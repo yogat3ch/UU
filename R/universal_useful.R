@@ -119,3 +119,16 @@ file_io_ext <- function(object) {
               inherits(., "data.frame") ~ ".feather",
               !inherits(., "data.frame") ~ ".rds")
 }
+
+
+#' @title Find the names in common
+#' @description Given named objects, find the names in common
+#' @param ... \code{(objects)}
+#' @return \code{(character)} of the common names
+#' @export
+common_names <- function(...) {
+  purrr::map(rlang::dots_list(..., .named = TRUE), names) |>
+    {\(x) {do.call(c, x)}}()  |>
+    table() |>
+    {\(x) {names(x)[x == max(x)]}}()
+}
