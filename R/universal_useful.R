@@ -110,6 +110,14 @@ file_io <- function(x, path, mkpath = TRUE) {
 
 }
 
+#' @title Make a file path name with underscores
+#' @param \code({character}) file path
+#' @export
+
+make_names <- function(x) {
+  stringr::str_replace_all(x, '[\\<|\\>|\\:\\"\\/\\|\\?\\*]', "_")
+}
+
 #' @title Provide the appropriate file extension for a given object
 #' @param object to determine the appropriate function for writing to disk
 #' @return \code{(character)}
