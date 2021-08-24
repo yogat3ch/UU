@@ -128,6 +128,27 @@ file_io_ext <- function(object) {
               !inherits(., "data.frame") ~ ".rds")
 }
 
+#' @title Find an object by it's class
+#' @param \code{(environment)} The environment to search
+#' @param \code{(class)} The class to search for
+#' @export
+
+find_by_class <- function(class, e = rlang::caller_env()) {
+  obj <- purrr::compact(purrr::map(ls(e), ~{
+    out <- get0(.x, envir = e)
+    purrr::when(out,
+                inherits(., class) ~ .,
+                ~ NULL)
+  }))
+  if (UU::is_legit(obj)) {
+    if (length(obj) > 1)
+      rlang::warn(paste0("More than one object with class: ", class,". Returning the first found."))
+    out <- obj[[1]]
+  } else {
+    rlang::abort(paste0("Could not find object with class ",class,". Has it been instantiated?"))
+  }
+  out
+}
 
 #' @title Find the names in common
 #' @description Given named objects, find the names in common
