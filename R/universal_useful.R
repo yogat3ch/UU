@@ -161,3 +161,34 @@ common_names <- function(...) {
     table() |>
     {\(x) {names(x)[x == max(x)]}}()
 }
+
+#' @title Match the first `n` letters to supplied arguments
+#' @description Case insensitive matching of argument to possibilities provided in ellipsis.
+#' @param x \code{(character)} to match on
+#' @param ... \code{(character)} vectors to match against
+#' @param n \code{(numeric)} how many characters of `x` to use in matching. Set to `NULL` to use all
+#' @param multiple \code{(logical)} are multiple matches allowed? If `FALSE` (Default) only the first match is returned.
+#' @inheritParams base::grep
+#' @param capitalize \code{(logical)} whether to capitalize the result
+#' @return \code{(character)} vector of matches
+#' @export
+
+match_letters <- function(x, ..., n = 1, multiple = FALSE, ignore.case = FALSE, capitalize = FALSE) {
+  if (!is.character(x)) return(x)
+  if (!is.null(n))
+    x <- substr(x, 0, n)
+  if (is.null(x)) {
+    out <- x
+  } else {
+    out <- tryCatch(grep(ifelse(length(x) > 1, paste0("^",x, collapse = "|"), paste0("^" ,x)), unlist(rlang::dots_list(...), use.names = FALSE), perl = TRUE, value = TRUE, ignore.case = ignore.case),
+                    error = function(e) {
+                      message(paste0(e))
+                    })
+    if (!multiple)
+      out <- out[1]
+
+    if (capitalize && !is.null(out))
+      out <- purrr::map_chr(out, ~purrr::when(nchar(.x) == 1,. ~ toupper(.x), ~ gsub("^(\\w)(\\w+)","\\U\\1\\L\\2", .x, perl = TRUE)))
+  }
+  out
+}
