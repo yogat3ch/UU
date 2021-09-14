@@ -75,39 +75,71 @@ mkpath <- function(path) {
     })
   }
 }
-#' @title Provide the appropriate file read/write function
-#' @description Return the appropriate read or write function given an object or `ext`ension as a character
-#' @param object to determine the appropriate function for writing to disk
-#' @param ext \code{(character)} file extension to determine the appropriate reading function
+
+
+#' @title Return the appropriate function for reading the specified path/extension
+#'
+#' @param x \code{(character)} The extension name or the path to the file
+#' @param write \code{(logical)} Return the writing function? **Default** `FALSE` to return the reading function
 #' @return \code{(function)}
 #' @export
+#'
+#' @examples
+#' file_fn("csv")
+#' file_fn("csv", write = TRUE)
 
-file_io <- function(x, path, mkpath = TRUE) {
-  if (mkpath && !missing(path))
-    mkpath(path)
+file_fn <- function(x, write = FALSE) {
+  purrr::when(
+    x,
+    grepl("csv$", ., ignore.case = TRUE) && !write ~ readr::read_csv,
+    grepl("feather$", ., ignore.case = TRUE) && !write ~ feather::read_feather,
+    grepl("rds$", ., ignore.case = TRUE) && !write ~ readRDS,
+    grepl("csv$", ., ignore.case = TRUE) ~ readr::write_csv,
+    grepl("feather$", ., ignore.case = TRUE) ~ feather::write_feather,
+    grepl("rds$", ., ignore.case = TRUE) ~ saveRDs
+  )
 
-  if (is.character(x) && is_filepath(x) && missing(path)) {
-    # if a filepath is passed as the first argument, load it based on the extension
-    fn <- purrr::when(
-      x,
-      !file.exists(.) ~ stop(x, " not found"),
-      length(.) > 1 ~ stop("Duplicate files found for ", x),
-      grepl("csv$", ., ignore.case = TRUE) ~ readr::read_csv,
-      grepl("feather$", ., ignore.case = TRUE) ~ feather::read_feather,
-      grepl("rds$", ., ignore.case = TRUE) ~ readRDS
-    )
-    out <- fn(x)
-  } else {
-    # write the file based on it's type
-    fn <- purrr::when(x,
-                      inherits(., "data.frame") ~ feather::write_feather,
-                      inherits(., "matrix") ~ function(x, path) {
-                        feather::write_feather(tibble::as_tibble(x, .name_repair = "minimal"), path = path)
-                      },
-                      !inherits(., "data.frame") ~ saveRDS)
-    fn(x, path)
-  }
+}
 
+#' @title Return the appropriate function for writing the supplied object to disk
+#'
+#' @param x \code{(object)}
+#' @return \code{(function)}
+#' @export
+#'
+#' @examples
+#' object_fn(1:15)
+#' object_fn(data.frame(a = 2, b = 3))
+
+
+object_fn <- function(x) {
+  purrr::when(
+    x,
+    inherits(., "data.frame") ~ feather::write_feather,
+    inherits(., "matrix") ~ function(x, path) {
+      feather::write_feather(tibble::as_tibble(x, .name_repair = "minimal"), path = path)
+    },!inherits(., "data.frame") ~ saveRDS
+  )
+}
+
+#' @title Provide the appropriate file read/write function
+#' @description Write an object to disk
+#' @param x \code{(object)} to write to disk
+#' @param write_path \code{(character)} path to write the object to
+#' @param mkpath \code{(logical)} Whether to create the directory for `write_path` if it doesn't exist. **Default** `FALSE`
+#' @return Success message if file is written
+#' @export
+
+object_write <- function(x, write_path, mkpath = FALSE) {
+  if (mkpath && !dir.exists(dirname(write_path)))
+    mkpath(write_path)
+  # write the file based on it's type
+
+  fn <- object_fn(x)
+  fp <- file.path(path, rlang::expr_deparse(rlang::enexpr(x)), object_ext(x))
+  fn(x, fp)
+  if (file.exists(fp))
+    cli::cli_alert_success(paste0(fp, " saved successfully."))
 }
 
 #' @title Make a file path name with underscores
@@ -122,7 +154,7 @@ make_names <- function(x) {
 #' @param object to determine the appropriate function for writing to disk
 #' @return \code{(character)}
 #' @export
-file_io_ext <- function(object) {
+object_ext <- function(object) {
   purrr::when(object,
               inherits(., "data.frame") ~ ".feather",
               !inherits(., "data.frame") ~ ".rds")
