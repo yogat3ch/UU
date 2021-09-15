@@ -77,6 +77,20 @@ mkpath <- function(path) {
 }
 
 
+#' @title List full file paths with the file name as the name
+#'
+#' @param path \code{(character)} dir path to files
+#'
+#' @return \code{(named character)}
+#' @export
+#'
+#' @examples
+#' list.files2("~")
+list.files2 <- function(path) {
+  files <- list.files(path, full.names = TRUE) |>
+    {\(x) {rlang::set_names(x, stringr::str_extract(basename(x), ".*(?=\\.)"))}}()
+}
+
 #' @title Return the appropriate function for reading the specified path/extension
 #'
 #' @param x \code{(character)} The extension name or the path to the file
