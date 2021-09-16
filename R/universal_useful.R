@@ -238,3 +238,44 @@ match_letters <- function(x, ..., n = 1, multiple = FALSE, ignore.case = FALSE, 
   }
   out
 }
+
+#' @title Get the missing arguments from the function as character
+#'
+#' @param calling_function \code{(call)} see `sys.function`
+#' @param include_null \code{(logical)} Include args set to `NULL`?
+#' @param exclude_defaults \code{(logical)} Exclude arguments wth defaults?
+#'
+#' @return \code{(character)}
+#' @export
+#'
+#' @examples
+#' a <- function(a, b = NULL, c = "d") {
+#'   missing_args()
+#' }
+#' a()
+missing_args <-
+  function(calling_function = sys.function(1),
+           include_null = TRUE,
+           exclude_defaults = TRUE)
+  {
+    all_args <- formals(calling_function)
+
+    arg_names <- names(all_args)
+    matched_call <- match.call(calling_function,
+                               sys.call(1),
+                               expand.dots = FALSE)
+
+    passed_args <- names(as.list(matched_call)[-1])
+    out <- setdiff(arg_names, passed_args)
+    if (include_null)
+      out <-
+      c(out, setdiff(names(purrr::keep(
+        all_args, ~ is.null(.x)
+      )), passed_args))
+    if (exclude_defaults)
+      out <-
+      setdiff(out, names(purrr::keep(
+        all_args, ~ !is.null(.x) & !rlang::is_missing(.x)
+      )))
+    out
+  }
