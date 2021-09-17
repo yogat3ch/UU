@@ -4,7 +4,7 @@
 \alias{get_package_fns}
 \title{Get the names of all exported functions in a package}
 \usage{
-get_package_fns(x, all.names = FALSE)
+get_package_fns(x, all.names = FALSE, pattern, negate = FALSE)
 }
 \arguments{
 \item{x}{\code{(character)} Package name}

@@ -290,6 +290,9 @@ missing_args <-
 #'
 #' @examples
 #' get_package_fns("dplyr")
-get_package_fns <- function(x, all.names = FALSE) {
-  ls(getNamespace(x), all.names=all.names)
+get_package_fns <- function(x, all.names = FALSE, pattern, negate = FALSE) {
+  nms <- ls(getNamespace(x), all.names=all.names)
+  if (!missing(pattern))
+    nms<- stringr::str_subset(nms, pattern, negate)
+  nms
 }
