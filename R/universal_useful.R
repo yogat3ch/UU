@@ -279,3 +279,17 @@ missing_args <-
       )))
     out
   }
+
+#' @title Get the names of all exported functions in a package
+#'
+#' @param x \code{(character)} Package name
+#' @param all.names \code{(logical)} Include names that begin with characters `.` `_` etc
+#'
+#' @return \code{(character)}
+#' @export
+#'
+#' @examples
+#' get_package_fns("dplyr")
+get_package_fns <- function(x, all.names = FALSE) {
+  ls(getNamespace(x), all.names=all.names)
+}
