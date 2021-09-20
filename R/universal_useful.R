@@ -296,3 +296,23 @@ get_package_fns <- function(x, all.names = FALSE, pattern, negate = FALSE) {
     nms<- stringr::str_subset(nms, pattern, negate)
   nms
 }
+
+# ----------------------- Mon Apr 08 16:49:54 2019 ------------------------#
+#' @title rle_df
+#'
+#' Given an \code{\link[base]{rle}} this function will return a data.frame of starts, ends, and indexes thereof of the run lengths.
+#' Credit: \url{https://stackoverflow.com/questions/43875716/find-start-and-end-positions-indices-of-runs-consecutive-values}
+#' @param x \code{(vector)} An object for which to run an `rle`
+#' @return \item{(data.frame)}{ with length, values, start and end indices.}
+#' @examples
+#' rleIndex(sample(c(T,F), replace = TRUE, 100))
+#' @export
+rle_df <- function(x) {
+  input_rle <- rle(x)
+  .out <- unclass(input_rle)
+  .out <- dplyr::mutate(tibble::as_tibble(.out),
+                        end = cumsum(lengths),
+                        start = c(1, dplyr::lag(end)[-1] + 1))
+  dplyr::select(.out, c(1,2,4,3))
+  return(.out)
+}
