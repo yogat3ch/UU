@@ -312,7 +312,7 @@ rle_df <- function(x) {
   .out <- unclass(input_rle)
   .out <- dplyr::mutate(tibble::as_tibble(.out),
                         end = cumsum(lengths),
-                        start = c(1, dplyr::lag(end)[-1] + 1))
-  dplyr::select(.out, c(1,2,4,3))
+                        start = c(1, dplyr::lag(end)[-1] + 1)) |>
+  dplyr::select(c(1,2,4,3))
   return(.out)
 }
