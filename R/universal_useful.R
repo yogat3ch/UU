@@ -180,12 +180,10 @@ object_ext <- function(object) {
 #' @export
 
 find_by_class <- function(class, e = rlang::caller_env()) {
-  obj <- purrr::compact(purrr::map(ls(e), purrr::safely(~{
+  obj <- purrr::compact(purrr::map(ls(e), purrr::possibly(~{
     out <- get0(.x, envir = e)
-    purrr::when(out,
-                inherits(., class) ~ .,
-                ~ NULL)
-  })))
+    purrr::when(out, inherits(., class) ~ ., ~NULL)
+  }, NULL)))
   if (UU::is_legit(obj)) {
     if (length(obj) > 1)
       rlang::warn(paste0("More than one object with class: ", class,". Returning the first found."))
