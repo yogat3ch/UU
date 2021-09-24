@@ -180,12 +180,12 @@ object_ext <- function(object) {
 #' @export
 
 find_by_class <- function(class, e = rlang::caller_env()) {
-  obj <- purrr::compact(purrr::map(ls(e), ~{
+  obj <- purrr::compact(purrr::map(ls(e), purrr::safely(~{
     out <- get0(.x, envir = e)
     purrr::when(out,
                 inherits(., class) ~ .,
                 ~ NULL)
-  }))
+  })))
   if (UU::is_legit(obj)) {
     if (length(obj) > 1)
       rlang::warn(paste0("More than one object with class: ", class,". Returning the first found."))
@@ -241,7 +241,8 @@ match_letters <- function(x, ..., n = 1, multiple = FALSE, ignore.case = FALSE, 
 
 #' @title Get the missing arguments from the function as character
 #'
-#' @param calling_function \code{(call)} see `sys.function`
+#' @param calling_function \code{(function)} see \link[rlang]{caller_fn} or \link[base]{sys.function}
+#' @param corresponding_call \code{(call)} The call where the `calling_function` is called. See \link[rlang]{trace_back} or \lnik[base]{sys.call}
 #' @param include_null \code{(logical)} Include args set to `NULL`?
 #' @param exclude_defaults \code{(logical)} Exclude arguments wth defaults?
 #'
@@ -254,7 +255,8 @@ match_letters <- function(x, ..., n = 1, multiple = FALSE, ignore.case = FALSE, 
 #' }
 #' a()
 missing_args <-
-  function(calling_function = sys.function(1),
+  function(calling_function = rlang::caller_fn(1),
+           corresponding_call = sys.call(1),
            include_null = TRUE,
            exclude_defaults = TRUE)
   {
@@ -262,7 +264,7 @@ missing_args <-
 
     arg_names <- names(all_args)
     matched_call <- match.call(calling_function,
-                               sys.call(1),
+                               corresponding_call,
                                expand.dots = FALSE)
 
     passed_args <- names(as.list(matched_call)[-1])
@@ -279,7 +281,6 @@ missing_args <-
       )))
     out
   }
-
 #' @title Get the names of all exported functions in a package
 #'
 #' @param x \code{(character)} Package name

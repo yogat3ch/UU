@@ -5,13 +5,16 @@
 \title{Get the missing arguments from the function as character}
 \usage{
 missing_args(
-  calling_function = sys.function(1),
+  calling_function = rlang::caller_fn(1),
+  corresponding_call = sys.call(1),
   include_null = TRUE,
   exclude_defaults = TRUE
 )
 }
 \arguments{
-\item{calling_function}{\code{(call)} see \code{sys.function}}
+\item{calling_function}{\code{(function)} see \link[rlang]{caller_fn} or \link[base]{sys.function}}
+
+\item{corresponding_call}{\code{(call)} The call where the \code{calling_function} is called. See \link[rlang]{trace_back} or \lnik[base]{sys.call}}
 
 \item{include_null}{\code{(logical)} Include args set to \code{NULL}?}
 
