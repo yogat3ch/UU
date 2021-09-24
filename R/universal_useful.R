@@ -317,3 +317,16 @@ rle_df <- function(x) {
   dplyr::select(c(1,2,4,3))
   return(.out)
 }
+
+
+#' @title Retrieve the function name
+#' @description Sometimes a function is passed down the call stack and it's name is unknown. This function finds the name without having to pass it down the call stack as an argument.
+#' @param fn \coe{(function)} for which to retrieve the name
+#'
+#' @return \code{(character)} of the functions name
+#' @export
+
+fn_name <- function(fn) {
+  trimws(stringr::str_extract(readLines(utils::getSrcFilename(fn, full.names = T))[utils::getSrcLocation(fn)], ".*(?=\\<\\-)"))
+
+}
