@@ -12,4 +12,4 @@ Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1.9001
-Imports: feather, dplyr, purrr, readr, rlang, stringr, tibble
+Imports: feather, future, dplyr, purrr, readr, rlang, stringr, tibble
