@@ -22,5 +22,5 @@ Given an \code{\link[base]{rle}} this function will return a data.frame of start
 Credit: \url{https://stackoverflow.com/questions/43875716/find-start-and-end-positions-indices-of-runs-consecutive-values}
 }
 \examples{
-rleIndex(sample(c(T,F), replace = TRUE, 100))
+rle_df(sample(c(T,F), replace = TRUE, 100))
 }
