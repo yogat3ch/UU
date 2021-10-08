@@ -48,7 +48,7 @@ is_filepath <- function(path) {
 ext <- function(path) {
   out <- stringr::str_extract(path, "(?<=\\.)\\w+$")
   if (!is_legit(out))
-    stop("Not a valid file path")
+    stop(path, " is not a valid file path")
   out
 }
 
