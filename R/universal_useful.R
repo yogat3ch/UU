@@ -360,7 +360,7 @@ rle_df <- function(x) {
   return(.out)
 }
 
-#' @title Detect possible duplicates after a join
+#' @title Detect possible duplicates of rows or columns after a join
 #'
 #' @param before \code{(data.frame)} from before the join
 #' @param after \code{(data.frame)} after the join
@@ -373,14 +373,18 @@ rle_df <- function(x) {
 #' a = data.frame(a = c(1, 2, 3, 4, 3, 5), b = 1:6)
 #' b = data.frame(a = c(1, 2, 3, 4, 5), c = letters[1:5])
 #' after <- dplyr::left_join(a, b)
-#' possible_dupes(b, after, halt_fn = message)
-possible_dupes <- function(before, after, halt_fn = rlang::warn) {
+#' join_check(b, after, halt_fn = message)
+join_check <- function(before, after, halt_fn = rlang::warn) {
   nm_b <- rlang::expr_deparse(rlang::enexpr(before))
   nm_a <- rlang::expr_deparse(rlang::enexpr(after))
   nb <- nrow(before)
   na <- nrow(after)
-  if(nb != na)
-    halt_fn(paste0("Possible duplicates after join detected, row counts:\n",
-              nm_b," - ", nb,"\n",
-              nm_a," - ", na,"\n"))
+  c_dupes <- stringr::str_detect(names(after), "\\.x$|\\.y$")
+  if(nb != na || any(c_dupes))
+    halt_fn(paste0("Possible join issues detected!\n",
+                   " - Row duplicates, row counts:\n",
+                   nm_b," - ", nb,"\n",
+                   nm_a," - ", na,"\n",
+                   ifelse(any(c_dupes), paste0(" - Column duplicates:\n",
+                          paste0(names(after)[c_dupes], collapse = ", ")))))
 }
