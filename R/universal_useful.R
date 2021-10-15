@@ -359,3 +359,28 @@ rle_df <- function(x) {
     dplyr::select(c(1,2,4,3))
   return(.out)
 }
+
+#' @title Detect possible duplicates after a join
+#'
+#' @param before \code{(data.frame)} from before the join
+#' @param after \code{(data.frame)} after the join
+#' @param halt_fn \code{(function)} to notify, default \link[rlang]{warn}.
+#' @seealso [rlang::abort()] [base::message()]
+
+#' @export
+#'
+#' @examples
+#' a = data.frame(a = c(1, 2, 3, 4, 3, 5), b = 1:6)
+#' b = data.frame(a = c(1, 2, 3, 4, 5), c = letters[1:5])
+#' after <- dplyr::left_join(a, b)
+#' possible_dupes(b, after, halt_fn = message)
+possible_dupes <- function(before, after, halt_fn = rlang::warn) {
+  nm_b <- rlang::expr_deparse(rlang::enexpr(before))
+  nm_a <- rlang::expr_deparse(rlang::enexpr(after))
+  nb <- nrow(before)
+  na <- nrow(after)
+  if(nb != na)
+    halt_fn(paste0("Possible duplicates after join detected, row counts:\n",
+              nm_b," - ", nb,"\n",
+              nm_a," - ", na,"\n"))
+}
