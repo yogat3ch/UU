@@ -5,7 +5,7 @@
 #' @export
 
 is_legit <- function(x) {
-  !(is.null(x) || rlang::is_empty(x) || is.na(x) || inherits(x, "try-error"))
+  !(is.null(x) || rlang::is_empty(x) || is.na(x) || inherits(x, c("try-error", "error")))
 }
 
 #' @title Is object an error class?
@@ -15,7 +15,7 @@ is_legit <- function(x) {
 #' @export
 
 is_error <- function(x) {
-  inherits(x, "try-error")
+  inherits(x, c("try-error", "error"))
 }
 
 #' @title Statistical mode
