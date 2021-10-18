@@ -383,9 +383,10 @@ join_check <- function(before, after, halt_fn = rlang::warn) {
   if(nb != na || any(c_dupes))
     halt_fn(paste0("Possible join issues detected!\n",
                    if (nb != na) {
+                     paste0(
                      " - Row duplicates, row counts:\n",
                      nm_b," - ", nb,"\n",
-                     nm_a," - ", na,"\n",
+                     nm_a," - ", na,"\n",)
                    },
                    if (any(c_dupes)) {
                      paste0(" - Column duplicates:\n",
