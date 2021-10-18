@@ -382,9 +382,14 @@ join_check <- function(before, after, halt_fn = rlang::warn) {
   c_dupes <- stringr::str_detect(names(after), "\\.x$|\\.y$")
   if(nb != na || any(c_dupes))
     halt_fn(paste0("Possible join issues detected!\n",
-                   " - Row duplicates, row counts:\n",
-                   nm_b," - ", nb,"\n",
-                   nm_a," - ", na,"\n",
-                   ifelse(any(c_dupes), paste0(" - Column duplicates:\n",
-                          paste0(names(after)[c_dupes], collapse = ", ")))))
+                   if (nb != na) {
+                     " - Row duplicates, row counts:\n",
+                     nm_b," - ", nb,"\n",
+                     nm_a," - ", na,"\n",
+                   },
+                   if (any(c_dupes)) {
+                     paste0(" - Column duplicates:\n",
+                            paste0(names(after)[c_dupes], collapse = ", "))
+                   }
+                   ))
 }
