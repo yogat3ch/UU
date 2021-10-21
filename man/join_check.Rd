@@ -4,12 +4,12 @@
 \alias{join_check}
 \title{Detect possible duplicates of rows or columns after a join}
 \usage{
-join_check(before, after, halt_fn = rlang::warn)
+join_check(after, before, halt_fn = rlang::warn)
 }
 \arguments{
-\item{before}{\code{(data.frame)} from before the join}
-
 \item{after}{\code{(data.frame)} after the join}
+
+\item{before}{\code{(data.frame)} from before the join \strong{Optional} but required for row comparison.}
 
 \item{halt_fn}{\code{(function)} to notify, default \link[rlang]{warn}.}
 }

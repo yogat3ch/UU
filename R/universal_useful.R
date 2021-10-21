@@ -362,8 +362,8 @@ rle_df <- function(x) {
 
 #' @title Detect possible duplicates of rows or columns after a join
 #'
-#' @param before \code{(data.frame)} from before the join
 #' @param after \code{(data.frame)} after the join
+#' @param before \code{(data.frame)} from before the join **Optional** but required for row comparison.
 #' @param halt_fn \code{(function)} to notify, default \link[rlang]{warn}.
 #' @seealso [rlang::abort()] [base::message()]
 
@@ -374,23 +374,27 @@ rle_df <- function(x) {
 #' b = data.frame(a = c(1, 2, 3, 4, 5), c = letters[1:5])
 #' after <- dplyr::left_join(a, b)
 #' join_check(b, after, halt_fn = message)
-join_check <- function(before, after, halt_fn = rlang::warn) {
-  nm_b <- rlang::expr_deparse(rlang::enexpr(before))
+join_check <- function(after, before, halt_fn = rlang::warn) {
   nm_a <- rlang::expr_deparse(rlang::enexpr(after))
-  nb <- nrow(before)
-  na <- nrow(after)
+  .msg <- character(0)
+  if (!missing(before)) {
+    nm_b <- rlang::expr_deparse(rlang::enexpr(before))
+    nb <- nrow(before)
+    na <- nrow(after)
+    if (nb != na)
+      .msg <- paste0(.msg,
+             " - Row duplicates, row counts:\n",
+             nm_b," - ", nb,"\n",
+             nm_a," - ", na,"\n",)
+  }
   c_dupes <- stringr::str_detect(names(after), "\\.x$|\\.y$")
-  if(nb != na || any(c_dupes))
-    halt_fn(paste0("Possible join issues detected!\n",
-                   if (nb != na) {
-                     paste0(
-                     " - Row duplicates, row counts:\n",
-                     nm_b," - ", nb,"\n",
-                     nm_a," - ", na,"\n",)
-                   },
-                   if (any(c_dupes)) {
-                     paste0(" - Column duplicates:\n",
-                            paste0(names(after)[c_dupes], collapse = ", "))
-                   }
-                   ))
+  if(any(c_dupes))
+    paste0(.msg,
+           " - Column duplicates:\n",
+           paste0(names(after)[c_dupes], collapse = ", "))
+
+
+
+  if (is_legit(.msg))
+    halt_fn(paste0("Possible join issues detected!\n",.msg))
 }
