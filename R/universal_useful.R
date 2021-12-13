@@ -385,7 +385,7 @@ join_check <- function(after, before, halt_fn = rlang::warn) {
       .msg <- paste0(.msg,
              " - Row duplicates, row counts:\n",
              nm_b," - ", nb,"\n",
-             nm_a," - ", na,"\n",)
+             nm_a," - ", na,"\n")
   }
   c_dupes <- stringr::str_detect(names(after), "\\.x$|\\.y$")
   if(any(c_dupes))
