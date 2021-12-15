@@ -115,7 +115,7 @@ file_fn <- function(x, write = FALSE) {
     grepl("rds$", ., ignore.case = TRUE) && !write ~ readRDS,
     grepl("csv$", ., ignore.case = TRUE) ~ readr::write_csv,
     grepl("feather$", ., ignore.case = TRUE) ~ feather::write_feather,
-    grepl("rds$", ., ignore.case = TRUE) ~ saveRDs
+    grepl("rds$", ., ignore.case = TRUE) ~ saveRDS
   )
 
 }
