@@ -85,15 +85,15 @@ mkpath <- function(path) {
 #' @title List full file paths with the file name as the name
 #'
 #' @param path \code{(character)} dir path to files
-#'
+#' @inheritDotParams base::list.files
 #' @return \code{(named character)}
 #' @export
 #'
 #' @examples
 #' list.files2("~")
-list.files2 <- function(path) {
-  files <- list.files(path, full.names = TRUE) |>
-    {\(x) {rlang::set_names(x, stringr::str_extract(basename(x), ".*(?=\\.)"))}}()
+list.files2 <- function(path = ".", ...) {
+  list.files(path, full.names = TRUE, ...) |>
+    {\(x) {rlang::set_names(x, ext(basename(x), strip = TRUE))}}()
 }
 
 #' @title Return the appropriate function for reading the specified path/extension
