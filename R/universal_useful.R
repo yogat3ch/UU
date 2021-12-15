@@ -42,13 +42,18 @@ is_filepath <- function(path) {
 #' @title Extract the file extensions from a filepath
 #' @description Given a path, extract the file extension
 #' @param path \code{(character)} path
+#' @param strip \code{(logical)} Whether to strip the extension from the path to return the bare file name
 #' @return \code{(character)} with the extensions
 #' @export
 
-ext <- function(path) {
-  out <- stringr::str_extract(path, "(?<=\\.)\\w+$")
-  if (!is_legit(out))
-    stop(path, " is not a valid file path")
+ext <- function(path, strip = FALSE) {
+  if (strip) {
+    out <- stringr::str_remove(path, "\\.\\w+$")
+  } else {
+    out <- stringr::str_extract(path, "(?<=\\.)\\w+$")
+    if (!is_legit(out))
+      stop(path, " is not a valid file path")
+  }
   out
 }
 
