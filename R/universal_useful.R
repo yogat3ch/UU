@@ -113,6 +113,17 @@ file_fn <- function(x, write = FALSE) {
 
 }
 
+#' @title Provide the appropriate file extension for a given object
+#' @param object to determine the appropriate function for writing to disk
+#' @return \code{(character)}
+#' @export
+object_ext <- function(object) {
+  purrr::when(object,
+              inherits(., "data.frame") ~ ".feather",
+              inherits(., "ggplot") ~ ".png",
+              !inherits(., "data.frame") ~ ".rds")
+}
+
 #' @title Return the appropriate function for writing the supplied object to disk
 #'
 #' @param x \code{(object)}
