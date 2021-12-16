@@ -4,14 +4,53 @@
 \alias{object_write}
 \title{Provide the appropriate file read/write function}
 \usage{
-object_write(x, write_path, mkpath = FALSE)
+object_write(x, filename, path, ..., verbose = TRUE)
 }
 \arguments{
 \item{x}{\code{(object)} to write to disk}
 
-\item{write_path}{\code{(character)} path to write the object to}
+\item{filename}{File name to create on disk.}
 
-\item{mkpath}{\code{(logical)} Whether to create the directory for \code{write_path} if it doesn't exist. \strong{Default} \code{FALSE}}
+\item{path}{Path of the directory to save plot to: \code{path} and \code{filename}
+are combined to create the fully qualified file name. Defaults to the
+working directory.}
+
+\item{...}{
+  Arguments passed on to \code{\link[ggplot2:ggsave]{ggplot2::ggsave}}, \code{\link[base:readRDS]{base::saveRDS}}
+  \describe{
+    \item{\code{plot}}{Plot to save, defaults to last plot displayed.}
+    \item{\code{device}}{Device to use. Can either be a device function
+(e.g. \code{\link[=png]{png()}}), or one of "eps", "ps", "tex" (pictex),
+"pdf", "jpeg", "tiff", "png", "bmp", "svg" or "wmf" (windows only).}
+    \item{\code{scale}}{Multiplicative scaling factor.}
+    \item{\code{width}}{Plot size in \code{units} ("in", "cm", or "mm").
+If not supplied, uses the size of current graphics device.}
+    \item{\code{height}}{Plot size in \code{units} ("in", "cm", or "mm").
+If not supplied, uses the size of current graphics device.}
+    \item{\code{units}}{Plot size in \code{units} ("in", "cm", or "mm").
+If not supplied, uses the size of current graphics device.}
+    \item{\code{dpi}}{Plot resolution. Also accepts a string input: "retina" (320),
+"print" (300), or "screen" (72). Applies only to raster output types.}
+    \item{\code{limitsize}}{When \code{TRUE} (the default), \code{ggsave} will not
+save images larger than 50x50 inches, to prevent the common error of
+specifying dimensions in pixels.}
+    \item{\code{object}}{\R object to serialize.}
+    \item{\code{file}}{a \link[base]{connection} or the name of the file where the \R object
+    is saved to or read from.}
+    \item{\code{ascii}}{a logical.  If \code{TRUE} or \code{NA}, an ASCII
+    representation is written; otherwise (default), a binary one is used.
+    See the comments in the help for \code{\link[base]{save}}.}
+    \item{\code{version}}{the workspace format version to use.  \code{NULL}
+    specifies the current default version (3). The only other supported
+    value is 2, the default from \R 1.4.0 to \R 3.5.0.}
+    \item{\code{compress}}{a logical specifying whether saving to a named file is
+    to use \code{"gzip"} compression, or one of \code{"gzip"},
+    \code{"bzip2"} or \code{"xz"} to indicate the type of compression to
+    be used.  Ignored if \code{file} is a connection.}
+    \item{\code{refhook}}{a hook function for handling reference objects.}
+  }}
+
+\item{verbose}{\code{(logical)} Whether to print saved messages. \strong{Default} \code{TRUE}}
 }
 \value{
 Success message if file is written

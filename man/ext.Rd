@@ -4,10 +4,12 @@
 \alias{ext}
 \title{Extract the file extensions from a filepath}
 \usage{
-ext(path)
+ext(path, strip = FALSE)
 }
 \arguments{
 \item{path}{\code{(character)} path}
+
+\item{strip}{\code{(logical)} Whether to strip the extension from the path to return the bare file name}
 }
 \value{
 \code{(character)} with the extensions
