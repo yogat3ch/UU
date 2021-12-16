@@ -141,28 +141,60 @@ object_fn <- function(x) {
     inherits(., "data.frame") ~ feather::write_feather,
     inherits(., "matrix") ~ function(x, path) {
       feather::write_feather(tibble::as_tibble(x, .name_repair = "minimal"), path = path)
-    },!inherits(., "data.frame") ~ saveRDS
+    },
+    inherits(., "ggplot") ~ ggplot2::ggsave,
+    !inherits(., "data.frame") ~ saveRDS
   )
 }
 
 #' @title Provide the appropriate file read/write function
 #' @description Write an object to disk
 #' @param x \code{(object)} to write to disk
-#' @param write_path \code{(character)} path to write the object to
-#' @param mkpath \code{(logical)} Whether to create the directory for `write_path` if it doesn't exist. **Default** `FALSE`
+#' @inheritParams ggplot2::ggsave
+#' @param verbose \code{(logical)} Whether to print saved messages. **Default** `TRUE`
+#' @inheritDotParams ggplot2::ggsave
+#' @inheritDotParams base::saveRDS
 #' @return Success message if file is written
 #' @export
 
-object_write <- function(x, write_path, mkpath = FALSE) {
-  if (mkpath && !dir.exists(dirname(write_path)))
-    mkpath(write_path)
+object_write <- function(x, filename, path, ..., verbose = TRUE) {
+  if (missing(path))
+    .path <- dirname(filename)
+  else
+    .path <- path
+
+  if (!dir.exists(.path))
+    mkpath(.path)
+
+  # Create the full filename
+  .ext <- object_ext(x)
+  img <- stringr::str_detect(.ext, "png$")
+  if (missing(filename))
+    .fname <- rlang::expr_deparse(rlang::enexpr(x))
+  else
+    .fname <- basename(filename)
+
+
+  fp <- file.path(.path, paste0(.fname, ifelse(is_filepath(filename), "", .ext)))
+
+  # order the arguments to the saving function
+  .dots <- rlang::dots_list(..., .named = TRUE)
+  if (img)
+    .dots <- purrr::list_modify(.dots, plot = x, filename = fp, device = "png", dpi = "screen")
+  else
+    .dots <- purrr::list_modify(.dots, x, fp)
+
   # write the file based on it's type
 
   fn <- object_fn(x)
-  fp <- file.path(path, rlang::expr_deparse(rlang::enexpr(x)), object_ext(x))
-  fn(x, fp)
-  if (file.exists(fp))
-    cli::cli_alert_success(paste0(fp, " saved successfully."))
+  rlang::exec(fn, !!!.dots)
+  if (img)
+    knitr::plot_crop(fp)
+  if (file.exists(fp) && verbose)
+    cli::cli_alert_success("Saved {.path {fp}}")
+  else if (!file.exists(fp))
+    stop(fp, " could not be written to disk.")
+  fp
 }
 
 #' @title Make a file path name with underscores
@@ -171,16 +203,6 @@ object_write <- function(x, write_path, mkpath = FALSE) {
 
 make_names <- function(x) {
   stringr::str_replace_all(x, '[\\<|\\>|\\:\\"\\/\\|\\?\\*]', "_")
-}
-
-#' @title Provide the appropriate file extension for a given object
-#' @param object to determine the appropriate function for writing to disk
-#' @return \code{(character)}
-#' @export
-object_ext <- function(object) {
-  purrr::when(object,
-              inherits(., "data.frame") ~ ".feather",
-              !inherits(., "data.frame") ~ ".rds")
 }
 
 #' @title Find an object by it's class
