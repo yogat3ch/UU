@@ -108,7 +108,8 @@ file_fn <- function(x, write = FALSE) {
     grepl("rds$", ., ignore.case = TRUE) && !write ~ readRDS,
     grepl("csv$", ., ignore.case = TRUE) ~ readr::write_csv,
     grepl("feather$", ., ignore.case = TRUE) ~ feather::write_feather,
-    grepl("rds$", ., ignore.case = TRUE) ~ saveRDS
+    grepl("rds$", ., ignore.case = TRUE) ~ saveRDS,
+    grepl("(?:png$)|(?:jpg$)|(?:jpeg$)", ., ignore.case = TRUE) ~ purrr::when(UU::is_legit(utils::packageVersion("magick")), ~ magick::image_read, ~ stop(x, " is an image and requires the magick package."),
   )
 
 }
