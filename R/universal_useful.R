@@ -342,6 +342,17 @@ fn_name <- function(fn) {
 
 }
 
+#' Create a compound regex grouped OR statement
+#'
+#' @param x \code{(character)} regex strings
+#'
+#' @return \code{(character)} grouped regex OR statement
+#' @export
+
+regex_or <- function(x) {
+  paste0(paste0("(?:", x,")"), collapse = "|")
+}
+
 #' @title start_cluster
 #' @description Creates a compute cluster
 #' @param workers \code{(numeric)} number of worker nodes. Defaults to 3/4 of the available.
