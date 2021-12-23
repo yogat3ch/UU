@@ -64,13 +64,15 @@ ext <- function(path, strip = FALSE) {
 #' @export
 
 mkpath <- function(path) {
-  # Check to see if it's a file path and use just the directory path if so
-  if (is_filepath(path))
-    path <- dirname(path)
-
   if (!dir.exists(path)) {
-    dir.create(path, recursive = TRUE)
-    cli::cli_inform("Created {.path {path}}")
+    # Check to see if it's a file path and use just the directory path if so
+    if (is_filepath(path))
+      path <- dirname(path)
+
+    if (!dir.exists(path)) {
+      dir.create(path, recursive = TRUE)
+      cli::cli_inform("Created {.path {path}}")
+    }
   }
 }
 

@@ -20,20 +20,22 @@ working directory.}
   \describe{
     \item{\code{plot}}{Plot to save, defaults to last plot displayed.}
     \item{\code{device}}{Device to use. Can either be a device function
-(e.g. \code{\link[=png]{png()}}), or one of "eps", "ps", "tex" (pictex),
+(e.g. \link{png}), or one of "eps", "ps", "tex" (pictex),
 "pdf", "jpeg", "tiff", "png", "bmp", "svg" or "wmf" (windows only).}
     \item{\code{scale}}{Multiplicative scaling factor.}
-    \item{\code{width}}{Plot size in \code{units} ("in", "cm", or "mm").
+    \item{\code{width}}{Plot size in \code{units} ("in", "cm", "mm", or "px").
 If not supplied, uses the size of current graphics device.}
-    \item{\code{height}}{Plot size in \code{units} ("in", "cm", or "mm").
+    \item{\code{height}}{Plot size in \code{units} ("in", "cm", "mm", or "px").
 If not supplied, uses the size of current graphics device.}
-    \item{\code{units}}{Plot size in \code{units} ("in", "cm", or "mm").
+    \item{\code{units}}{Plot size in \code{units} ("in", "cm", "mm", or "px").
 If not supplied, uses the size of current graphics device.}
     \item{\code{dpi}}{Plot resolution. Also accepts a string input: "retina" (320),
 "print" (300), or "screen" (72). Applies only to raster output types.}
-    \item{\code{limitsize}}{When \code{TRUE} (the default), \code{ggsave} will not
+    \item{\code{limitsize}}{When \code{TRUE} (the default), \code{ggsave()} will not
 save images larger than 50x50 inches, to prevent the common error of
 specifying dimensions in pixels.}
+    \item{\code{bg}}{Background colour. If \code{NULL}, uses the \code{plot.background} fill value
+from the plot theme.}
     \item{\code{object}}{\R object to serialize.}
     \item{\code{file}}{a \link[base]{connection} or the name of the file where the \R object
     is saved to or read from.}
