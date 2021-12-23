@@ -106,13 +106,27 @@ file_fn <- function(x, write = FALSE) {
     grepl("csv$", ., ignore.case = TRUE) && !write ~ readr::read_csv,
     grepl("feather$", ., ignore.case = TRUE) && !write ~ feather::read_feather,
     grepl("rds$", ., ignore.case = TRUE) && !write ~ readRDS,
+    grepl("(?:rda$)|(?:rdata$)", ., ignore.case = TRUE) && !write ~ load_obj,
     grepl("csv$", ., ignore.case = TRUE) ~ readr::write_csv,
     grepl("feather$", ., ignore.case = TRUE) ~ feather::write_feather,
     grepl("rds$", ., ignore.case = TRUE) ~ saveRDS,
     grepl("(?:png$)|(?:jpg$)|(?:jpeg$)", ., ignore.case = TRUE) ~ purrr::when(UU::is_legit(utils::packageVersion("magick")), ~ magick::image_read, ~ stop(x, " is an image and requires the magick package."),
-  )
+  ),
+  grepl("(?:rda$)|(?:rdata$)", ., ignore.case = TRUE) ~ save,
   )
 
+}
+
+load_obj <- function(file) {
+  e <- new.env()
+  load(file, e)
+  .nms <- ls(e, all.names = TRUE)
+  if (length(.nms) == 1)
+    out <- e[[.nms]]
+  else {
+    out <- rlang::env_get_list(e, nms = .nms)
+  }
+  out
 }
 
 #' @title Provide the appropriate file extension for a given object
