@@ -128,6 +128,34 @@ load_obj <- function(file) {
   }
   out
 }
+.size <- data.frame(
+  stringsAsFactors = FALSE,
+  check.names = FALSE,
+  IEC = c(1, 1024^(1:8)),
+  SI = c(1, 1000^(1:8)),
+  type = c("b", "Kb", "Mb", "Gb", "Tb", "Pb", "Eb", "Zb", "Yb")
+)
+#' Digital storage size conversion
+#' See \link[utils]{object.size}
+#' @param x \code{(numeric)}
+#' @param in_unit \code{(character)} units of x
+#' @param out_unit \code{(character)} units of output number
+#' @param standard \code{(character)}
+#' @return \code{(numeric)}
+#' @export
+#'
+#' @examples
+#' size(50, "mb")
+#' size(50, "gb")
+#' size(50, "gb", "mb")
+
+size <- function(x, in_unit = c("b", "Kb", "Mb", "Gb", "Tb", "Pb", "Eb", "Zb", "Yb")[1], out_unit = "b", standard = c("IEC", "SI")[1]) {
+  .standard <- UU::match_letters(standard, "IEC", "SI", ignore.case = TRUE)
+  .in_unit <- UU::match_letters(in_unit, .size$type, ignore.case = TRUE)
+  .out_unit <- UU::match_letters(out_unit, .size$type, ignore.case = TRUE)
+  (.size[grepl(paste0("^",.in_unit), .size$type, ignore.case = TRUE), .standard, drop = TRUE] * x) / .size[grepl(paste0("^",.out_unit), .size$type, ignore.case = TRUE), .standard, drop = TRUE]
+}
+
 
 #' @title Provide the appropriate file extension for a given object
 #' @param object to determine the appropriate function for writing to disk
