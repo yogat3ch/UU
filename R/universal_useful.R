@@ -5,7 +5,7 @@
 #' @export
 
 is_legit <- function(x) {
-  !(is.null(x) || rlang::is_empty(x) || suppressWarnings(is.na(x)) || inherits(x, c("try-error", "error")))
+  !(all(is.null(x)) || rlang::is_empty(x) || all(suppressWarnings(is.na(x))) || inherits(x, c("try-error", "error")))
 }
 
 #' @title Is object an error class?
