@@ -114,7 +114,7 @@ file_fn <- function(x, write = FALSE) {
     grepl("rds$", ., ignore.case = TRUE) ~ saveRDS,
     grepl("(?:png$)|(?:jpg$)|(?:jpeg$)", ., ignore.case = TRUE) ~ purrr::when(UU::is_legit(utils::packageVersion("magick")), ~ magick::image_read, ~ stop(x, " is an image and requires the magick package."),
   ),
-  grepl("(?:rda$)|(?:rdata$)", ., ignore.case = TRUE) ~ save,
+  grepl("(?:rda$)|(?:rdata$)", ., ignore.case = TRUE) ~ save
   )
 
 }
@@ -317,7 +317,7 @@ match_letters <- function(x, ..., n = 1, multiple = FALSE, ignore.case = FALSE, 
 #' @title Get the missing arguments from the function as character
 #'
 #' @param calling_function \code{(function)} see \link[rlang]{caller_fn} or \link[base]{sys.function}
-#' @param corresponding_call \code{(call)} The call where the `calling_function` is called. See \link[rlang]{trace_back} or \lnik[base]{sys.call}
+#' @param corresponding_call \code{(call)} The call where the `calling_function` is called. See \link[rlang]{trace_back} or \link[base]{sys.call}
 #' @param include_null \code{(logical)} Include args set to `NULL`?
 #' @param exclude_defaults \code{(logical)} Exclude arguments wth defaults?
 #'
