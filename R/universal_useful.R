@@ -266,7 +266,7 @@ find_by_class <- function(class, e = rlang::caller_env()) {
       rlang::warn(paste0("More than one object with class: ", class,". Returning the first found."))
     out <- obj[[1]]
   } else {
-    rlang::abort(paste0("Could not find object with class ",class,". Has it been instantiated?"))
+    rlang::warn(paste0("Could not find object with class ",class,". Has it been instantiated?"))
   }
   out
 }
