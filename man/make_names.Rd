@@ -7,7 +7,7 @@
 make_names(x)
 }
 \arguments{
-\item{\code({character})}{file path}
+\item{\code{(character)}}{file path}
 }
 \description{
 Make a file path name with underscores

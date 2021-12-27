@@ -14,7 +14,7 @@ missing_args(
 \arguments{
 \item{calling_function}{\code{(function)} see \link[rlang]{caller_fn} or \link[base]{sys.function}}
 
-\item{corresponding_call}{\code{(call)} The call where the \code{calling_function} is called. See \link[rlang]{trace_back} or \lnik[base]{sys.call}}
+\item{corresponding_call}{\code{(call)} The call where the \code{calling_function} is called. See \link[rlang]{trace_back} or \link[base]{sys.call}}
 
 \item{include_null}{\code{(logical)} Include args set to \code{NULL}?}
 

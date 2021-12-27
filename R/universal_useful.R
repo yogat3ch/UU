@@ -244,7 +244,7 @@ object_write <- function(x, filename, path, ..., verbose = TRUE) {
 }
 
 #' @title Make a file path name with underscores
-#' @param \code({character}) file path
+#' @param \code{(character)} file path
 #' @export
 
 make_names <- function(x) {
@@ -377,7 +377,7 @@ get_package_fns <- function(x, all.names = FALSE, pattern, negate = FALSE) {
 
 #' @title Retrieve the function name
 #' @description Sometimes a function is passed down the call stack and it's name is unknown. This function finds the name without having to pass it down the call stack as an argument.
-#' @param fn \coe{(function)} for which to retrieve the name
+#' @param fn \code{(function)} for which to retrieve the name
 #'
 #' @return \code{(character)} of the functions name
 #' @export

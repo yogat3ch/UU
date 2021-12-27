@@ -7,7 +7,7 @@
 fn_name(fn)
 }
 \arguments{
-\item{fn}{\coe{(function)} for which to retrieve the name}
+\item{fn}{\code{(function)} for which to retrieve the name}
 }
 \value{
 \code{(character)} of the functions name
