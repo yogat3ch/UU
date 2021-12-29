@@ -4,7 +4,7 @@
 \alias{list.files2}
 \title{List full file paths with the file name as the name}
 \usage{
-list.files2(path = ".", ...)
+list.files2(path = ".", full.names = TRUE, ...)
 }
 \arguments{
 \item{path}{\code{(character)} dir path to files}
