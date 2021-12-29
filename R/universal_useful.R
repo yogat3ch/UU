@@ -86,8 +86,8 @@ mkpath <- function(path) {
 #'
 #' @examples
 #' list.files2("~")
-list.files2 <- function(path = ".", ...) {
-  list.files(path, full.names = TRUE, ...) |>
+list.files2 <- function(path = ".", full.names =  TRUE, ...) {
+  list.files(path, full.names = full.names, ...) |>
     {\(x) {rlang::set_names(x, ext(basename(x), strip = TRUE))}}()
 }
 
