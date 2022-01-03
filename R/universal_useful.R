@@ -181,8 +181,8 @@ object_ext <- function(object) {
 #' object_fn(data.frame(a = 2, b = 3))
 
 
-object_fn <- function(x) {
-  purrr::when(
+object_fn <- function(x, filepath) {
+  out <- purrr::when(
     x,
     inherits(., "data.frame") ~ feather::write_feather,
     inherits(., "matrix") ~ function(x, path) {
@@ -191,6 +191,11 @@ object_fn <- function(x) {
     inherits(., "ggplot") ~ ggplot2::ggsave,
     !inherits(., "data.frame") ~ saveRDS
   )
+  if (!missing(filepath)) {
+    if (!identical(out, file_fn(filepath, write = TRUE)))
+      stop(glue::glue("Mismatch between class of object `x` & it's `filepath` extension. Is this the right object?"))
+  }
+  out
 }
 
 #' @title Provide the appropriate file read/write function
@@ -232,7 +237,7 @@ object_write <- function(x, filename, path, ..., verbose = TRUE) {
 
   # write the file based on it's type
 
-  fn <- object_fn(x)
+  fn <- object_fn(x, fp)
   rlang::exec(fn, !!!.dots)
   if (img)
     knitr::plot_crop(fp)
@@ -242,6 +247,7 @@ object_write <- function(x, filename, path, ..., verbose = TRUE) {
     stop(fp, " could not be written to disk.")
   fp
 }
+
 
 #' @title Make a file path name with underscores
 #' @param \code{(character)} file path
