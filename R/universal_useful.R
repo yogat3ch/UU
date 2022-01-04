@@ -8,6 +8,18 @@ is_legit <- function(x) {
   !(all(is.null(x)) || rlang::is_empty(x) || all(suppressWarnings(is.na(x))) || inherits(x, c("try-error", "error")))
 }
 
+#' @title Try an expression
+#' @description Calls the expression (LHS) & if it fails return RHS
+#' @param lhs \code{(expression)} to try
+#' @param rhs \code{()}
+#'
+#' @return rhs
+#' @export
+
+`%|try|%` <- function(lhs, rhs) {
+  tryCatch(eval(rlang::enexpr(lhs)), error = rlang::as_function(~{eval(rlang::enexpr(rhs))}))
+}
+
 #' @title Is object an error class?
 #' @description Is object of class `try-error`
 #' @param x \code{(object)}
