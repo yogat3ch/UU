@@ -120,7 +120,7 @@ file_fn <- function(x, write = FALSE) {
     grepl("csv$", ., ignore.case = TRUE) &&
       !write ~ readr::read_csv,
     grepl("feather$", ., ignore.case = TRUE) &&
-      !write ~ feather::read_feather,
+      !write ~ arrow::read_feather,
     grepl("rds$", ., ignore.case = TRUE) && !write ~ readRDS,
     grepl("(?:rda$)|(?:rdata$)", ., ignore.case = TRUE) &&
       !write ~ load_obj,
@@ -131,7 +131,7 @@ file_fn <- function(x, write = FALSE) {
         ~ stop(x, " is an image and requires the magick package.")
       ),
     grepl("csv$", ., ignore.case = TRUE) ~ readr::write_csv,
-    grepl("feather$", ., ignore.case = TRUE) ~ feather::write_feather,
+    grepl("feather$", ., ignore.case = TRUE) ~ arrow::write_feather,
     grepl("rds$", ., ignore.case = TRUE) ~ saveRDS,
     grepl("(?:png$)|(?:jpg$)|(?:jpeg$)", ., ignore.case = TRUE) ~ ggplot2::ggsave,
     grepl("(?:rda$)|(?:rdata$)", ., ignore.case = TRUE) ~ save
@@ -204,9 +204,9 @@ object_ext <- function(object) {
 object_fn <- function(x, filepath) {
   out <- purrr::when(
     x,
-    inherits(., "data.frame") ~ feather::write_feather,
+    inherits(., "data.frame") ~ arrow::write_feather,
     inherits(., "matrix") ~ function(x, path) {
-      feather::write_feather(tibble::as_tibble(x, .name_repair = "minimal"), path = path)
+      arrow::write_feather(tibble::as_tibble(x, .name_repair = "minimal"), path = path)
     },
     inherits(., "ggplot") ~ ggplot2::ggsave,
     !inherits(., "data.frame") ~ saveRDS

@@ -4,7 +4,7 @@
 \alias{object_fn}
 \title{Return the appropriate function for writing the supplied object to disk}
 \usage{
-object_fn(x)
+object_fn(x, filepath)
 }
 \arguments{
 \item{x}{\code{(object)}}
