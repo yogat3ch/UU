@@ -251,9 +251,9 @@ object_write <- function(x, filename, path, ..., verbose = TRUE) {
   # order the arguments to the saving function
   .dots <- rlang::dots_list(..., .named = TRUE)
   if (img)
-    .dots <- purrr::list_modify(.dots, plot = x, filename = fp, device = "png", dpi = "screen")
+    .dots <- purrr::list_modify(list(plot = x, filename = fp, device = "png", dpi = "screen"), !!!.dots)
   else
-    .dots <- purrr::list_modify(.dots, x, fp)
+    .dots <- purrr::list_modify(list(x, fp), !!!.dots)
 
   # write the file based on it's type
 
