@@ -30,6 +30,7 @@ is_error <- function(x) {
   inherits(x, c("try-error", "error"))
 }
 
+
 #' @title Statistical mode
 #' @description Return the most frequenctly occuring item in a dataset
 #' @param x \code{(vector)}
@@ -51,6 +52,40 @@ is_filepath <- function(path) {
   grepl("\\.\\w{1,}", basename(path))
 }
 
+#' Custom error message
+#' Throw \link[rlang]{abort} with \link[glue]{glue} capacity on the message
+#' @inheritParams rlang::abort
+#' @param e \code{(environment)} calling environment. Passed to `glue` for making the message
+#' @export
+
+gbort <- function (
+  message = NULL,
+  class = NULL,
+  ...,
+  trace = rlang::trace_back(),
+  parent = NULL,
+  e = rlang::caller_env()
+) {
+  rlang::abort(glue::glue(message, .envir = e), class, ..., trace, parent)
+}
+
+#' Custom warning message
+#' Throw \link[rlang]{warn} with \link[glue]{glue} capacity on the message
+#' @inheritParams rlang::warn
+#' @inheritParams gbort
+#' @export
+
+gwarn <- function (
+  message = NULL,
+  class = NULL,
+  ...,
+  .frequency = c("always",
+                 "regularly", "once"),
+  .frequency_id = NULL,
+  e = rlang::caller_env()
+) {
+  rlang::warn(glue::glue(message, .envir = e), class, ..., .frequency, .frequency_id)
+}
 #' @title Extract the file extensions from a filepath
 #' @description Given a path, extract the file extension
 #' @param path \code{(character)} path
@@ -60,9 +95,9 @@ is_filepath <- function(path) {
 
 ext <- function(path, strip = FALSE) {
   if (strip) {
-    out <- stringr::str_remove(path, "\\.\\w+$")
+    out <- fs::path_ext_remove(path)
   } else {
-    out <- stringr::str_extract(path, "(?<=\\.)\\w+$")
+    out <- fs::path_ext(path)
     if (!is_legit(out))
       stop(path, " is not a valid file path")
   }
