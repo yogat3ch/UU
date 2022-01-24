@@ -35,6 +35,5 @@ vignettes/*.pdf
 *.utf8.md
 *.knit.md
 
-recursive_language_finder.R
 
 todo.R
