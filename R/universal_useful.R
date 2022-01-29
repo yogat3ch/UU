@@ -53,7 +53,7 @@ is_filepath <- function(path) {
 }
 
 #' Custom error message
-#' Throw \link[rlang]{abort} with \link[glue]{glue} capacity on the message
+#' Throw \link[rlang]{abort} with \link[cli]{format_error} capacity on the message
 #' @inheritParams rlang::abort
 #' @param e \code{(environment)} calling environment. Passed to `glue` for making the message
 #' @export
@@ -66,11 +66,11 @@ gbort <- function (
   parent = NULL,
   e = rlang::caller_env()
 ) {
-  rlang::abort(glue::glue(message, .envir = e), class, ..., trace, parent)
+  rlang::abort(cli::format_error(message, .envir = e), class = class, ..., trace = trace, parent = parent)
 }
 
 #' Custom warning message
-#' Throw \link[rlang]{warn} with \link[glue]{glue} capacity on the message
+#' Throw \link[rlang]{warn} with \link[cli]{format_warning} capacity on the message
 #' @inheritParams rlang::warn
 #' @inheritParams gbort
 #' @export
@@ -84,8 +84,22 @@ gwarn <- function (
   .frequency_id = NULL,
   e = rlang::caller_env()
 ) {
-  rlang::warn(glue::glue(message, .envir = e), class, ..., .frequency, .frequency_id)
+  rlang::warn(cli::format_warning(message, .envir = e), class, ..., .frequency, .frequency_id)
 }
+
+#' Custom warning message
+#' Throw \link[rlang]{signal} with \link[cli]{format_message} capacity on the message
+#' @inheritParams rlang::signal
+#' @inheritParams gbort
+#' @export
+gmessage <- function(
+  message = NULL,
+  class = "message",
+  ...
+) {
+  rlang::signal(cli::format_message(message), class, ...)
+}
+
 #' @title Extract the file extensions from a filepath
 #' @description Given a path, extract the file extension
 #' @param path \code{(character)} path
