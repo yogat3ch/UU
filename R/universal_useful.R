@@ -66,7 +66,7 @@ gbort <- function (
   parent = NULL,
   e = rlang::caller_env()
 ) {
-  rlang::abort(cli::format_error(message, .envir = e), class, ..., trace, parent)
+  rlang::abort(cli::format_error(message, .envir = e), class = class, ..., trace = trace, parent = parent)
 }
 
 #' Custom warning message
@@ -83,7 +83,7 @@ gwarn <- function (
                  "regularly", "once"),
   e = rlang::caller_env()
 ) {
-  rlang::warn(cli::format_warning(message, .envir = e), class, ..., .frequency)
+  rlang::warn(cli::format_warning(message, .envir = e), class = class, ..., .frequency = .frequency)
 }
 
 #' Custom message
