@@ -9,6 +9,10 @@ list.files2(path = ".", full.names = TRUE, ...)
 \arguments{
 \item{path}{\code{(character)} dir path to files}
 
+\item{full.names}{a logical value.  If \code{TRUE}, the directory
+    path is prepended to the file names to give a relative file path.
+    If \code{FALSE}, the file names (rather than paths) are returned.}
+
 \item{...}{
   Arguments passed on to \code{\link[base:list.files]{base::list.files}}
   \describe{
@@ -18,9 +22,6 @@ list.files2(path = ".", full.names = TRUE, ...)
     names of visible files are returned (following Unix-style visibility,
     that is files whose name does not start with a dot).  If \code{TRUE},
     all file names will be returned.}
-    \item{\code{full.names}}{a logical value.  If \code{TRUE}, the directory
-    path is prepended to the file names to give a relative file path.
-    If \code{FALSE}, the file names (rather than paths) are returned.}
     \item{\code{recursive}}{logical.  Should the listing recurse into directories?}
     \item{\code{ignore.case}}{logical.  Should pattern-matching be case-insensitive?}
     \item{\code{include.dirs}}{logical.  Should subdirectory names be included in
