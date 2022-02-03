@@ -168,24 +168,21 @@ list.files2 <- function(path = ".", full.names =  TRUE, ...) {
 file_fn <- function(x, write = FALSE) {
   purrr::when(
     x,
-    grepl("csv$", ., ignore.case = TRUE) &&
-      !write ~ readr::read_csv,
-    grepl("feather$", ., ignore.case = TRUE) &&
-      !write ~ arrow::read_feather,
-    grepl("rds$", ., ignore.case = TRUE) && !write ~ readRDS,
-    grepl("(?:rda$)|(?:rdata$)", ., ignore.case = TRUE) &&
-      !write ~ load_obj,
-    grepl("(?:png$)|(?:jpg$)|(?:jpeg$)", ., ignore.case = TRUE) &&
-      !write ~ purrr::when(
+    grepl("csv$", ., ignore.case = TRUE) && write ~ readr::write_csv,
+    grepl("feather$", ., ignore.case = TRUE) && write ~ arrow::write_feather,
+    grepl("rds$", ., ignore.case = TRUE) && write ~ saveRDS,
+    grepl("(?:png$)|(?:jpg$)|(?:jpeg$)", ., ignore.case = TRUE) && write~ ggplot2::ggsave,
+    grepl("(?:rda$)|(?:rdata$)", ., ignore.case = TRUE) && write ~ save,
+    grepl("csv$", ., ignore.case = TRUE) ~ readr::read_csv,
+    grepl("feather$", ., ignore.case = TRUE)  ~ arrow::read_feather,
+    grepl("rds$", ., ignore.case = TRUE) ~ readRDS,
+    grepl("(?:rda$)|(?:rdata$)", ., ignore.case = TRUE) ~ load_obj,
+    grepl("(?:png$)|(?:jpg$)|(?:jpeg$)", ., ignore.case = TRUE) ~ purrr::when(
         UU::is_legit(utils::packageVersion("magick")),
         . ~ magick::image_read,
         ~ stop(x, " is an image and requires the magick package.")
       ),
-    grepl("csv$", ., ignore.case = TRUE) ~ readr::write_csv,
-    grepl("feather$", ., ignore.case = TRUE) ~ arrow::write_feather,
-    grepl("rds$", ., ignore.case = TRUE) ~ saveRDS,
-    grepl("(?:png$)|(?:jpg$)|(?:jpeg$)", ., ignore.case = TRUE) ~ ggplot2::ggsave,
-    grepl("(?:rda$)|(?:rdata$)", ., ignore.case = TRUE) ~ save
+    grepl("(?:txt$)|(?:^$)", ., ignore.case = TRUE) ~ readLines
   )
 
 }
