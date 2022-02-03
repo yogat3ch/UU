@@ -144,6 +144,7 @@ mkpath <- function(path) {
 #'
 #' @param path \code{(character)} dir path to files
 #' @inheritDotParams base::list.files
+#' @inheritParams base::list.files
 #' @return \code{(named character)}
 #' @export
 #'
