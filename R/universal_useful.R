@@ -182,7 +182,7 @@ file_fn <- function(x, write = FALSE) {
         . ~ magick::image_read,
         ~ stop(x, " is an image and requires the magick package.")
       ),
-    grepl("(?:txt$)|(?:^$)", ., ignore.case = TRUE) ~ readLines
+    ~ readLines
   )
 
 }
