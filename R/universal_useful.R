@@ -322,7 +322,7 @@ object_write <- function(x, filename, path, ..., verbose = TRUE) {
 #' @export
 
 make_names <- function(x) {
-  stringr::str_replace_all(x, '[\\<|\\>|\\:\\"\\/\\|\\?\\*]', "_")
+  fs::path_sanitize(x)
 }
 
 #' @title Find an object by it's class
