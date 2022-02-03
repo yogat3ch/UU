@@ -5,45 +5,7 @@
 \title{Custom message
 Message using \link[cli]{format_message}}
 \usage{
-gmessage(
-  message = NULL,
-  class = NULL,
-  ...,
-  .frequency = c("always", "regularly", "once"),
-  .frequency_id = NULL,
-  e = rlang::caller_env()
-)
-}
-\arguments{
-\item{message}{The message to display. Character vectors are
-formatted with \code{\link[rlang:format_error_bullets]{format_error_bullets()}}. The first element
-defines a message header and the rest of the vector defines
-bullets. Bullets named \code{i} and \code{x} define info and error bullets
-respectively, with special Unicode and colour formatting applied
-if possible.
-
-If a message is not supplied, it is expected that the message is
-generated lazily through \link[rlang:cnd_message]{conditionMessage()}. In
-that case, \code{class} must be supplied. Only \code{inform()} allows empty
-messages as it is occasionally useful to build user output
-incrementally.}
-
-\item{class}{Subclass of the condition. This allows your users
-to selectively handle the conditions signalled by your functions.}
-
-\item{...}{Additional data to be stored in the condition object.}
-
-\item{.frequency}{How frequently should the warning or message be
-displayed? By default (\code{"always"}) it is displayed at each
-time. If \code{"regularly"}, it is displayed once every 8 hours. If
-\code{"once"}, it is displayed once per session.}
-
-\item{.frequency_id}{A unique identifier for the warning or
-message. This is used when \code{.frequency} is supplied to recognise
-recurring conditions. This argument must be supplied if
-\code{.frequency} is not set to \code{"always"}.}
-
-\item{e}{\code{(environment)} calling environment. Passed to \code{glue} for making the message}
+gmessage(e = rlang::caller_env())
 }
 \description{
 Custom message

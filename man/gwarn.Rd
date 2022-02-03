@@ -10,7 +10,6 @@ gwarn(
   class = NULL,
   ...,
   .frequency = c("always", "regularly", "once"),
-  .frequency_id = NULL,
   e = rlang::caller_env()
 )
 }
@@ -37,11 +36,6 @@ to selectively handle the conditions signalled by your functions.}
 displayed? By default (\code{"always"}) it is displayed at each
 time. If \code{"regularly"}, it is displayed once every 8 hours. If
 \code{"once"}, it is displayed once per session.}
-
-\item{.frequency_id}{A unique identifier for the warning or
-message. This is used when \code{.frequency} is supplied to recognise
-recurring conditions. This argument must be supplied if
-\code{.frequency} is not set to \code{"always"}.}
 
 \item{e}{\code{(environment)} calling environment. Passed to \code{glue} for making the message}
 }

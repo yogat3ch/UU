@@ -81,28 +81,20 @@ gwarn <- function (
   ...,
   .frequency = c("always",
                  "regularly", "once"),
-  .frequency_id = NULL,
   e = rlang::caller_env()
 ) {
-  rlang::warn(cli::format_warning(message, .envir = e), class, ..., .frequency, .frequency_id)
+  rlang::warn(cli::format_warning(message, .envir = e), class, ..., .frequency)
 }
 
 #' Custom message
 #' Message using \link[cli]{format_message}
-#' @inheritParams rlang::warn
-#' @inheritParams gbort
+#' @inheritParams cli::format_warning
 #' @export
 
 gmessage <- function (
-  message = NULL,
-  class = NULL,
-  ...,
-  .frequency = c("always",
-                 "regularly", "once"),
-  .frequency_id = NULL,
   e = rlang::caller_env()
 ) {
-  rlang::warn(cli::format_warning(message, .envir = e), class, ..., .frequency, .frequency_id)
+  cli::cat_line(cli::format_warning(message, .envir = e))
 }
 #' @title Extract the file extensions from a filepath
 #' @description Given a path, extract the file extension
