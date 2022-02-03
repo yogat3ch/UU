@@ -116,8 +116,6 @@ ext <- function(path, strip = FALSE) {
     out <- fs::path_ext_remove(path)
   } else {
     out <- fs::path_ext(path)
-    if (!is_legit(out))
-      stop(path, " is not a valid file path")
   }
   out
 }
