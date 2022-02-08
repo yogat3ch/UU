@@ -115,11 +115,12 @@ ext <- function(path, strip = FALSE) {
 #' @title Construct a path
 #' @description Given a path, construct it if it does not exist.
 #' @param path \code{(character)} path
-#' @return \code{(logical)}
+#' @param mkfile \code{(logical)} whether to make the file if it doesn't exist.
+#' @return \code{(informative messages)}
 #' @export
 
-mkpath <- function(path, file = FALSE, mkfile = FALSE) {
-  if (file || mkfile)
+mkpath <- function(path, mkfile = FALSE) {
+  if (mkfile)
     .path <- basename(path)
   else
     .path <- path
