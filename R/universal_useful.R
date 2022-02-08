@@ -118,17 +118,21 @@ ext <- function(path, strip = FALSE) {
 #' @return \code{(logical)}
 #' @export
 
-mkpath <- function(path) {
-  if (!dir.exists(path)) {
+mkpath <- function(path, file = FALSE, mkfile = FALSE) {
+  if (file || mkfile)
+    .path <- basename(path)
+  else
+    .path <- path
+  if (!dir.exists(.path) && !identical(path, .path)) {
     # Check to see if it's a file path and use just the directory path if so
-    if (is_filepath(path))
-      path <- dirname(path)
-
-    if (!dir.exists(path)) {
-      dir.create(path, recursive = TRUE)
-      cli::cli_inform("Created {.path {path}}")
-    }
+    dir.create(.path, recursive = TRUE)
+    cli::cli_inform("Created {.path {.path}}")
   }
+  if (mkfile && !file.exists(path)) {
+    file.create(path)
+    cli::cli_inform("{.path {path}} created.")
+  }
+
 }
 
 
