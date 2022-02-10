@@ -469,7 +469,7 @@ fn_name <- function(fn) {
 #' @export
 
 regex_op <- function(x, type = "|", pre = "", suf = "") {
-  paste0(paste0("(?",pre,switch(type, `|` = ":", `&` = "=.*"), x,suf,")"), collapse = switch(type, `|` = "|", `&` = ""))
+  paste0(paste0("(?",switch(type, `|` = ":", `&` = "=.*"),pre, x,suf,")"), collapse = switch(type, `|` = "|", `&` = ""))
 }
 
 #' Create a compound regex grouped OR statement
