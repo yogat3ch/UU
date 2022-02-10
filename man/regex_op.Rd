@@ -4,12 +4,16 @@
 \alias{regex_op}
 \title{Create a compound regex grouped statement}
 \usage{
-regex_op(x, type = "|")
+regex_op(x, type = "|", pre = "", suf = "")
 }
 \arguments{
 \item{x}{\code{(character)} regex strings}
 
 \item{type}{\code{(character)} \code{|}, \code{&} supported}
+
+\item{pre}{\code{(character)} regex tokens to precede each string group. IE \verb{(?:[pre]x)} w/out the braces}
+
+\item{suf}{\code{(character)} regex tokens to follow each string group. IE \verb{(?:x[suf])} w/out the braces}
 }
 \value{
 \code{(character)} grouped regex statement
