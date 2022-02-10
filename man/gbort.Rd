@@ -2,8 +2,7 @@
 % Please edit documentation in R/universal_useful.R
 \name{gbort}
 \alias{gbort}
-\title{Custom error message
-Throw \link[rlang]{abort} with \link[cli]{format_error}}
+\title{Custom error message}
 \usage{
 gbort(
   message = NULL,
@@ -58,6 +57,5 @@ default.
 \item{e}{\code{(environment)} calling environment. Passed to \code{glue} for making the message}
 }
 \description{
-Custom error message
 Throw \link[rlang]{abort} with \link[cli]{format_error}
 }

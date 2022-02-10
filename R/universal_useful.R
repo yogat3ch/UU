@@ -53,7 +53,7 @@ is_filepath <- function(path) {
 }
 
 #' Custom error message
-#' Throw \link[rlang]{abort} with \link[cli]{format_error}
+#' @description Throw \link[rlang]{abort} with \link[cli]{format_error}
 #' @inheritParams rlang::abort
 #' @param e \code{(environment)} calling environment. Passed to `glue` for making the message
 #' @export
@@ -70,7 +70,7 @@ gbort <- function (
 }
 
 #' Custom warning message
-#' Throw \link[rlang]{warn} with \link[cli]{format_warning}
+#' @description Throw \link[rlang]{warn} with \link[cli]{format_warning}
 #' @inheritParams rlang::warn
 #' @inheritParams gbort
 #' @export

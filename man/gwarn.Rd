@@ -2,8 +2,7 @@
 % Please edit documentation in R/universal_useful.R
 \name{gwarn}
 \alias{gwarn}
-\title{Custom warning message
-Throw \link[rlang]{warn} with \link[cli]{format_warning}}
+\title{Custom warning message}
 \usage{
 gwarn(
   message = NULL,
@@ -43,6 +42,5 @@ time. If \code{"regularly"}, it is displayed once every 8 hours. If
 \item{e}{\code{(environment)} calling environment. Passed to \code{glue} for making the message}
 }
 \description{
-Custom warning message
 Throw \link[rlang]{warn} with \link[cli]{format_warning}
 }
