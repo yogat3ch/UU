@@ -478,7 +478,7 @@ regex_op <- function(x, type = "|", pre = "", suf = "") {
 #' @return \code{(character)} grouped regex OR statement
 #' @export
 
-regex_or <- function(x, pre = "", suf = "") regex_op(x)
+regex_or <- function(x, pre = "", suf = "") regex_op(x, pre = pre, suf = suf)
 
 #' @title start_cluster
 #' @description Creates a compute cluster
