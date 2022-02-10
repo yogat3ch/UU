@@ -462,21 +462,23 @@ fn_name <- function(fn) {
 #' Create a compound regex grouped statement
 #'
 #' @param x \code{(character)} regex strings
+#' @param pre \code{(character)} regex tokens to precede each string group. IE `(?:[pre]x)` w/out the braces
+#' @param suf \code{(character)} regex tokens to follow each string group. IE `(?:x[suf])` w/out the braces
 #' @param type \code{(character)} `|`, `&` supported
 #' @return \code{(character)} grouped regex statement
 #' @export
 
-regex_op <- function(x, type = "|") {
+regex_op <- function(x, type = "|", pre = "", suf = "") {
   paste0(paste0("(?",switch(type, `|` = ":", `&` = "=.*"), x,")"), collapse = switch(type, `|` = "|", `&` = ""))
 }
 
 #' Create a compound regex grouped OR statement
 #'
-#' @param x \code{(character)} regex strings
+#' @inheritParams regex_op
 #' @return \code{(character)} grouped regex OR statement
 #' @export
 
-regex_or <- function(x) regex_op(x)
+regex_or <- function(x, pre = "", suf = "") regex_op(x)
 
 #' @title start_cluster
 #' @description Creates a compute cluster
