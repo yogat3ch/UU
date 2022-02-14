@@ -136,6 +136,8 @@ mkpath <- function(path, mkfile = FALSE) {
 
 }
 
+#' Load project & user-level _.Renviron_ & _.Rprofile_
+#' @export
 startup <- function() {
   list(.Rprofile = Sys.getenv("R_PROFILE" , ".Rprofile"),
        .Rprofile_user = Sys.getenv("R_PROFILE_USER", "~/.Rprofile"),
