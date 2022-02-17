@@ -140,7 +140,7 @@ mkpath <- function(path, mkfile = FALSE) {
 #' @export
 startup <- function() {
   if (!getOption("UU_startup", FALSE)) {
-    option(UU_startup = TRUE)
+    options(UU_startup = TRUE)
     list(.Rprofile = Sys.getenv("R_PROFILE" , ".Rprofile"),
          .Rprofile_user = Sys.getenv("R_PROFILE_USER", "~/.Rprofile"),
          .Renviron = Sys.getenv("R_ENVIRON", ".Renviron"),
