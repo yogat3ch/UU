@@ -4,7 +4,12 @@
 \alias{creds_to_renviron}
 \title{Write named credentials to .Renviron file}
 \usage{
-creds_to_renviron(..., scope = c("user", "project"), overwrite = FALSE)
+creds_to_renviron(
+  ...,
+  scope = c("user", "project"),
+  overwrite = FALSE,
+  proj_dir = "."
+)
 }
 \arguments{
 \item{...}{named keys to write}
@@ -13,6 +18,8 @@ creds_to_renviron(..., scope = c("user", "project"), overwrite = FALSE)
 current \strong{project}}
 
 \item{overwrite}{\code{(lgl)} should an existing key be overwritten. \strong{Default: \code{FALSE}}}
+
+\item{proj_dir}{\code{(chr)} project directory to write credentials to}
 }
 \value{
 success message if a value is written

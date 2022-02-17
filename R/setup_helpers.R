@@ -17,16 +17,17 @@ need_write <- function(creds, file_lines, overwrite = FALSE) {
 #' @param ... named keys to write
 #' @inheritParams usethis::edit_r_environ
 #' @param overwrite \code{(lgl)} should an existing key be overwritten. **Default: `FALSE`**
+#' @param proj_dir \code{(chr)} project directory to write credentials to
 #'
 #' @return success message if a value is written
 #' @export
 #'
 
-creds_to_renviron <- function(..., scope = c("user", "project"), overwrite = FALSE) {
+creds_to_renviron <- function(..., scope = c("user", "project"), overwrite = FALSE, proj_dir = ".") {
   .scope <- UU::match_letters(scope, "user", "project")
   fp <- switch(.scope,
                user = Sys.getenv("R_ENVIRON_USER", "~/.Renviron"),
-               project = ".Renviron")
+               project = file.path(proj_dir, ".Renviron"))
   UU::mkpath(fp, mkfile = TRUE)
   l <- readLines(fp)
   l <- l[nzchar(l)]
@@ -38,10 +39,9 @@ creds_to_renviron <- function(..., scope = c("user", "project"), overwrite = FAL
     readRenviron(fp)
     cli::cli_alert_success("{cli::col_green(paste0(names(creds_to_write), collapse = \", \"))} successfully written to {.path {fp}}")
   }
-  if (.scope == "project") {
-    UU::mkpath(".gitignore", mkfile = TRUE)
-    ignore_files(".Renviron")
-  }
+  if (.scope == "project")
+    ignore_files(".Renviron", proj_dir)
+
 
 }
 
@@ -60,6 +60,6 @@ ignore_files <- function(lines, directory = ".") {
   to_ignore <- need_write(lines, l)
   write(to_ignore, file = fp, append = TRUE)
   if (UU::is_legit(to_ignore))
-    cli::cli_alert_info("{.path {paste0(files, collapse = ',')}} added to {.val {'.gitignore'}}")
+    cli::cli_alert_info("{.val {paste0(files, collapse = ',')}} added to {.path {fp}}")
 
 }

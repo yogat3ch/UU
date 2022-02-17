@@ -139,18 +139,22 @@ mkpath <- function(path, mkfile = FALSE) {
 #' Load project & user-level _.Renviron_ & _.Rprofile_
 #' @export
 startup <- function() {
-  list(.Rprofile = Sys.getenv("R_PROFILE" , ".Rprofile"),
-       .Rprofile_user = Sys.getenv("R_PROFILE_USER", "~/.Rprofile"),
-       .Renviron = Sys.getenv("R_ENVIRON", ".Renviron"),
-       .Renviron_user = Sys.getenv("R_ENVIRON_USER", "~/.Renviron")) |>
-    purrr::iwalk(~{
-      if (file.exists(.x))
-        rlang::exec(switch(.y,
-                           .Rprofile = ,
-                           .Rprofile_user = base::source,
-                           .Renviron = ,
-                           .Renviron_user = base::readRenviron), .x)
-    })
+  if (!getOption("UU_startup", FALSE)) {
+    option(UU_startup = TRUE)
+    list(.Rprofile = Sys.getenv("R_PROFILE" , ".Rprofile"),
+         .Rprofile_user = Sys.getenv("R_PROFILE_USER", "~/.Rprofile"),
+         .Renviron = Sys.getenv("R_ENVIRON", ".Renviron"),
+         .Renviron_user = Sys.getenv("R_ENVIRON_USER", "~/.Renviron")) |>
+      purrr::iwalk(~{
+        if (file.exists(.x))
+          rlang::exec(switch(.y,
+                             .Rprofile = ,
+                             .Rprofile_user = base::source,
+                             .Renviron = ,
+                             .Renviron_user = base::readRenviron), .x)
+      })
+  }
+
 }
 
 #' @title List full file paths with the file name as the name
