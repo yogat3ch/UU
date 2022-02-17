@@ -39,7 +39,7 @@ creds_to_renviron <- function(..., scope = c("user", "project"), overwrite = FAL
     readRenviron(fp)
     cli::cli_alert_success("{cli::col_green(paste0(names(creds_to_write), collapse = \", \"))} successfully written to {.path {fp}}")
   }
-  if (.scope == "project")
+  if (scope == "project")
     ignore_files(".Renviron", proj_dir)
 
 
@@ -60,6 +60,6 @@ ignore_files <- function(lines, directory = ".") {
   to_ignore <- need_write(lines, l)
   write(to_ignore, file = fp, append = TRUE)
   if (UU::is_legit(to_ignore))
-    cli::cli_alert_info("{.val {paste0(files, collapse = ',')}} added to {.path {fp}}")
+    cli::cli_alert_info("{.val {paste0(lines, collapse = ',')}} added to {.path {fp}}")
 
 }
