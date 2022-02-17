@@ -120,8 +120,8 @@ ext <- function(path, strip = FALSE) {
 #' @export
 
 mkpath <- function(path, mkfile = FALSE) {
-  if (mkfile)
-    .path <- basename(path)
+  if (mkfile && grepl(paste0("\\",.Platform$file.sep), path))
+    .path <- dirname(path)
   else
     .path <- path
   if (!dir.exists(.path) && !file.exists(.path) && !identical(path, .path)) {
