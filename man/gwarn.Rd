@@ -13,31 +13,11 @@ gwarn(
 )
 }
 \arguments{
-\item{message}{The message to display, formatted as a \strong{bulleted
-list}. The first element is displayed as an \emph{alert} bullet
-prefixed with \code{!} by default. Elements named \code{"*"}, \code{"i"}, and
-\code{"x"} are formatted as regular, info, and cross bullets
-respectively. Se\ifelse{{html}{\link[rlang:topic-condition-formatting]{Formatting condition messages}}{\link[rlang:topic-condition-formatting]{Formatting condition messages}}})` for more
-about bulleted messaging.
+\item{message}{\code{(chr)} The message to display, formatted as a bulleted list. The first element is displayed as an alert bullet prefixed with ! by default. Elements named "*", "i", and "x" are formatted as regular, info, and cross bullets respectively. See \link[rlang]{topic-condition-formatting} for more about bulleted messaging.}
 
-If a message is not supplied, it is expected that the message is
-generated \strong{lazily} through \code{\link[rlang:cnd_message]{cnd_header()}} and \code{\link[rlang:cnd_message]{cnd_body()}}
-methods. In that case, \code{class} must be supplied. Only \code{inform()}
-allows empty messages as it is occasionally useful to build user
-output incrementally.}
+\item{class}{\code{(class)} Subclass of the condition}
 
-\item{class}{Subclass of the condition.}
-
-\item{...}{Additional data to be stored in the condition object.
-If you supply condition fields, you should usually provide a
-\code{class} argument. You may consider prefixing condition fields
-with the name of your package or organisation to prevent name
-collisions.}
-
-\item{.frequency}{How frequently should the warning or message be
-displayed? By default (\code{"always"}) it is displayed at each
-time. If \code{"regularly"}, it is displayed once every 8 hours. If
-\code{"once"}, it is displayed once per session.}
+\item{.frequency}{\code{(chr)} How frequently should the warning or message be displayed? By default ("always") it is displayed at each time. If "regularly", it is displayed once every 8 hours. If "once", it is displayed once per session.}
 
 \item{e}{\code{(environment)} calling environment. Passed to \code{glue} for making the message}
 }

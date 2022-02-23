@@ -3,11 +3,11 @@
 \name{gmsg}
 \alias{gmsg}
 \title{Custom message
-Message using \link[cli]{format_message}}
+Message using \link[cli]{format_message} & \link[cli]{cat_line}}
 \usage{
 gmsg(msg, e = rlang::caller_env())
 }
 \description{
 Custom message
-Message using \link[cli]{format_message}
+Message using \link[cli]{format_message} & \link[cli]{cat_line}
 }

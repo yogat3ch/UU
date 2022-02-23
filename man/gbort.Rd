@@ -14,45 +14,13 @@ gbort(
 )
 }
 \arguments{
-\item{message}{The message to display, formatted as a \strong{bulleted
-list}. The first element is displayed as an \emph{alert} bullet
-prefixed with \code{!} by default. Elements named \code{"*"}, \code{"i"}, and
-\code{"x"} are formatted as regular, info, and cross bullets
-respectively. Se\ifelse{{html}{\link[rlang:topic-condition-formatting]{Formatting condition messages}}{\link[rlang:topic-condition-formatting]{Formatting condition messages}}})` for more
-about bulleted messaging.
+\item{message}{\code{(chr)} The message to display, formatted as a bulleted list. The first element is displayed as an alert bullet prefixed with ! by default. Elements named "*", "i", and "x" are formatted as regular, info, and cross bullets respectively. See \link[rlang]{topic-condition-formatting} for more about bulleted messaging.}
 
-If a message is not supplied, it is expected that the message is
-generated \strong{lazily} through \code{\link[rlang:cnd_message]{cnd_header()}} and \code{\link[rlang:cnd_message]{cnd_body()}}
-methods. In that case, \code{class} must be supplied. Only \code{inform()}
-allows empty messages as it is occasionally useful to build user
-output incrementally.}
+\item{class}{\code{(class)} Subclass of the condition}
 
-\item{class}{Subclass of the condition.}
+\item{trace}{\code{(trace)} A \code{trace} object created by \link[rlang]{trace_back}}
 
-\item{...}{Additional data to be stored in the condition object.
-If you supply condition fields, you should usually provide a
-\code{class} argument. You may consider prefixing condition fields
-with the name of your package or organisation to prevent name
-collisions.}
-
-\item{trace}{A \code{trace} object created by \code{\link[rlang:trace_back]{trace_back()}}.}
-
-\item{parent}{Supply \code{parent} when you rethrow an error from a
-condition handler (e.g. with \code{\link[rlang:try_fetch]{try_fetch()}}).
-\itemize{
-\item If \code{parent} is a condition object, a \emph{chained error} is
-created, which is useful when you want to enhance an error with
-more details, while still retaining the original information.
-\item If \code{parent} is \code{NA}, it indicates an unchained rethrow, which
-is useful when you want to take ownership over an error and
-rethrow it with a custom message that better fits the
-surrounding context.
-
-Technically, supplying \code{NA} lets \code{abort()} know it is called
-from a condition handler. This helps it create simpler
-backtraces where the condition handling context is hidden by
-default.
-}}
+\item{parent}{\code{(cond)} Supply \code{parent} when you rethrow an error from a condition handler}
 
 \item{e}{\code{(environment)} calling environment. Passed to \code{glue} for making the message}
 }

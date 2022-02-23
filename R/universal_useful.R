@@ -9,11 +9,12 @@ is_legit <- function(x) {
 }
 
 #' @title Try an expression
+#' @name try-infix
 #' @description Calls the expression (LHS) & if it fails return RHS
 #' @param lhs \code{(expression)} to try
-#' @param rhs \code{()}
+#' @param rhs \code{(expression)} to replace if expression fails
 #'
-#' @return rhs
+#' @return results from lhs on success results from rhs on fail
 #' @export
 
 `%|try|%` <- function(lhs, rhs) {
@@ -54,7 +55,10 @@ is_filepath <- function(path) {
 
 #' Custom error message
 #' @description Throw \link[rlang]{abort} with \link[cli]{format_error}
-#' @inheritParams rlang::abort
+#' @param message \code{(chr)} The message to display, formatted as a bulleted list. The first element is displayed as an alert bullet prefixed with ! by default. Elements named "*", "i", and "x" are formatted as regular, info, and cross bullets respectively. See \link[rlang]{topic-condition-formatting} for more about bulleted messaging.
+#' @param class \code{(class)} Subclass of the condition
+#' @param trace \code{(trace)} A `trace` object created by \link[rlang]{trace_back}
+#' @param parent \code{(cond)} Supply `parent` when you rethrow an error from a condition handler
 #' @param e \code{(environment)} calling environment. Passed to `glue` for making the message
 #' @export
 
@@ -71,8 +75,8 @@ gbort <- function (
 
 #' Custom warning message
 #' @description Throw \link[rlang]{warn} with \link[cli]{format_warning}
-#' @inheritParams rlang::warn
 #' @inheritParams gbort
+#' @param .frequency \code{(chr)} How frequently should the warning or message be displayed? By default ("always") it is displayed at each time. If "regularly", it is displayed once every 8 hours. If "once", it is displayed once per session.
 #' @export
 
 gwarn <- function (
@@ -87,8 +91,8 @@ gwarn <- function (
 }
 
 #' Custom message
-#' Message using \link[cli]{format_message}
-#' @inheritParams cli::format_warning
+#' Message using \link[cli]{format_message} & \link[cli]{cat_line}
+#' @inheritParams cli::format_message
 #' @export
 
 gmsg <- function (
