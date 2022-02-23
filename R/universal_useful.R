@@ -365,7 +365,7 @@ object_write <- function(x, filename, path, ..., verbose = TRUE) {
 #' @export
 last_updated <- function(x, path = "data") {
   if (!missing(x)) {
-    do.call(c, purrr::map(rlang::set_names(x), ~file.info(.x)$mtime %||% lubridate::NA_POSIXct_)) |> sort(decreasing = TRUE)
+    do.call(c, purrr::map(rlang::set_names(x), ~file.info(.x)$mtime)) |> sort(decreasing = TRUE, na.last = TRUE)
   } else {
     do.call(c, purrr::map(rlang::set_names(UU::list.files2(path)), purrr::possibly(~file.info(.x)$mtime, lubridate::NA_POSIXct_)))
   }
