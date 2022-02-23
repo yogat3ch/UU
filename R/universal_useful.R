@@ -341,6 +341,20 @@ object_write <- function(x, filename, path, ..., verbose = TRUE) {
     stop(fp, " could not be written to disk.")
   fp
 }
+#' @title Gather last updated times for on-disk files
+#' @description Check the last modified time for the hud_exports specified
+#' @param x \code{(chr)} file path to check last updated time
+#' @param path \code{(chr)} directory path in which to check all files (alternative to `x`)
+#' @return \code{(POSIXct)} Last modified time
+#' @export
+last_updated <- function(x, path = "data") {
+  if (!missing(x)) {
+    do.call(c, purrr::map(rlang::set_names(x), ~file.info(.x)$mtime)) |> sort(decreasing = TRUE)
+  } else {
+    do.call(c, purrr::map(rlang::set_names(UU::list.files2(path)), purrr::possibly(~file.info(.x)$mtime, lubridate::NA_POSIXct_)))
+  }
+
+}
 
 
 #' @title Make a file path name with underscores
