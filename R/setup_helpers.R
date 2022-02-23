@@ -23,7 +23,7 @@ need_write <- function(creds, file_lines, overwrite = FALSE) {
 #' @export
 #'
 
-creds_to_renviron <- function(..., scope = c("user", "project"), overwrite = FALSE, proj_dir = ".") {
+creds_to_renviron <- function(..., scope = c("user", "project")[1], overwrite = FALSE, proj_dir = ".") {
   .scope <- UU::match_letters(scope, "user", "project")
   fp <- switch(.scope,
                user = Sys.getenv("R_ENVIRON_USER", "~/.Renviron"),
