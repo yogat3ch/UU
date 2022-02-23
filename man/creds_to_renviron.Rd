@@ -6,7 +6,7 @@
 \usage{
 creds_to_renviron(
   ...,
-  scope = c("user", "project"),
+  scope = c("user", "project")[1],
   overwrite = FALSE,
   proj_dir = "."
 )
