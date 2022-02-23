@@ -91,10 +91,11 @@ gwarn <- function (
 #' @inheritParams cli::format_warning
 #' @export
 
-gmessage <- function (
+gmsg <- function (
+  msg,
   e = rlang::caller_env()
 ) {
-  cli::cat_line(cli::format_warning(message, .envir = e))
+  cli::cat_line(cli::format_message(msg, .envir = e))
 }
 #' @title Extract the file extensions from a filepath
 #' @description Given a path, extract the file extension
@@ -146,12 +147,15 @@ startup <- function() {
          .Renviron = Sys.getenv("R_ENVIRON", ".Renviron"),
          .Renviron_user = Sys.getenv("R_ENVIRON_USER", "~/.Renviron")) |>
       purrr::iwalk(~{
-        if (file.exists(.x))
+        if (file.exists(.x)) {
+          gmsg("{.path {.x}} loaded.")
           rlang::exec(switch(.y,
                              .Rprofile = ,
                              .Rprofile_user = base::source,
                              .Renviron = ,
                              .Renviron_user = base::readRenviron), .x)
+        }
+
       })
   }
 
@@ -209,9 +213,9 @@ load_obj <- function(file) {
   e <- new.env()
   load(file, e)
   .nms <- ls(e, all.names = TRUE)
-  if (length(.nms) == 1)
+  if (length(.nms) == 1){
     out <- e[[.nms]]
-  else {
+  } else {
     out <- rlang::env_get_list(e, nms = .nms)
   }
   out
