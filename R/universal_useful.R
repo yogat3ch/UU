@@ -21,6 +21,22 @@ is_legit <- function(x) {
   tryCatch(eval(rlang::enexpr(lhs)), error = rlang::as_function(~{eval(rlang::enexpr(rhs))}))
 }
 
+#' @title Replace a 0 length value
+#' @name zero-length-infix
+#' @description If the lhs is length 0, replace with rhs
+#' @param lhs \code{(expression)} to try
+#' @param rhs \code{(expression)} to replace if expression fails
+#'
+#' @return results from lhs if length > 1 otherwise rhs
+#' @export
+
+`%|0|%` <- function(lhs, rhs) {
+  if (rlang::is_empty(lhs))
+    rhs
+  else
+    lhs
+}
+
 #' @title Is object an error class?
 #' @description Is object of class `try-error`
 #' @param x \code{(object)}
@@ -349,7 +365,7 @@ object_write <- function(x, filename, path, ..., verbose = TRUE) {
 #' @export
 last_updated <- function(x, path = "data") {
   if (!missing(x)) {
-    do.call(c, purrr::map(rlang::set_names(x), ~file.info(.x)$mtime)) |> sort(decreasing = TRUE)
+    do.call(c, purrr::map(rlang::set_names(x), ~file.info(.x)$mtime %|0|% lubridate::NA_POSIXct_)) |> sort(decreasing = TRUE)
   } else {
     do.call(c, purrr::map(rlang::set_names(UU::list.files2(path)), purrr::possibly(~file.info(.x)$mtime, lubridate::NA_POSIXct_)))
   }
