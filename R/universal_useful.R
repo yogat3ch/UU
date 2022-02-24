@@ -185,7 +185,7 @@ is_project <- function() {
 #' Load project & user-level _.Renviron_ & _.Rprofile_
 #' @export
 startup <- function(ns = loadedNamespaces()) {
-  force(ns)
+  ns
   if (!getOption("UU_startup", FALSE)) {
     options(UU_startup = TRUE)
     list(.Rprofile = Sys.getenv("R_PROFILE" , ".Rprofile"),
@@ -205,7 +205,7 @@ startup <- function(ns = loadedNamespaces()) {
       })
   }
   lns <- loadedNamespaces()
-on.exit(unload_namespaces(lns[!lns %in% ns]))
+  on.exit(unload_namespaces(lns[!lns %in% ns]))
 }
 
 #' @title List full file paths with the file name as the name
