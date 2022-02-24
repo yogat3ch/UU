@@ -175,7 +175,7 @@ mkpath <- function(path, mkfile = FALSE) {
 
 is_project <- function() {
   desc <- utils::packageDescription("rstudioapi")
-  if (is_legit(desc))
+  if (is_legit(desc) && rstudioapi::isAvailable())
     is_legit(rstudioapi::getActiveProject())
   else
     FALSE
