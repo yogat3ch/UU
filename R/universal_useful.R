@@ -393,11 +393,15 @@ object_write <- function(x, filename, path, ..., verbose = TRUE) {
 #' @export
 last_updated <- function(x, path = "data") {
   if (!missing(x)) {
-    do.call(c, purrr::map(rlang::set_names(x), ~file.info(.x)$mtime))
+    .files <- x
   } else {
-    do.call(c, purrr::map(rlang::set_names(UU::list.files2(path)), purrr::possibly(~file.info(.x)$mtime, lubridate::NA_POSIXct_)))
+    .files <- UU::list.files2(path)
   }
-
+  if (is_legit(.files))
+    .files <- do.call(c, purrr::map(rlang::set_names(.files), purrr::possibly(~file.info(.x)$mtime, lubridate::NA_POSIXct_)))
+  else
+    gwarn("{cli::code_highlight('UU::last_udpated', code_theme = 'Twilight')}: No files detected")
+  .files
 }
 
 
