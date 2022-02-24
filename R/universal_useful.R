@@ -2,14 +2,14 @@
 #' @param ns \code{(chr)} namespaces to unload
 #' @export
 
-unload_namespaces <- function(ns) {
+unload_namespaces <- function(ns, verbose = FALSE) {
   if (missing(ns))
     ns <- loadedNamespaces()
   .ns <- ns[!ns %in% c("rstudio", "stats", "graphics", "utils", "datasets", "methods",
                 "base", "bit64", "tools")]
   purrr::walk(.ns, purrr::possibly(unloadNamespace, NA, quiet = TRUE))
   .ns <- loadedNamespaces()
-  if (length(.ns) < length(ns))
+  if (length(.ns) < length(ns) && verbose)
     cli::cli_alert_success("Unloaded: {cli::col_grey(paste0(ns[!ns %in% .ns], sep = ', '))}")
 }
 
@@ -185,7 +185,6 @@ is_project <- function() {
 #' Load project & user-level _.Renviron_ & _.Rprofile_
 #' @export
 startup <- function() {
-  ns <- loadedNamespaces()
   if (!getOption("UU_startup", FALSE)) {
     options(UU_startup = TRUE)
     list(.Rprofile = Sys.getenv("R_PROFILE" , ".Rprofile"),
@@ -204,8 +203,7 @@ startup <- function() {
 
       })
   }
-  lns <- loadedNamespaces()
-  on.exit(unload_namespaces(lns[!lns %in% ns]))
+  on.exit(unload_namespaces(c("UU", "purrr", "rlang")))
 }
 
 #' @title List full file paths with the file name as the name
