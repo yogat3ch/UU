@@ -184,8 +184,8 @@ is_project <- function() {
 
 #' Load project & user-level _.Renviron_ & _.Rprofile_
 #' @export
-startup <- function(ns = loadedNamespaces()) {
-  ns
+startup <- function() {
+  ns <- loadedNamespaces()
   if (!getOption("UU_startup", FALSE)) {
     options(UU_startup = TRUE)
     list(.Rprofile = Sys.getenv("R_PROFILE" , ".Rprofile"),
