@@ -181,10 +181,11 @@ is_project <- function() {
     FALSE
 }
 
+
 #' Load project & user-level _.Renviron_ & _.Rprofile_
 #' @export
 startup <- function() {
-  if (!getOption("UU_startup", FALSE) && is_project()) {
+  if (!getOption("UU_startup", FALSE)) {
     options(UU_startup = TRUE)
     list(.Rprofile = Sys.getenv("R_PROFILE" , ".Rprofile"),
          .Rprofile_user = Sys.getenv("R_PROFILE_USER", "~/.Rprofile"),
