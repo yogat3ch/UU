@@ -1,3 +1,19 @@
+#' @title Unload namespaces prior to package install
+#' @param ns \code{(chr)} namespaces to unload
+#' @export
+
+unload_namespaces <- function(ns) {
+  if (missing(ns))
+    ns <- loadedNamespaces()
+  .ns <- ns[!ns %in% c("rstudio", "stats", "graphics", "utils", "datasets", "methods",
+                "base", "bit64", "tools")]
+  purrr::walk(.ns, purrr::possibly(unloadNamespace, NA, quiet = TRUE))
+  .ns <- loadedNamespaces()
+  if (length(.ns) < length(ns))
+    cli::cli_alert_success("Unloaded: {cli::col_grey(paste0(ns[!ns %in% .ns], sep = ', '))}")
+}
+
+
 #' @title Is object legit?
 #' @description Is object non-null, non-empty, non-NA, and not a try-error?
 #' @param x \code{(object)}
@@ -213,16 +229,20 @@ file_fn <- function(x, write = FALSE) {
     grepl("csv$", ., ignore.case = TRUE) && write ~ readr::write_csv,
     grepl("feather$", ., ignore.case = TRUE) && write ~ arrow::write_feather,
     grepl("rds$", ., ignore.case = TRUE) && write ~ saveRDS,
-    grepl("(?:png$)|(?:jpg$)|(?:jpeg$)", ., ignore.case = TRUE) && write~ ggplot2::ggsave,
     grepl("(?:rda$)|(?:rdata$)", ., ignore.case = TRUE) && write ~ save,
     grepl("csv$", ., ignore.case = TRUE) ~ readr::read_csv,
     grepl("feather$", ., ignore.case = TRUE)  ~ arrow::read_feather,
     grepl("rds$", ., ignore.case = TRUE) ~ readRDS,
     grepl("(?:rda$)|(?:rdata$)", ., ignore.case = TRUE) ~ load_obj,
+    grepl("(?:png$)|(?:jpg$)|(?:jpeg$)", ., ignore.case = TRUE) && write ~ purrr::when(
+      UU::is_legit(utils::packageVersion("ggplot2")),
+      . ~ ggplot2::ggsave,
+      ~ stop(x, " is an plot and requires ggplot2.")
+    ),
     grepl("(?:png$)|(?:jpg$)|(?:jpeg$)", ., ignore.case = TRUE) ~ purrr::when(
         UU::is_legit(utils::packageVersion("magick")),
         . ~ magick::image_read,
-        ~ stop(x, " is an image and requires the magick package.")
+        ~ stop(x, " is an image and requires magick.")
       ),
     ~ readLines
   )
@@ -349,8 +369,7 @@ object_write <- function(x, filename, path, ..., verbose = TRUE) {
 
   fn <- object_fn(x, fp)
   rlang::exec(fn, !!!.dots)
-  if (img)
-    knitr::plot_crop(fp)
+
   if (file.exists(fp) && verbose)
     cli::cli_alert_success("Saved {.path {fp}}")
   else if (!file.exists(fp))
@@ -537,34 +556,6 @@ regex_op <- function(x, type = "|", pre = "", suf = "") {
 #' @export
 
 regex_or <- function(x, pre = "", suf = "") regex_op(x, pre = pre, suf = suf)
-
-#' @title start_cluster
-#' @description Creates a compute cluster
-#' @param workers \code{(numeric)} number of worker nodes. Defaults to 3/4 of the available.
-#' @param outfile \code{(character/logical)} Path and name of the outfile or `FALSE` to disable an outfile.
-#' @return \code{(RichSOCKcluster)}
-#' @export
-
-start_cluster <- function(workers = future::availableCores() %/% 2, timeout = 60 * 60 * 5, outfile = file.path(getwd(), "cl_out.log")) {
-  .args <- list(
-    workers = workers,
-    timeout = timeout
-  )
-  if (!isFALSE(outfile)) {
-    # Remove the previous outfile if it exists
-    if (file.exists(outfile)) {
-      file.remove(outfile)
-    } else {
-      file.create(outfile)
-    }
-    .args$outfile = outfile
-  }
-
-
-  # create the cluster
-  do.call(parallelly::makeClusterPSOCK, purrr::compact(.args))
-}
-
 
 
 # ----------------------- Mon Apr 08 16:49:54 2019 ------------------------#
