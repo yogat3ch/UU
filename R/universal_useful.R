@@ -98,7 +98,7 @@ gbort <- function (
   message = NULL,
   class = NULL,
   ...,
-  trace = rlang::trace_back(),
+  trace = rlang::trace_back(bottom = 1),
   parent = NULL,
   e = rlang::caller_env()
 ) {
@@ -236,13 +236,13 @@ file_fn <- function(x, write = FALSE) {
     grepl("(?:rda$)|(?:rdata$)", ., ignore.case = TRUE) ~ load_obj,
     grepl("(?:png$)|(?:jpg$)|(?:jpeg$)", ., ignore.case = TRUE) && write ~ purrr::when(
       UU::is_legit(utils::packageVersion("ggplot2")),
-      . ~ ggplot2::ggsave,
-      ~ stop(x, " is an plot and requires ggplot2.")
+      . ~ getFromNamespace("ggsave", ns = "ggplot2"),
+      ~ gbort(c(x = "{x} is an plot and requires ggplot2. Use {cli::code_highlight(\"install.packages('ggplot2')\", code_theme = 'Twilight')}."))
     ),
     grepl("(?:png$)|(?:jpg$)|(?:jpeg$)", ., ignore.case = TRUE) ~ purrr::when(
         UU::is_legit(utils::packageVersion("magick")),
-        . ~ magick::image_read,
-        ~ stop(x, " is an image and requires magick.")
+        . ~ getFromNamespace("image_read", ns = "magick"),
+        ~ gbort(c(x = "{x} is an image and requires magick. Use {cli::code_highlight(\"install.packages('magick')\", code_theme = 'Twilight')}."))
       ),
     ~ readLines
   )
@@ -566,7 +566,7 @@ regex_or <- function(x, pre = "", suf = "") regex_op(x, pre = pre, suf = suf)
 #' @param x \code{(vector)} An object for which to run an `rle`
 #' @return \item{(data.frame)}{ with length, values, start and end indices.}
 #' @examples
-#' rle_df(sample(c(T,F), replace = TRUE, 100))
+#' rle_df(sample(c(TRUE,FALSE), replace = TRUE, 100))
 #' @export
 
 rle_df <- function(x) {

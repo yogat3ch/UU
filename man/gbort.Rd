@@ -8,7 +8,7 @@ gbort(
   message = NULL,
   class = NULL,
   ...,
-  trace = rlang::trace_back(),
+  trace = rlang::trace_back(bottom = 1),
   parent = NULL,
   e = rlang::caller_env()
 )
