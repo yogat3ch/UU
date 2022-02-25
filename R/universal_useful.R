@@ -159,8 +159,12 @@ ext <- function(path, strip = FALSE) {
 mkpath <- function(path, mkfile = FALSE, mkpath = TRUE) {
   if (mkpath) {
     # Check to see if it's a file path and use just the directory path if so
-    dir.create(ifelse(mkfile, dirname(path), path), recursive = TRUE)
-    cli::cli_inform("Created dir: {.path {path}}")
+    .dir <- ifelse(mkfile, dirname(path), path)
+    if (!dir.exists(.dir)) {
+      dir.create(, recursive = TRUE)
+      cli::cli_inform("Created dir: {.path {.dir}}")
+    }
+
   }
   if (mkfile && !file.exists(path)) {
     file.create(path)
