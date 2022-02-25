@@ -156,19 +156,15 @@ ext <- function(path, strip = FALSE) {
 #' @return \code{(informative messages)}
 #' @export
 
-mkpath <- function(path, mkfile = FALSE) {
-  if (mkfile && grepl(paste0("\\",.Platform$file.sep), path))
-    .path <- dirname(path)
-  else
-    .path <- path
-  if (!dir.exists(.path) && !file.exists(.path) && !identical(path, .path)) {
+mkpath <- function(path, mkfile = FALSE, mkpath = TRUE) {
+  if (mkpath) {
     # Check to see if it's a file path and use just the directory path if so
-    dir.create(.path, recursive = TRUE)
-    cli::cli_inform("Created {.path {.path}}")
+    dir.create(ifelse(mkfile, dirname(path), path), recursive = TRUE)
+    cli::cli_inform("Created dir: {.path {.path}}")
   }
   if (mkfile && !file.exists(path)) {
     file.create(path)
-    cli::cli_inform("{.path {path}} created.")
+    cli::cli_inform("Created file: {.path {path}}.")
   }
 
 }
