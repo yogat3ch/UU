@@ -4,7 +4,7 @@
 \alias{unload_namespaces}
 \title{Unload namespaces prior to package install}
 \usage{
-unload_namespaces(ns)
+unload_namespaces(ns, verbose = FALSE)
 }
 \arguments{
 \item{ns}{\code{(chr)} namespaces to unload}

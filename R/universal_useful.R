@@ -153,15 +153,16 @@ ext <- function(path, strip = FALSE) {
 #' @description Given a path, construct it if it does not exist.
 #' @param path \code{(character)} path
 #' @param mkfile \code{(logical)} whether to make the file if it doesn't exist.
+#' @param mkdir \code{(logical)} whether to make the directory if it doesn't exist.
 #' @return \code{(informative messages)}
 #' @export
 
-mkpath <- function(path, mkfile = FALSE, mkpath = TRUE) {
-  if (mkpath) {
+mkpath <- function(path, mkfile = FALSE, mkdir = TRUE) {
+  if (mkdir) {
     # Check to see if it's a file path and use just the directory path if so
     .dir <- ifelse(mkfile, dirname(path), path)
     if (!dir.exists(.dir)) {
-      dir.create(, recursive = TRUE)
+      dir.create(.dir, recursive = TRUE)
       cli::cli_inform("Created dir: {.path {.dir}}")
     }
 

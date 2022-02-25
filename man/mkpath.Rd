@@ -4,12 +4,14 @@
 \alias{mkpath}
 \title{Construct a path}
 \usage{
-mkpath(path, mkfile = FALSE)
+mkpath(path, mkfile = FALSE, mkdir = TRUE)
 }
 \arguments{
 \item{path}{\code{(character)} path}
 
 \item{mkfile}{\code{(logical)} whether to make the file if it doesn't exist.}
+
+\item{mkdir}{\code{(logical)} whether to make the directory if it doesn't exist.}
 }
 \value{
 \code{(informative messages)}
