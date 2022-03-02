@@ -387,22 +387,46 @@ object_write <- function(x, filename, path, ..., verbose = TRUE) {
   fp
 }
 #' @title Gather last updated times for on-disk files
-#' @description Check the last modified time for the hud_exports specified
+#' @description Check the last modified time files or paths
 #' @param x \code{(chr)} file path to check last updated time
-#' @param path \code{(chr)} directory path in which to check all files (alternative to `x`)
+#' @param path \code{(lgl)} whether x is a path and all files should be checked
 #' @return \code{(POSIXct)} Last modified time
 #' @export
-last_updated <- function(x, path = "data") {
-  if (!missing(x)) {
+last_updated <- function(x, path = FALSE) {
+  if (!path) {
     .files <- x
   } else {
-    .files <- UU::list.files2(path)
+    .files <- UU::list.files2(x)
   }
   if (is_legit(.files))
     .files <- do.call(c, purrr::map(rlang::set_names(.files), purrr::possibly(~file.info(.x)$mtime, lubridate::NA_POSIXct_)))
   else
     gwarn("{cli::code_highlight('UU::last_udpated', code_theme = 'Twilight')}: No files detected")
   .files
+}
+
+#' Check if files need to be updated
+#'
+#' @inheritParams last_updated
+#' @param threshold The threshold time. If files have last modified times less than this time, they will be marked as needing an update.
+#'
+#' @return \code{(tbl)} with columns:
+#' \itemize{
+#'   \item{\code{full_path}}{ The full path to the file(s)}
+#'   \item{\code{basename}}{ The file(s) basename}
+#'   \item{\code{last_updated}}{ The last updated time}
+#'   \item{\code{threshold}}{ The threshold time for comparison}
+#'   \item{\code{needs_update}}{ logical as to whether the file should be updated}
+#' }
+#' @export
+
+needs_update <- function(x, path = FALSE, threshold = lubridate::floor_date(Sys.time(), "day")) {
+  .files <- UU::last_updated(x, path)
+  tibble::tibble(full_path = names(.files),
+                 basename = basename(full_path),
+                 last_updated = .files,
+                 threshold = threshold,
+                 needs_update = threshold > last_updated)
 }
 
 

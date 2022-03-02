@@ -4,16 +4,16 @@
 \alias{last_updated}
 \title{Gather last updated times for on-disk files}
 \usage{
-last_updated(x, path = "data")
+last_updated(x, path = FALSE)
 }
 \arguments{
 \item{x}{\code{(chr)} file path to check last updated time}
 
-\item{path}{\code{(chr)} directory path in which to check all files (alternative to \code{x})}
+\item{path}{\code{(lgl)} whether x is a path and all files should be checked}
 }
 \value{
 \code{(POSIXct)} Last modified time
 }
 \description{
-Check the last modified time for the hud_exports specified
+Check the last modified time files or paths
 }
