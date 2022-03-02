@@ -426,7 +426,7 @@ needs_update <- function(x, path = FALSE, threshold = lubridate::floor_date(Sys.
                  basename = basename(full_path),
                  last_updated = .files,
                  threshold = threshold,
-                 needs_update = threshold > last_updated)
+                 needs_update = (threshold > last_updated) %|% TRUE)
 }
 
 
