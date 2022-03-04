@@ -222,6 +222,15 @@ list.files2 <- function(path = ".", full.names =  TRUE, ...) {
     {\(x) {rlang::set_names(x, ext(basename(x), strip = TRUE))}}()
 }
 
+need_pkg <- function(x, pkg, fn) {
+  pkg_inst <- glue::glue("install.packages('{pkg}')")
+  purrr::when(
+    UU::is_legit(try(utils::packageVersion(pkg), silent = TRUE)),
+    . ~ getFromNamespace(fn, ns = pkg),
+    ~ gbort(c(x = "{x} requires {pkg}. Use {cli::code_highlight(pkg_inst, code_theme = 'Twilight')} first."))
+  )
+}
+
 #' @title Return the appropriate function for reading the specified path/extension
 #'
 #' @param x \code{(character)} The extension name or the path to the file
@@ -243,21 +252,18 @@ file_fn <- function(x, write = FALSE) {
     grepl("csv$", ., ignore.case = TRUE) ~ readr::read_csv,
     grepl("feather$", ., ignore.case = TRUE)  ~ arrow::read_feather,
     grepl("rds$", ., ignore.case = TRUE) ~ readRDS,
-    grepl("(?:rda$)|(?:rdata$)", ., ignore.case = TRUE) ~ load_obj,
-    grepl("(?:png$)|(?:jpg$)|(?:jpeg$)", ., ignore.case = TRUE) && write ~ purrr::when(
-      UU::is_legit(utils::packageVersion("ggplot2")),
-      . ~ getFromNamespace("ggsave", ns = "ggplot2"),
-      ~ gbort(c(x = "{x} is an plot and requires ggplot2. Use {cli::code_highlight(\"install.packages('ggplot2')\", code_theme = 'Twilight')}."))
-    ),
-    grepl("(?:png$)|(?:jpg$)|(?:jpeg$)", ., ignore.case = TRUE) ~ purrr::when(
-        UU::is_legit(utils::packageVersion("magick")),
-        . ~ getFromNamespace("image_read", ns = "magick"),
-        ~ gbort(c(x = "{x} is an image and requires magick. Use {cli::code_highlight(\"install.packages('magick')\", code_theme = 'Twilight')}."))
-      ),
+    grepl(regex_or(c("rda", "rdata"), suf = "$"), ., ignore.case = TRUE) ~ load_obj,
+    grepl("(?:png$)|(?:jpg$)|(?:jpeg$)", ., ignore.case = TRUE) && write ~ need_pkg(x, "ggplot2", "ggsave"),
+    grepl("(?:png$)|(?:jpg$)|(?:jpeg$)", ., ignore.case = TRUE) ~ need_pkg(x, "magick", "img_read"),
+    grepl(regex_or(c("xlsx", "xls"), suf = "$"), ., ignore.case = TRUE) && write ~ need_pkg(x, "writexl", "write_xlsx"),
+    grepl("(?:xls$)", ., ignore.case = TRUE) ~ need_pkg(x, "readxl", "read_xls"),
+    grepl("(?:xlsx$)", ., ignore.case = TRUE) ~ need_pkg(x, "readxl", "read_xlsx"),
     ~ readLines
   )
 
 }
+
+
 
 load_obj <- function(file) {
   e <- new.env()
@@ -583,8 +589,8 @@ fn_name <- function(fn) {
 #' @return \code{(character)} grouped regex statement
 #' @export
 
-regex_op <- function(x, type = "|", pre = "", suf = "") {
-  paste0(paste0("(?",switch(type, `|` = ":", `&` = "=.*"),pre, x,suf,")"), collapse = switch(type, `|` = "|", `&` = ""))
+regex_op <- function(x, type = "|", prefix = "", suffix = "") {
+  paste0(paste0("(?",switch(type, `|` = ":", `&` = "=.*"),prefix, x,suffix,")"), collapse = switch(type, `|` = "|", `&` = ""))
 }
 
 #' Create a compound regex grouped OR statement
@@ -593,7 +599,7 @@ regex_op <- function(x, type = "|", pre = "", suf = "") {
 #' @return \code{(character)} grouped regex OR statement
 #' @export
 
-regex_or <- function(x, pre = "", suf = "") regex_op(x, pre = pre, suf = suf)
+regex_or <- function(x, prefix = "", suffix = "") regex_op(x, prefix = prefix, suffix = suffix)
 
 
 # ----------------------- Mon Apr 08 16:49:54 2019 ------------------------#

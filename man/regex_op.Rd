@@ -4,7 +4,7 @@
 \alias{regex_op}
 \title{Create a compound regex grouped statement}
 \usage{
-regex_op(x, type = "|", pre = "", suf = "")
+regex_op(x, type = "|", prefix = "", suffix = "")
 }
 \arguments{
 \item{x}{\code{(character)} regex strings}
