@@ -24,34 +24,6 @@ is_legit <- function(x) {
   !(all(is.null(x)) || rlang::is_empty(x) || all(suppressWarnings(is.na(x))) || inherits(x, c("try-error", "error")))
 }
 
-#' @title Try an expression
-#' @name try-infix
-#' @description Calls the expression (LHS) & if it fails return RHS
-#' @param lhs \code{(expression)} to try
-#' @param rhs \code{(expression)} to replace if expression fails
-#'
-#' @return results from lhs on success results from rhs on fail
-#' @export
-
-`%|try|%` <- function(lhs, rhs) {
-  tryCatch(eval(rlang::enexpr(lhs)), error = rlang::as_function(~{eval(rlang::enexpr(rhs))}))
-}
-
-#' @title Replace a 0 length value
-#' @name zero-length-infix
-#' @description If the lhs is length 0, replace with rhs
-#' @param lhs \code{(expression)} to try
-#' @param rhs \code{(expression)} to replace if expression fails
-#'
-#' @return results from lhs if length > 1 otherwise rhs
-#' @export
-
-`%|0|%` <- function(lhs, rhs) {
-  if (rlang::is_empty(lhs))
-    rhs
-  else
-    lhs
-}
 
 #' @title Is object an error class?
 #' @description Is object of class `try-error`
@@ -223,12 +195,8 @@ list.files2 <- function(path = ".", full.names =  TRUE, ...) {
 }
 
 need_pkg <- function(x, pkg, fn) {
-  pkg_inst <- glue::glue("install.packages('{pkg}')")
-  purrr::when(
-    UU::is_legit(try(utils::packageVersion(pkg), silent = TRUE)),
-    . ~ getFromNamespace(fn, ns = pkg),
-    ~ gbort(c(x = "{x} requires {pkg}. Use {cli::code_highlight(pkg_inst, code_theme = 'Twilight')} first."))
-  )
+  cmd <- cli::code_highlight(glue::glue("install.packages('{pkg}')"), code_theme = 'Twilight')
+  getFromNamespace(fn, ns = pkg) %|try|% gbort(c(x = "{x} requires {pkg}. Use {cmd} first."))
 }
 
 #' @title Return the appropriate function for reading the specified path/extension
