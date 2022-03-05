@@ -213,12 +213,12 @@ need_pkg <- function(x, pkg, fn) {
 file_fn <- function(x, write = FALSE) {
   purrr::when(
     x,
-    grepl("csv$", ., ignore.case = TRUE) && write ~ readr::write_csv,
-    grepl("feather$", ., ignore.case = TRUE) && write ~ arrow::write_feather,
+    grepl("csv$", ., ignore.case = TRUE) && write ~ need_pkg(x, "readr", "write_csv"),
+    grepl("feather$", ., ignore.case = TRUE) && write ~ need_pkg(x, "arrow", "write_feather"),
     grepl("rds$", ., ignore.case = TRUE) && write ~ saveRDS,
     grepl("(?:rda$)|(?:rdata$)", ., ignore.case = TRUE) && write ~ save,
-    grepl("csv$", ., ignore.case = TRUE) ~ readr::read_csv,
-    grepl("feather$", ., ignore.case = TRUE)  ~ arrow::read_feather,
+    grepl("csv$", ., ignore.case = TRUE) ~ need_pkg(x, "readr", "read_csv"),
+    grepl("feather$", ., ignore.case = TRUE)  ~ need_pkg(x, "arrow", "read_feather"),
     grepl("rds$", ., ignore.case = TRUE) ~ readRDS,
     grepl(regex_or(c("rda", "rdata"), suf = "$"), ., ignore.case = TRUE) ~ load_obj,
     grepl("(?:png$)|(?:jpg$)|(?:jpeg$)", ., ignore.case = TRUE) && write ~ need_pkg(x, "ggplot2", "ggsave"),
@@ -298,11 +298,11 @@ object_ext <- function(object) {
 object_fn <- function(x, filepath) {
   out <- purrr::when(
     x,
-    inherits(., "data.frame") ~ arrow::write_feather,
+    inherits(., "data.frame") ~ need_pkg(x, "arrow", "write_feather"),
     inherits(., "matrix") ~ function(x, path) {
-      arrow::write_feather(tibble::as_tibble(x, .name_repair = "minimal"), path = path)
+      need_pkg(x, "arrow", "read_feather")(tibble::as_tibble(x, .name_repair = "minimal"), path = path)
     },
-    inherits(., "ggplot") ~ ggplot2::ggsave,
+    inherits(., "ggplot") ~ need_pkg(x, "ggplot2", "ggsave"),
     !inherits(., "data.frame") ~ saveRDS
   )
   if (!missing(filepath)) {
