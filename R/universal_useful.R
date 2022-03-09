@@ -224,8 +224,7 @@ file_fn <- function(x, write = FALSE) {
     grepl("(?:png$)|(?:jpg$)|(?:jpeg$)", ., ignore.case = TRUE) && write ~ need_pkg(x, "ggplot2", "ggsave"),
     grepl("(?:png$)|(?:jpg$)|(?:jpeg$)", ., ignore.case = TRUE) ~ need_pkg(x, "magick", "img_read"),
     grepl(regex_or(c("xlsx", "xls", "xlsm"), suf = "$"), ., ignore.case = TRUE) && write ~ need_pkg(x, "writexl", "write_xlsx"),
-    grepl("(?:xls$)", ., ignore.case = TRUE) ~ need_pkg(x, "readxl", "read_xls"),
-    grepl(regex_or(c("xlsx", "xlsm")), ., ignore.case = TRUE) ~ need_pkg(x, "readxl", "read_xlsx"),
+    grepl(regex_or(c("xlsx", "xls", "xlsm"), suf = "$"), ., ignore.case = TRUE) ~ need_pkg(x, "readxl", "read_excel"),
     ~ readLines
   )
 
