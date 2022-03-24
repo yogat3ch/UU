@@ -480,6 +480,31 @@ match_letters <- function(x, ..., n = 1, multiple = FALSE, ignore.case = FALSE, 
   out
 }
 
+class_coercion_fn <- function(.class) {
+  switch(.class,
+         numeric = ,
+         character = ,
+         logical = ,
+         factor = ,
+         integer = getFromNamespace(paste0("as.",.class), "base"),
+         Date = lubridate::as_date,
+         POSIXCt = lubridate::as_datetime
+         )
+}
+
+#' Match the classes of one object to that of another object
+#'
+#' @param x \code{(object)} object to be matched
+#' @param y \code{(object)} object to be coerced
+#'
+#' @return \code{y} with class types matching that of \code{x}
+#' @export
+
+map_class <- function(x, y) {
+  purrr::map(y, class) |>
+    purrr::map2(x, ~class_coercion_fn(.x)(.y))
+}
+
 #' @title Get the missing arguments from the function as character
 #'
 #' @param calling_function \code{(function)} see \link[rlang]{caller_fn} or \link[base]{sys.function}
