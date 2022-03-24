@@ -286,7 +286,13 @@ object_ext <- function(object) {
 #' @title Return the appropriate function for writing the supplied object to disk
 #'
 #' @param x \code{(object)}
-#' @return \code{(function)}
+#' @details
+#' \itemize{
+#'   \item{\code{data.frame/matrix}}{ \link[arrow]{write_feather}}
+#'   \item{\code{ggplot}}{ \link[ggplot2]{ggsave}}
+#'   \item{\code{anything else}}{ \link[base]{saveRDS}}
+#' }
+#' @return \code{(function)} See details for which function
 #' @export
 #'
 #' @examples
@@ -299,7 +305,7 @@ object_fn <- function(x, filepath) {
     x,
     inherits(., "data.frame") ~ need_pkg(x, "arrow", "write_feather"),
     inherits(., "matrix") ~ function(x, path) {
-      need_pkg(x, "arrow", "read_feather")(tibble::as_tibble(x, .name_repair = "minimal"), path = path)
+      need_pkg(x, "arrow", "write_feather")(tibble::as_tibble(x, .name_repair = "minimal"), path = path)
     },
     inherits(., "ggplot") ~ need_pkg(x, "ggplot2", "ggsave"),
     !inherits(., "data.frame") ~ saveRDS
@@ -314,10 +320,10 @@ object_fn <- function(x, filepath) {
 #' @title Provide the appropriate file read/write function
 #' @description Write an object to disk
 #' @param x \code{(object)} to write to disk
-#' @inheritParams ggplot2::ggsave
+#' @param filename \code{(chr)} without path to write to disk
+#' @param path \code{(chr)} where file will be written
+#' @param ... arguments passed on to methods. See `?object_fn`
 #' @param verbose \code{(logical)} Whether to print saved messages. **Default** `TRUE`
-#' @inheritDotParams ggplot2::ggsave
-#' @inheritDotParams base::saveRDS
 #' @return Success message if file is written
 #' @export
 

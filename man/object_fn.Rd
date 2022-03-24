@@ -10,10 +10,17 @@ object_fn(x, filepath)
 \item{x}{\code{(object)}}
 }
 \value{
-\code{(function)}
+\code{(function)} See details for which function
 }
 \description{
 Return the appropriate function for writing the supplied object to disk
+}
+\details{
+\itemize{
+\item{\code{data.frame/matrix}}{ \link[arrow]{write_feather}}
+\item{\code{ggplot}}{ \link[ggplot2]{ggsave}}
+\item{\code{anything else}}{ \link[base]{saveRDS}}
+}
 }
 \examples{
 object_fn(1:15)
