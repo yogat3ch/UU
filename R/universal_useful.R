@@ -644,7 +644,7 @@ join_check <- function(after, before, halt_fn = rlang::warn) {
     na <- nrow(after)
     if (nb != na)
       .msg <- paste0(.msg,
-             " - Row duplicates, row counts:\n",
+             " - Row count discrepancies:\n",
              nm_b," - ", nb,"\n",
              nm_a," - ", na,"\n")
   }
