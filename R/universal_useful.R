@@ -283,6 +283,19 @@ object_ext <- function(object) {
               !inherits(., "data.frame") ~ ".rds")
 }
 
+#' Create a directory path pointing function
+#'
+#' @param base_dir \code{(chr)} the base directory to which the path should point
+#'
+#' @return \code{(fun)} with pointing function using \link[fs]{path}
+#' @export
+#'
+#' @examples
+#' dir_fn("data")("random_data", "file", ext = "txt")
+dir_fn <- function(base_dir) {
+  rlang::new_function(args = rlang::pairlist2(... =, ext = ""), body = rlang::expr(fs::path(!!base_dir, ..., ext = ext)))
+}
+
 #' @title Return the appropriate function for writing the supplied object to disk
 #'
 #' @param x \code{(object)}
