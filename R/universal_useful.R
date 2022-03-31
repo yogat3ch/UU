@@ -634,6 +634,21 @@ rle_df <- function(x) {
   return(.out)
 }
 
+#' Create a sequence from the start to the end for a given value from an `rle_df` for indexing
+#'
+#' @param rle_df \code{(tbl)} See `rle_df`
+#' @param value \code{(any)} Value to filter for in the `values` column. Require the values in the value column to be unique.
+#'
+#' @return \code{(dbl)}
+#' @export
+#'
+#' @examples
+#' rle_seq(rle_df(rep(letters[1:3], each = 3)), "c")
+rle_seq <- function(rle_df, value) {
+  r <- dplyr::filter(rle_df, values == value)
+  seq(r$start, r$end)
+}
+
 #' @title Detect possible duplicates of rows or columns after a join
 #'
 #' @param after \code{(data.frame)} after the join
