@@ -9,9 +9,9 @@ mkpath(path, mkfile = FALSE, mkdir = TRUE)
 \arguments{
 \item{path}{\code{(character)} path}
 
-\item{mkfile}{\code{(logical)} whether to make the file if it doesn't exist.}
+\item{mkfile}{\code{(logical)} whether to make the file if it doesn't exist. IF \code{TRUE} and the path has an extension, both the directory and the file will be created}
 
-\item{mkdir}{\code{(logical)} whether to make the directory if it doesn't exist.}
+\item{mkdir}{\code{(logical)} whether to make the directory if it doesn't exist. If \code{TRUE}, and the \code{path} does not have an extension, path will be created as a directory path.}
 }
 \value{
 \code{(informative messages)}
