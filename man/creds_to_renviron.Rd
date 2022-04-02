@@ -2,13 +2,14 @@
 % Please edit documentation in R/setup_helpers.R
 \name{creds_to_renviron}
 \alias{creds_to_renviron}
-\title{Write named credentials to .Renviron file}
+\title{Write named keypairs to an \emph{.Renviron} / \emph{.Rprofile} file}
 \usage{
 creds_to_renviron(
   ...,
   scope = c("user", "project")[1],
   overwrite = FALSE,
-  proj_dir = "."
+  proj_dir = ".",
+  rprofile = FALSE
 )
 }
 \arguments{
@@ -17,13 +18,15 @@ creds_to_renviron(
 \item{scope}{Edit globally for the current \strong{user}, or locally for the
 current \strong{project}}
 
-\item{overwrite}{\code{(lgl)} should an existing key be overwritten. \strong{Default: \code{FALSE}}}
+\item{overwrite}{\code{(lgl)} should an existing key pair be overwritten. \strong{Default: \code{FALSE}}}
 
 \item{proj_dir}{\code{(chr)} project directory to write credentials to}
+
+\item{rprofile}{\cpde{(lgl)} whether to write the keypairs to a \link[base]{options} call in a \emph{.Rprofile} file instead.}
 }
 \value{
 success message if a value is written
 }
 \description{
-Writes key pairs to .Renviron and adds .Renviron to \emph{.gitignore} if not already there.
+Writes key pairs to \emph{.Renviron} / \emph{.Rprofile} and adds .Renviron to \emph{.gitignore} if not already there.
 }

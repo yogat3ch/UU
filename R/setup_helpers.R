@@ -1,9 +1,9 @@
 
-need_write <- function(creds, file_lines, overwrite = FALSE) {
+need_write <- function(creds, file_lines, overwrite = FALSE, rprofile = FALSE) {
   if (is.null(names(creds)))
     creds <- rlang::set_names(creds)
   creds[purrr::imap_lgl(creds, ~{
-    cred_exists <- grepl(paste0("^",.y), file_lines)
+    cred_exists <- grepl(paste0(ifelse(rprofile, "", "^"),.y, "\\s?\\="), file_lines)
     if (!any(cred_exists) || overwrite)
       TRUE
     else
@@ -12,34 +12,56 @@ need_write <- function(creds, file_lines, overwrite = FALSE) {
 }
 
 
-#' Write named credentials to .Renviron file
-#' @description Writes key pairs to .Renviron and adds .Renviron to _.gitignore_ if not already there.
+#' Write named keypairs to an _.Renviron_ / _.Rprofile_ file
+#' @description Writes key pairs to _.Renviron_ / _.Rprofile_ and adds .Renviron to _.gitignore_ if not already there.
 #' @param ... named keys to write
 #' @inheritParams usethis::edit_r_environ
-#' @param overwrite \code{(lgl)} should an existing key be overwritten. **Default: `FALSE`**
+#' @param overwrite \code{(lgl)} should an existing key pair be overwritten. **Default: `FALSE`**
 #' @param proj_dir \code{(chr)} project directory to write credentials to
-#'
+#' @param rprofile \cpde{(lgl)} whether to write the keypairs to a \link[base]{options} call in a _.Rprofile_ file instead.
 #' @return success message if a value is written
 #' @export
 #'
 
-creds_to_renviron <- function(..., scope = c("user", "project")[1], overwrite = FALSE, proj_dir = ".") {
+creds_to_renviron <- function(..., scope = c("user", "project")[1], overwrite = FALSE, proj_dir = ".", rprofile = FALSE) {
   .scope <- UU::match_letters(scope, "user", "project")
-  fp <- switch(.scope,
-               user = Sys.getenv("R_ENVIRON_USER", "~/.Renviron"),
-               project = file.path(proj_dir, ".Renviron"))
-  UU::mkpath(fp, mkfile = TRUE)
+  .fp <- purrr::when(
+    rprofile,
+    isTRUE(.) ~ list(
+      user = Sys.getenv("R_PROFILE_USER", "~/.Rprofile"),
+      project = file.path(proj_dir, ".Rprofile")
+    ),
+    ~ list(
+      user = Sys.getenv("R_ENVIRON_USER", "~/.Renviron"),
+      project = file.path(proj_dir, ".Renviron")
+    )
+  )
+  fp <- rlang::exec(switch,.scope,
+               !!!.fp)
+
+  UU::mkpath(fp, mkfile = TRUE, mkdir = FALSE)
   l <- readLines(fp)
   l <- l[nzchar(l)]
   creds <- rlang::dots_list(..., .named = TRUE)
-  creds_to_write <- need_write(creds, l, overwrite)
+  creds_to_write <- need_write(creds, l, overwrite, options = rprofile)
 
   if (length(creds_to_write)) {
-    write(paste0(names(creds_to_write), " = '", creds_to_write,"'"), fp, append = TRUE)
-    readRenviron(fp)
+    if (rprofile)
+      c2w <- paste0(names(creds_to_write), " = ", creds_to_write) |>
+        paste0(collapse = ",\n") |>
+        {\(x) {paste0("options(\n",x,"\n)")}}()
+    else
+      c2w <- paste0(names(creds_to_write), " = ","'",creds_to_write,"'")
+    browser()
+    write(c2w, fp, append = TRUE)
+    # Read the newly added vars/options
+    purrr::when(rprofile,
+                isTRUE(.) ~ source,
+                ~ readRenviron)(fp)
+
     cli::cli_alert_success("{cli::col_green(paste0(names(creds_to_write), collapse = \", \"))} successfully written to {.path {fp}}")
   }
-  if (scope == "project")
+  if (scope == "project" && !rprofile)
     ignore_files(".Renviron", proj_dir)
 
 
