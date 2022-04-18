@@ -189,6 +189,8 @@ startup <- function() {
 #' @examples
 #' list.files2("~")
 list.files2 <- function(path = ".", full.names =  TRUE, ...) {
+  if (!fs::dir_exists(path))
+    gbort("{.path {path}} does not exist.")
   list.files(path, full.names = full.names, ...) |>
     {\(x) {rlang::set_names(x, ext(basename(x), strip = TRUE))}}()
 }
@@ -392,7 +394,7 @@ last_updated <- function(x, path = FALSE) {
   if (is_legit(.files))
     .files <- do.call(c, purrr::map(rlang::set_names(.files), purrr::possibly(~file.info(.x)$mtime, lubridate::NA_POSIXct_)))
   else
-    gwarn("{cli::code_highlight('UU::last_udpated', code_theme = 'Twilight')}: No files detected")
+    gwarn("{cli::code_highlight('UU::last_updated', code_theme = 'Twilight')}: No files detected")
   .files
 }
 
