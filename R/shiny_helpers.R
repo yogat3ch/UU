@@ -7,7 +7,7 @@
 #' @export
 #'
 #' @examples
-#' gluejs("$(document).ready(() => {let x = !@tolower(F)@#})")
-gluejs <- function(js, e = rlang::caller_env()) {
-  glue::glue(.open = "!@", .close = "@#", js, .envir = e)
+#' gluejs("$(document).ready(() => {let x = *{tolower(F)}*)")
+glue_js <- function(js, e = rlang::caller_env()) {
+  glue::glue(.open = "*{", .close = "}*", js, .envir = e)
 }
