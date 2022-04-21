@@ -195,9 +195,19 @@ list.files2 <- function(path = ".", full.names =  TRUE, ...) {
     {\(x) {rlang::set_names(x, ext(basename(x), strip = TRUE))}}()
 }
 
-need_pkg <- function(x, pkg, fn) {
+#' Get a function from a package, abort if package not installed.
+#'
+#' @param pkg \code{chr} package
+#' @param fn \code{fn} function name
+#'
+#' @return \code{fun}
+#' @export
+#'
+#' @examples
+#' need_pkg("utils", "recover")
+need_pkg <- function(pkg, fn) {
   cmd <- cli::code_highlight(glue::glue("install.packages('{pkg}')"), code_theme = 'Twilight')
-  getFromNamespace(fn, ns = pkg) %|try|% gbort(c(x = "{x} requires {pkg}. Use {cmd} first."))
+  getFromNamespace(fn, ns = pkg) %|try|% gbort(c("{fn} requires {pkg}. Use {cmd} first."))
 }
 
 #' @title Return the appropriate function for reading the specified path/extension
@@ -214,23 +224,22 @@ need_pkg <- function(x, pkg, fn) {
 file_fn <- function(x, write = FALSE) {
   purrr::when(
     x,
-    grepl("csv$", ., ignore.case = TRUE) && write ~ need_pkg(x, "readr", "write_csv"),
-    grepl("feather$", ., ignore.case = TRUE) && write ~ need_pkg(x, "arrow", "write_feather"),
+    grepl("csv$", ., ignore.case = TRUE) && write ~ need_pkg("readr", "write_csv"),
+    grepl("feather$", ., ignore.case = TRUE) && write ~ need_pkg("arrow", "write_feather"),
     grepl("rds$", ., ignore.case = TRUE) && write ~ saveRDS,
     grepl("(?:rda$)|(?:rdata$)", ., ignore.case = TRUE) && write ~ save,
-    grepl("csv$", ., ignore.case = TRUE) ~ need_pkg(x, "readr", "read_csv"),
-    grepl("feather$", ., ignore.case = TRUE)  ~ need_pkg(x, "arrow", "read_feather"),
+    grepl("csv$", ., ignore.case = TRUE) ~ need_pkg("readr", "read_csv"),
+    grepl("feather$", ., ignore.case = TRUE)  ~ need_pkg("arrow", "read_feather"),
     grepl("rds$", ., ignore.case = TRUE) ~ readRDS,
     grepl(regex_or(c("rda", "rdata"), suf = "$"), ., ignore.case = TRUE) ~ load_obj,
-    grepl("(?:png$)|(?:jpg$)|(?:jpeg$)", ., ignore.case = TRUE) && write ~ need_pkg(x, "ggplot2", "ggsave"),
-    grepl("(?:png$)|(?:jpg$)|(?:jpeg$)", ., ignore.case = TRUE) ~ need_pkg(x, "magick", "img_read"),
-    grepl(regex_or(c("xlsx", "xls", "xlsm"), suf = "$"), ., ignore.case = TRUE) && write ~ need_pkg(x, "writexl", "write_xlsx"),
-    grepl(regex_or(c("xlsx", "xls", "xlsm"), suf = "$"), ., ignore.case = TRUE) ~ need_pkg(x, "readxl", "read_excel"),
+    grepl("(?:png$)|(?:jpg$)|(?:jpeg$)", ., ignore.case = TRUE) && write ~ need_pkg("ggplot2", "ggsave"),
+    grepl("(?:png$)|(?:jpg$)|(?:jpeg$)", ., ignore.case = TRUE) ~ need_pkg("magick", "img_read"),
+    grepl(regex_or(c("xlsx", "xls", "xlsm"), suf = "$"), ., ignore.case = TRUE) && write ~ need_pkg("writexl", "write_xlsx"),
+    grepl(regex_or(c("xlsx", "xls", "xlsm"), suf = "$"), ., ignore.case = TRUE) ~ need_pkg("readxl", "read_excel"),
     ~ readLines
   )
 
 }
-
 
 
 load_obj <- function(file) {
@@ -317,11 +326,11 @@ dir_fn <- function(base_dir) {
 object_fn <- function(x, filepath) {
   out <- purrr::when(
     x,
-    inherits(., "data.frame") ~ need_pkg(x, "arrow", "write_feather"),
+    inherits(., "data.frame") ~ need_pkg("arrow", "write_feather"),
     inherits(., "matrix") ~ function(x, path) {
-      need_pkg(x, "arrow", "write_feather")(tibble::as_tibble(x, .name_repair = "minimal"), path = path)
+      need_pkg("arrow", "write_feather")(tibble::as_tibble(x, .name_repair = "minimal"), path = path)
     },
-    inherits(., "ggplot") ~ need_pkg(x, "ggplot2", "ggsave"),
+    inherits(., "ggplot") ~ need_pkg("ggplot2", "ggsave"),
     !inherits(., "data.frame") ~ saveRDS
   )
   if (!missing(filepath)) {
