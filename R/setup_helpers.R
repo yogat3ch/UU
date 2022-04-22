@@ -43,7 +43,7 @@ creds_to_renviron <- function(..., scope = c("user", "project")[1], overwrite = 
   l <- readLines(fp)
   l <- l[nzchar(l)]
   creds <- rlang::dots_list(..., .named = TRUE)
-  creds_to_write <- need_write(creds, l, overwrite, options = rprofile)
+  creds_to_write <- need_write(creds, l, overwrite, rprofile = rprofile)
 
   if (length(creds_to_write)) {
     if (rprofile)
