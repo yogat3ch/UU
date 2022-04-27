@@ -13,6 +13,18 @@ unload_namespaces <- function(ns, verbose = FALSE) {
     cli::cli_alert_success("Unloaded: {cli::col_grey(paste0(ns[!ns %in% .ns], sep = ', '))}")
 }
 
+#' Is zero-length character?
+#'
+#' @param x \code{chr}
+#'
+#' @return \code{lgl}
+#' @export
+#'
+#' @examples
+#' zchar("")
+zchar <- function(x) {
+  !nzchar(x)
+}
 
 #' @title Is object legit?
 #' @description Is object non-null, non-empty, non-NA, and not a try-error?
