@@ -52,7 +52,7 @@ creds_to_renviron <- function(..., scope = c("user", "project")[1], overwrite = 
         {\(x) {paste0("options(\n",x,"\n)")}}()
     else
       c2w <- paste0(names(creds_to_write), " = ","'",creds_to_write,"'")
-    browser()
+
     write(c2w, fp, append = TRUE)
     # Read the newly added vars/options
     purrr::when(rprofile,
