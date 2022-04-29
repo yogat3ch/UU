@@ -30,6 +30,7 @@ zchar <- function(x) {
 #' @param out \code{obj} Of class matching the desired output. **Default** `NULL` returns a `data.frame` with the matching row in `y`. `numeric()` will return the matching index in `y` & `logical()` will return a matching logical index
 #' @seealso plyr::match_df
 #' @return \code{tbl/dbl/lgl} Depending on
+#' @export
 match_df <- function(x, y, out = NULL, on = NULL, verbose = FALSE) {
   if (is.null(on)) {
     on <- intersect(names(x), names(y))

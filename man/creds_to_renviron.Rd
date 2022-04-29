@@ -22,7 +22,7 @@ current \strong{project}}
 
 \item{proj_dir}{\code{(chr)} project directory to write credentials to}
 
-\item{rprofile}{\cpde{(lgl)} whether to write the keypairs to a \link[base]{options} call in a \emph{.Rprofile} file instead.}
+\item{rprofile}{\code{(lgl)} whether to write the keypairs to a \link[base]{options} call in a \emph{.Rprofile} file instead.}
 }
 \value{
 success message if a value is written

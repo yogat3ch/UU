@@ -18,7 +18,7 @@ need_write <- function(creds, file_lines, overwrite = FALSE, rprofile = FALSE) {
 #' @inheritParams usethis::edit_r_environ
 #' @param overwrite \code{(lgl)} should an existing key pair be overwritten. **Default: `FALSE`**
 #' @param proj_dir \code{(chr)} project directory to write credentials to
-#' @param rprofile \cpde{(lgl)} whether to write the keypairs to a \link[base]{options} call in a _.Rprofile_ file instead.
+#' @param rprofile \code{(lgl)} whether to write the keypairs to a \link[base]{options} call in a _.Rprofile_ file instead.
 #' @return success message if a value is written
 #' @export
 #'
