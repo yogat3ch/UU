@@ -16,10 +16,7 @@ use_reimport <- function(pkg, fun) {
   l <- readLines(imports)
   fn <- glue::glue("{pkg}::{fun}")
   if (!any(stringr::str_detect(l, stringr::fixed(as.character(fn))))) {
-    glue::glue("
-    #' @importFrom {pkg} {fun}
-    #' @export
-    {fn}
+    glue::glue("\n#' @importFrom {pkg} {fun}\n#' @export\n{fn}
     ") |>
       write(imports, append = TRUE)
     l <- readLines(imports)

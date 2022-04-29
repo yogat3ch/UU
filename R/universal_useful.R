@@ -26,6 +26,36 @@ zchar <- function(x) {
   !nzchar(x)
 }
 
+#' @inherit plyr::match_df title params description
+#' @param out \code{obj} Of class matching the desired output. **Default** `NULL` returns a `data.frame` with the matching row in `y`. `numeric()` will return the matching index in `y` & `logical()` will return a matching logical index
+#' @seealso plyr::match_df
+#' @return \code{tbl/dbl/lgl} Depending on
+match_df <- function(x, y, out = NULL, on = NULL, verbose = FALSE) {
+  if (is.null(on)) {
+    on <- intersect(names(x), names(y))
+    if (verbose)
+      message("Matching on: ", paste(on, collapse = ", "))
+  }
+  keys <- plyr::join.keys(x, y, on)
+  key_out(x, keys, out)
+}
+#' Handle different output type requests for `match_df`
+#' @export
+key_out <- function(x, keys, out) {
+  UseMethod("key_out", out)
+}
+#' @export
+key_out.default <- function(x, keys, out) {
+  x[keys$x %in% keys$y, , drop = FALSE]
+}
+#' @export
+key_out.numeric <- function(x, keys, out) {
+  keys$x
+}
+#' @export
+key_out.logical <- function(x, keys, out) {
+  keys$y %in% keys$x
+}
 #' @title Is object legit?
 #' @description Is object non-null, non-empty, non-NA, and not a try-error?
 #' @param x \code{(object)}
