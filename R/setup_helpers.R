@@ -85,3 +85,56 @@ ignore_files <- function(lines, directory = ".") {
     cli::cli_alert_info("{.val {paste0(lines, collapse = ',')}} added to {.path {fp}}")
 
 }
+
+#' Write expressions to the _.Rprofile_
+#'
+#' @param ... \code{exprs}
+#' @param scope \code{chr} which _.Rprofile_ to write to
+#'
+#' @return \coe{msg}
+#' @export
+
+write_to_rprofile <- function(..., scope = c("user", "project")[1]) {
+  path <- usethis:::scoped_path_r(scope, ".Rprofile", envvar = "R_PROFILE_USER")
+  full <- list(e = rlang::enexprs(...),
+       l = parse(path))
+  full <- purrr::map(full, ~{
+    src <- purrr::map(.x, rlang::call_standardise)
+    e_calls <- purrr::map_chr(src, ~rlang::expr_deparse(.x[[1]]))
+    e_options_ind <- stringr::str_which(e_calls, "options")
+    e_options_nms <- purrr::map(src[e_options_ind], rlang::call_args_names)
+    e_options_vals <- purrr::map(src[e_options_ind], ~rlang::call_args(.x))
+    list(exp = .x,
+         calls = e_calls,
+         options_ind = e_options_ind,
+         options_nms = e_options_nms,
+         options_vals = e_options_vals)
+  })
+
+
+  full <- purrr::map(full, ~{
+    # if more than 1 option call in a single location
+    if (length(.x$options_vals) > 1)
+      .x$options_vals <- purrr::reduce(.x$options_vals, ~purrr::list_modify(.x, !!!.y))
+    .x$options_vals <- purrr::flatten(.x$options_vals)
+    .x
+  })
+  # Combine options calls
+  full$combined <- list(options_vals = purrr::list_modify(full$l$options_vals, !!!full$e$options_vals))
+
+
+  # combine any additional calls
+  full$combined$exp <- do.call(union, list(
+    purrr::map(full$e$exp[-full$e$options_ind], rlang::expr_deparse) |>
+      purrr::flatten_chr(),
+    purrr::map(full$l$exp[-full$l$options_ind], rlang::expr_deparse) |>
+      purrr::flatten_chr()
+  )) |>
+    rlang::parse_exprs()
+  full$combined$exp <- append(full$combined$exp, rlang::exec(base::call, "options", !!!full$combined$options_vals))
+  full$combined$exp_txt <- do.call(c, purrr::map(full$combined$exp, rlang::expr_deparse))
+
+  write(full$combined$exp_txt, path)
+  cli::cli_alert_success("Lines written to {.path {path}}:\n{cli::cli_code(full$combined$exp_txt)}")
+
+}
