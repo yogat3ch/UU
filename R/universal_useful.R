@@ -26,6 +26,19 @@ zchar <- function(x) {
   !nzchar(x)
 }
 
+#' The length of unique values in a vector
+#'
+#' @param x \code{vctr}
+#'
+#' @return \code{dbl}
+#' @export
+#'
+#' @examples
+#' len_unique(c(1,2,1))
+len_unique <- function(x) {
+  length(unique(x))
+}
+
 #' @inherit plyr::match_df title params description
 #' @param out \code{obj} Of class matching the desired output. **Default** `NULL` returns a `data.frame` with the matching row in `y`. `numeric()` will return the matching index in `y` & `logical()` will return a matching logical index
 #' @seealso plyr::match_df
