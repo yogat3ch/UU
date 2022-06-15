@@ -8,6 +8,10 @@
 #'
 #' @examples
 #' gluejs("$(document).ready(() => {let x = *{tolower(F)}*)")
-glue_js <- function(js, e = rlang::caller_env()) {
-  glue::glue(.open = "*{", .close = "}*", js, .envir = e)
+glue_js <- function(js, e = rlang::caller_env(), .open = "*{", .close = "}*") {
+  if (file.exists(js))
+    .js <- glue::glue_collapse(readLines(js))
+  else
+    .js <- js
+  glue::glue(.open = .open, .close = .close, .js, .envir = e)
 }
