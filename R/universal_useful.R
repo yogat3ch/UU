@@ -247,8 +247,8 @@ startup <- function() {
 list.files2 <- function(path = ".", full.names =  TRUE, ...) {
   if (!fs::dir_exists(path))
     gbort("{.path {path}} does not exist.")
-  list.files(path, full.names = full.names, ...) |>
-    {\(x) {rlang::set_names(x, ext(basename(x), strip = TRUE))}}()
+  x <- list.files(path, full.names = full.names, ...)
+    rlang::set_names(x, ext(basename(x), strip = TRUE))
 }
 
 #' Get a function from a package, abort if package not installed.
@@ -521,11 +521,10 @@ find_by_class <- function(class, e = rlang::caller_env()) {
 #' @param ... \code{(objects)}
 #' @return \code{(character)} of the common names
 #' @export
+
 common_names <- function(...) {
-  purrr::map(rlang::dots_list(..., .named = TRUE), names) |>
-    {\(x) {do.call(c, x)}}()  |>
-    table() |>
-    {\(x) {names(x)[x == max(x)]}}()
+  x <- table(do.call(c, purrr::map(rlang::dots_list(..., .named = TRUE), names)))
+  names(x)[x == max(x)]
 }
 
 #' @title Match the first `n` letters to supplied arguments
@@ -580,8 +579,7 @@ class_coercion_fn <- function(.class) {
 #' @export
 
 map_class <- function(x, y) {
-  purrr::map(y, class) |>
-    purrr::map2(x, ~class_coercion_fn(.x)(.y))
+    purrr::map2(purrr::map(y, class), x, ~class_coercion_fn(.x)(.y))
 }
 
 #' @title Get the missing arguments from the function as character
@@ -693,10 +691,10 @@ regex_or <- function(x, prefix = "", suffix = "") regex_op(x, prefix = prefix, s
 rle_df <- function(x) {
   input_rle <- rle(x)
   .out <- unclass(input_rle)
-  .out <- dplyr::mutate(tibble::as_tibble(.out),
-                        end = cumsum(lengths),
-                        start = c(1, dplyr::lag(end)[-1] + 1)) |>
-    dplyr::select(c(1,2,4,3))
+  .out <- dplyr::select(dplyr::mutate(tibble::as_tibble(.out),
+                                      end = cumsum(lengths),
+                                      start = c(1, dplyr::lag(end)[-1] + 1)),
+                        c(1,2,4,3))
   return(.out)
 }
 

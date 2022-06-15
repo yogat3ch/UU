@@ -47,9 +47,7 @@ creds_to_renviron <- function(..., scope = c("user", "project")[1], overwrite = 
 
   if (length(creds_to_write)) {
     if (rprofile)
-      c2w <- paste0(names(creds_to_write), " = ", creds_to_write) |>
-        paste0(collapse = ",\n") |>
-        {\(x) {paste0("options(\n",x,"\n)")}}()
+      c2w <-  paste0("options(\n", paste0(paste0(names(creds_to_write), " = ", creds_to_write), collapse = ",\n") ,"\n)")
     else
       c2w <- paste0(names(creds_to_write), " = ","'",creds_to_write,"'")
 
@@ -124,13 +122,11 @@ write_to_rprofile <- function(..., scope = c("user", "project")[1]) {
 
 
   # combine any additional calls
-  full$combined$exp <- do.call(union, list(
-    purrr::map(full$e$exp[-full$e$options_ind], rlang::expr_deparse) |>
-      purrr::flatten_chr(),
-    purrr::map(full$l$exp[-full$l$options_ind], rlang::expr_deparse) |>
-      purrr::flatten_chr()
-  )) |>
-    rlang::parse_exprs()
+  full$combined$exp <- rlang::parse_exprs(do.call(union, list(
+    purrr::flatten_chr(purrr::map(full$e$exp[-full$e$options_ind], rlang::expr_deparse)),
+    purrr::flatten_chr(purrr::map(full$l$exp[-full$l$options_ind], rlang::expr_deparse))
+  )))
+
   full$combined$exp <- append(full$combined$exp, rlang::exec(base::call, "options", !!!full$combined$options_vals))
   full$combined$exp_txt <- do.call(c, purrr::map(full$combined$exp, rlang::expr_deparse))
 
