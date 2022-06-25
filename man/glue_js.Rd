@@ -5,7 +5,7 @@
 \title{Create a JS string with glue insertions
 glue \verb{.open = !@} & \verb{.close = @#}}
 \usage{
-glue_js(js, e = rlang::caller_env())
+glue_js(js, e = rlang::caller_env(), .open = "*{", .close = "}*")
 }
 \arguments{
 \item{js}{\code{chr} JS code to \link[glue]{glue}}

@@ -26,3 +26,20 @@
   else
     lhs
 }
+
+#' If legit lhs, else rhs
+#' @inheritParams try-infix
+#' @name legit-infix
+#' @seealso is_legit
+#' @return If legit lhs else rhs
+#' @export
+#' @examples
+#' (100 / NA) %|legit|% 4
+#' list(a = 5)$a$value %|legit|% 4
+`%|legit|%` <- function(lhs, rhs) {
+  if (UU::is_legit(try(lhs, silent = TRUE))) {
+    lhs
+  } else {
+    rhs
+  }
+}
