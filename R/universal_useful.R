@@ -39,6 +39,18 @@ len_unique <- function(x) {
   length(unique(x))
 }
 
+#' Read Javascript file
+#'
+#' @param filename \code{chr}
+#'
+#' @return \code{chr}
+#' @export
+#'
+
+read_js <- function(filename) {
+  glue::glue_collapse(readLines(filename))
+}
+
 #' @inherit plyr::match_df title params description
 #' @param out \code{obj} Of class matching the desired output. **Default** `NULL` returns a `data.frame` with the matching row in `y`. `numeric()` will return the matching index in `y` & `logical()` will return a matching logical index
 #' @seealso plyr::match_df
