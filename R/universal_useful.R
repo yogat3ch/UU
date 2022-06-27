@@ -94,18 +94,21 @@ is_error <- function(x) {
 #' Convert numeric value to a string abbreviation with K, M, B for Thousand, Million & Billion
 #'
 #' @param n \code{num}
-#'
+#' @param sf \code{num} significant figures to round to
 #' @return \code{chr}
 #' @export
 #'
 #' @examples
 #' num2str(10000)
-num2str <- function(n) {
-  divisors <- purrr::map(1:3 * 3, ~{
+num2str <- function(n, sf = 2) {
+  divisors <- purrr::map_dbl(1:3 * 3, ~{
     n / 10 ^ .x
   })
   i <- which.max(which(divisors >= 1))
-  paste0(divisors[i], c("K", "M", "B")[i])
+  if (is_legit(i))
+    paste0(round(divisors[i], 2), c("K", "M", "B")[i])
+  else
+    as.character(round(n, sf))
 }
 
 
