@@ -110,7 +110,28 @@ num2str <- function(n, sf = 2) {
   else
     as.character(round(n, sf))
 }
+num2str <- Vectorize(num2str)
 
+#' What is the human-readable suffix for a number
+#'
+#' @param n \code{num/chr} Either a numeric or number as a string with suffix input.
+#' @seealso num2str
+#' @return \code{chr}
+#' @export
+#'
+#' @examples
+#' num_suf(30000)
+num_suf <- function(n) {
+  UseMethod("num_suf")
+}
+#' @export
+num_suf.numeric <- function(n) {
+  stringr::str_extract(num2str(n), "[[:alpha:]]+")
+}
+#' @export
+num_suf.character <- function(n) {
+  stringr::str_extract(n, "[[:alpha:]]+")
+}
 
 #' @title Statistical mode
 #' @description Return the most frequenctly occuring item in a dataset
