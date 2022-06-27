@@ -48,7 +48,7 @@ len_unique <- function(x) {
 #'
 
 read_js <- function(filename) {
-  glue::glue_collapse(readLines(filename))
+  glue::glue_collapse(readLines(filename), sep = "\n")
 }
 
 #' @inherit plyr::match_df title params description
