@@ -91,6 +91,23 @@ is_error <- function(x) {
   inherits(x, c("try-error", "error"))
 }
 
+#' Convert numeric value to a string abbreviation with K, M, B for Thousand, Million & Billion
+#'
+#' @param n \code{num}
+#'
+#' @return \code{chr}
+#' @export
+#'
+#' @examples
+#' num2str(10000)
+num2str <- function(n) {
+  divisors <- purrr::map(1:3 * 3, ~{
+    n / 10 ^ .x
+  })
+  i <- which.max(which(divisors >= 1))
+  paste0(divisors[i], c("K", "M", "B")[i])
+}
+
 
 #' @title Statistical mode
 #' @description Return the most frequenctly occuring item in a dataset
