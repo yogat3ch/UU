@@ -218,15 +218,22 @@ gmsg <- function (
 #' @description Given a path, extract the file extension
 #' @param path \code{(character)} path
 #' @param strip \code{(logical)} Whether to strip the extension from the path to return the bare file name
+#' @param new_ext \code{chr} New extension for the filename
 #' @return \code{(character)} with the extensions
 #' @export
 
-ext <- function(path, strip = FALSE) {
+ext <- function(path, strip = FALSE, new_ext) {
+  new <- !missing(new_ext)
+  if (new)
+    strip <- TRUE
+
   if (strip) {
     out <- fs::path_ext_remove(path)
   } else {
     out <- fs::path_ext(path)
   }
+  if (new)
+    out <- fs::path(out, ext = new_ext)
   out
 }
 
