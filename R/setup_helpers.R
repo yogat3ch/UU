@@ -3,7 +3,7 @@ need_write <- function(creds, file_lines, overwrite = FALSE, rprofile = FALSE) {
   if (is.null(names(creds)))
     creds <- rlang::set_names(creds)
   creds[purrr::imap_lgl(creds, ~{
-    cred_exists <- grepl(paste0(ifelse(rprofile, "", "^"),.y, "\\s?\\="), file_lines)
+    cred_exists <- stringr::str_detect(file_lines, stringr::regex(paste0(ifelse(rprofile, "^\\s{1,}?", "^"),.y,ifelse(rprofile, "[\\s]*\\=", "[\\n\\s]*$"))))
     if (!any(cred_exists) || overwrite)
       TRUE
     else

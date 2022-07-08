@@ -248,7 +248,7 @@ ext <- function(path, strip = FALSE, new_ext) {
 mkpath <- function(path, mkfile = FALSE, mkdir = TRUE) {
   if (mkdir) {
     .dir <- ifelse(nzchar(ext(path)), dirname(path), path)
-    if (!dir.exists(.dir)) {
+    if (!dir.exists(.dir) && !file.exists(path)) {
       dir.create(.dir, recursive = TRUE)
       cli::cli_inform("Created dir: {.path {.dir}}")
     }
