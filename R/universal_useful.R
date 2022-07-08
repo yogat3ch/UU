@@ -246,7 +246,7 @@ ext <- function(path, strip = FALSE, new_ext) {
 #' @export
 
 mkpath <- function(path, mkfile = FALSE, mkdir = TRUE) {
-  if (mkdir) {
+  if (mkdir && !(!stringr::str_detect(path, "\\/") && mkfile)) {
     .dir <- ifelse(nzchar(ext(path)), dirname(path), path)
     if (!dir.exists(.dir) && !file.exists(path)) {
       dir.create(.dir, recursive = TRUE)
