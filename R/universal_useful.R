@@ -510,7 +510,7 @@ object_write <- function(x, filename, path, ..., verbose = TRUE) {
 #' @description Check the last modified time files or paths
 #' @param x \code{(chr)} file path to check last updated time
 #' @param path \code{(lgl)} whether x is a path and all files should be checked
-#' @inheritDotParams list.files
+#' @inheritDotParams base::list.files
 #' @return \code{(POSIXct)} Last modified time
 #' @export
 last_updated <- function(x, path = FALSE, ...) {
@@ -550,6 +550,18 @@ needs_update <- function(x, path = FALSE, threshold = lubridate::floor_date(Sys.
                  needs_update = (threshold > last_updated) %|% TRUE)
 }
 
+#' An alternative to \link[base]{max} that preserves names
+#'
+#' @param x \code{vec}
+#'
+#' @return \code{atomic} returns the largest element in the vector
+#' @export
+#'
+#' @examples
+#' max(c(a = 1, b = 2))
+max <- function(x) {
+  x[which.max(x) %|0|% 1]
+}
 
 #' @title Make a file path name with underscores
 #' @param \code{(character)} file path
