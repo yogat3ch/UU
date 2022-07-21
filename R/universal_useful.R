@@ -510,13 +510,14 @@ object_write <- function(x, filename, path, ..., verbose = TRUE) {
 #' @description Check the last modified time files or paths
 #' @param x \code{(chr)} file path to check last updated time
 #' @param path \code{(lgl)} whether x is a path and all files should be checked
+#' @inheritDotParams list.files
 #' @return \code{(POSIXct)} Last modified time
 #' @export
-last_updated <- function(x, path = FALSE) {
+last_updated <- function(x, path = FALSE, ...) {
   if (!path) {
     .files <- x
   } else {
-    .files <- UU::list.files2(x)
+    .files <- UU::list.files2(x, ...)
   }
   if (is_legit(.files))
     .files <- do.call(c, purrr::map(rlang::set_names(.files), purrr::possibly(~file.info(.x)$mtime, lubridate::NA_POSIXct_)))
