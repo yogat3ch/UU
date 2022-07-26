@@ -20,12 +20,12 @@
 #' @return results from lhs if length > 1 otherwise rhs
 #' @export
 
-`%|0|%` <- function(lhs, rhs) {
+`%|0|%` <- Vectorize(function(lhs, rhs) {
   if (rlang::is_empty(lhs))
     rhs
   else
     lhs
-}
+})
 
 #' If legit lhs, else rhs
 #' @inheritParams try-infix
@@ -36,10 +36,27 @@
 #' @examples
 #' (100 / NA) %|legit|% 4
 #' list(a = 5)$a$value %|legit|% 4
-`%|legit|%` <- function(lhs, rhs) {
+`%|legit|%` <- Vectorize(function(lhs, rhs) {
   if (UU::is_legit(try(lhs, silent = TRUE))) {
     lhs
   } else {
     rhs
   }
-}
+})
+
+#' Replace zero-length character strings with right hand side
+#'
+#' @param lhs \code{chr}
+#' @param rhs \code{chr}
+#'
+#' @return \code{chr}
+#' @export
+#'
+#' @examples
+#' c("a" , "", "c", "") %|nzchar|% "b"
+`%|nzchar|%` <- Vectorize(function(lhs, rhs) {
+  if (nzchar(lhs))
+    lhs
+  else
+    rhs
+})
