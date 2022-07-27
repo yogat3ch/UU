@@ -144,6 +144,6 @@ write_to_rprofile <- function(..., scope = c("user", "project")[1]) {
   full$combined$exp_txt <- do.call(c, purrr::map(full$combined$exp, rlang::expr_deparse))
 
   write(full$combined$exp_txt, path)
-  cli::cli_alert_success("Lines written to {.path {path}}:\n{.code paste0(full$combined$exp_txt, collapse = '\n')}")
+  cli::cli_alert_success("Lines written to {.path {path}}:\n{paste0(full$combined$exp_txt, collapse = '\n')}")
 
 }
