@@ -65,6 +65,19 @@ creds_to_renviron <- function(..., scope = c("user", "project")[1], overwrite = 
 
 }
 
+#' Make key-pairs from a named character vector
+#'
+#' @param x \code{chr} named
+#'
+#' @return \code{chr}
+#' @export
+#'
+#' @examples
+#' key_pairs_text(Sys.getenv())
+key_pairs_text <- function(x) {
+  sprintf("%s = '%s'", names(x), x)
+}
+
 #' Add lines to _.gitignore_
 #'
 #' @param lines \code{chr}
