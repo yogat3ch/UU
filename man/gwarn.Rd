@@ -6,8 +6,8 @@
 \usage{
 gwarn(
   message = NULL,
-  class = NULL,
-  ...,
+  body = NULL,
+  footer = NULL,
   .frequency = c("always", "regularly", "once"),
   e = rlang::caller_env()
 )
@@ -15,12 +15,15 @@ gwarn(
 \arguments{
 \item{message}{\code{(chr)} The message to display, formatted as a bulleted list. The first element is displayed as an alert bullet prefixed with ! by default. Elements named "*", "i", and "x" are formatted as regular, info, and cross bullets respectively. See \link[rlang]{topic-condition-formatting} for more about bulleted messaging.}
 
-\item{class}{\code{(class)} Subclass of the condition}
+\item{body, footer}{Additional bullets.}
 
-\item{.frequency}{\code{(chr)} How frequently should the warning or message be displayed? By default ("always") it is displayed at each time. If "regularly", it is displayed once every 8 hours. If "once", it is displayed once per session.}
+\item{.frequency}{How frequently should the warning or message be
+displayed? By default (\code{"always"}) it is displayed at each
+time. If \code{"regularly"}, it is displayed once every 8 hours. If
+\code{"once"}, it is displayed once per session.}
 
 \item{e}{\code{(environment)} calling environment. Passed to \code{glue} for making the message}
 }
 \description{
-Throw \link[rlang]{warn} with \link[cli]{format_warning}
+Throw \link[cli]{cli_alert_warning} with \link[cli]{format_warning}
 }

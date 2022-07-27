@@ -2,10 +2,7 @@
 % Please edit documentation in R/universal_useful.R
 \name{rle_df}
 \alias{rle_df}
-\title{rle_df
-
-Given an \code{\link[base]{rle}} this function will return a data.frame of starts, ends, and indexes thereof of the run lengths.
-Credit: \url{https://stackoverflow.com/questions/43875716/find-start-and-end-positions-indices-of-runs-consecutive-values}}
+\title{rle_df - create a run-length-encoding data.frame}
 \usage{
 rle_df(x)
 }
@@ -16,8 +13,6 @@ rle_df(x)
 \item{(data.frame)}{ with length, values, start and end indices.}
 }
 \description{
-rle_df
-
 Given an \code{\link[base]{rle}} this function will return a data.frame of starts, ends, and indexes thereof of the run lengths.
 Credit: \url{https://stackoverflow.com/questions/43875716/find-start-and-end-positions-indices-of-runs-consecutive-values}
 }

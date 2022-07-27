@@ -18,5 +18,5 @@ lhs \%|nzchar|\% rhs
 Replace zero-length character strings with right hand side
 }
 \examples{
-c("a" , "", "c") \%|nzchar|\% "b"
+c("a" , "", "c", "") \%|nzchar|\% "b"
 }

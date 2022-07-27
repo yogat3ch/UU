@@ -187,20 +187,19 @@ gbort <- function (
 }
 
 #' Custom warning message
-#' @description Throw \link[rlang]{warn} with \link[cli]{format_warning}
+#' @description Throw \link[cli]{cli_alert_warning} with \link[cli]{format_warning}
 #' @inheritParams gbort
-#' @param .frequency \code{(chr)} How frequently should the warning or message be displayed? By default ("always") it is displayed at each time. If "regularly", it is displayed once every 8 hours. If "once", it is displayed once per session.
+#' @inheritParams rlang::warn
 #' @export
 
 gwarn <- function (
   message = NULL,
-  class = NULL,
-  ...,
-  .frequency = c("always",
-                 "regularly", "once"),
+  body = NULL,
+  footer = NULL,
+  .frequency = c("always", "regularly", "once"),
   e = rlang::caller_env()
 ) {
-  rlang::warn(cli::format_warning(message, .envir = e), class = class, ..., .frequency = .frequency)
+  rlang::warn(cli::format_warning(message, .envir = e) , use_cli_format = TRUE)
 }
 
 #' Custom message
@@ -753,8 +752,8 @@ regex_or <- function(x, prefix = "", suffix = "") regex_op(x, prefix = prefix, s
 
 
 # ----------------------- Mon Apr 08 16:49:54 2019 ------------------------#
-#' @title rle_df
-#'
+#' @title rle_df - create a run-length-encoding data.frame
+#' @description
 #' Given an \code{\link[base]{rle}} this function will return a data.frame of starts, ends, and indexes thereof of the run lengths.
 #' Credit: \url{https://stackoverflow.com/questions/43875716/find-start-and-end-positions-indices-of-runs-consecutive-values}
 #' @param x \code{(vector)} An object for which to run an `rle`
