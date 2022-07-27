@@ -12,7 +12,7 @@ write_to_rprofile(..., scope = c("user", "project")[1])
 \item{scope}{\code{chr} which \emph{.Rprofile} to write to}
 }
 \value{
-\coe{msg}
+\code{msg}
 }
 \description{
 Write expressions to the \emph{.Rprofile}

@@ -89,7 +89,7 @@ ignore_files <- function(lines, directory = ".") {
 #' @param ... \code{exprs}
 #' @param scope \code{chr} which _.Rprofile_ to write to
 #'
-#' @return \coe{msg}
+#' @return \code{msg}
 #' @export
 
 write_to_rprofile <- function(..., scope = c("user", "project")[1]) {
@@ -131,6 +131,6 @@ write_to_rprofile <- function(..., scope = c("user", "project")[1]) {
   full$combined$exp_txt <- do.call(c, purrr::map(full$combined$exp, rlang::expr_deparse))
 
   write(full$combined$exp_txt, path)
-  cli::cli_alert_success("Lines written to {.path {path}}:\n{cli::cli_code(full$combined$exp_txt)}")
+  cli::cli_alert_success("Lines written to {.path {path}}:\n{.code paste0(full$combined$exp_txt, collapse = '\n')}")
 
 }
