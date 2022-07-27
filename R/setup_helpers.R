@@ -78,6 +78,24 @@ key_pairs_text <- function(x) {
   sprintf("%s = '%s'", names(x), x)
 }
 
+#' Find duplicates in key pairs
+#'
+#' @param x \code{chr/Dlist} Either character strings of keypairs or a Dlist returned by \link[base]{Sys.getenv}
+#'
+#' @return \code{lgl}
+#' @export
+#'
+#' @examples
+#' key_pairs_duplicated(Sys.getenv())
+key_pairs_duplicated <- function(x, fromLast = TRUE) {
+  .x <- x[nzchar(x)]
+  if (!inherits(x, "Dlist") && is.null(names(x)))
+    nms <- trimws(stringr::str_extract(.x, "^[^\\=]+"))
+  else
+    nms <- names(x)
+  duplicated(nms, fromLast = fromLast)
+}
+
 #' Add lines to _.gitignore_
 #'
 #' @param lines \code{chr}
