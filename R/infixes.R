@@ -59,4 +59,4 @@
     lhs
   else
     rhs
-})
+}, vectorize.args = "lhs", SIMPLIFY = TRUE)
