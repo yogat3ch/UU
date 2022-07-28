@@ -25,7 +25,7 @@
     rhs
   else
     lhs
-})
+}, vectorize.args = "lhs", SIMPLIFY = TRUE)
 
 #' If legit lhs, else rhs
 #' @inheritParams try-infix
@@ -42,7 +42,7 @@
   } else {
     rhs
   }
-})
+}, vectorize.args = "lhs", SIMPLIFY = TRUE)
 
 #' Replace zero-length character strings with right hand side
 #'
