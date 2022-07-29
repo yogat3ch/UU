@@ -20,12 +20,12 @@
 #' @return results from lhs if length > 1 otherwise rhs
 #' @export
 
-`%|0|%` <- Vectorize(function(lhs, rhs) {
+`%|0|%` <- function(lhs, rhs) {
   if (rlang::is_empty(lhs))
     rhs
   else
     lhs
-}, vectorize.args = "lhs", SIMPLIFY = TRUE)
+}
 
 #' If legit lhs, else rhs
 #' @inheritParams try-infix
