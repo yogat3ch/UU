@@ -54,7 +54,7 @@
 #'
 #' @examples
 #' c("a" , "", "c", "") %|nzchar|% "b"
-`%|nzchar|%` <- Vectorize(function(lhs, rhs) {
+`%|zchar|%` <- Vectorize(function(lhs, rhs) {
   if (nzchar(lhs))
     lhs
   else

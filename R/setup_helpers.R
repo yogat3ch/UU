@@ -165,3 +165,38 @@ write_to_rprofile <- function(..., scope = c("user", "project")[1]) {
   cli::cli_alert_success("Lines written to {.path {path}}:\n{paste0(full$combined$exp_txt, collapse = '\n')}")
 
 }
+
+
+#' Write _R/aaa_reimports.R_ file
+#' @param file \code{chr} path to file to write
+#' @export
+
+use_reimports <- function(file = "R/aaa_reimports.R") {
+  write("#' @title Re-imports
+#' @name Re-imports
+#' @description Useful functions from other packages
+#' @importFrom rlang `%||%` `%|%`
+#' @importFrom UU `%|0|%` `%|try|%` `%|zchar|%` `%|legit|%`
+NULL
+
+
+#' @export
+rlang::`%||%`
+
+#' @export
+rlang::`%|%`
+
+#' @export
+UU::`%|try|%`
+
+#' @export
+UU::`%|0|%`
+
+#' @export
+UU::`%|zchar|%`
+
+#' @export
+UU::`%|legit|%`
+
+", file)
+}
