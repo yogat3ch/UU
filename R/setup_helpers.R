@@ -15,7 +15,7 @@ need_write <- function(creds, file_lines, overwrite = FALSE, rprofile = FALSE) {
 #' Write named keypairs to an _.Renviron_ / _.Rprofile_ file
 #' @description Writes key pairs to _.Renviron_ / _.Rprofile_ and adds .Renviron to _.gitignore_ if not already there.
 #' @param ... named keys to write
-#' @inheritParams usethis::edit_r_environ
+#' @param scope \code{chr} Edit globally for the current user, or locally for the current project
 #' @param overwrite \code{(lgl)} should an existing key pair be overwritten. **Default: `FALSE`**
 #' @param proj_dir \code{(chr)} project directory to write credentials to
 #' @param rprofile \code{(lgl)} whether to write the keypairs to a \link[base]{options} call in a _.Rprofile_ file instead.

@@ -21,12 +21,13 @@ Imports:
     rlang,
     stringr,
     tibble,
-    plyr
+    plyr,
+    usethis (>= 2.1.6)
 Collate: 
     'aaa_imports.R'
     'infixes.R'
-    'load_helpers.R'
     'onload.R'
+    'opts_helpers.R'
     'setup_helpers.R'
     'shiny_helpers.R'
     'universal_useful.R'

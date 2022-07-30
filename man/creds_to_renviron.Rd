@@ -15,8 +15,7 @@ creds_to_renviron(
 \arguments{
 \item{...}{named keys to write}
 
-\item{scope}{Edit globally for the current \strong{user}, or locally for the
-current \strong{project}}
+\item{scope}{\code{chr} Edit globally for the current user, or locally for the current project}
 
 \item{overwrite}{\code{(lgl)} should an existing key pair be overwritten. \strong{Default: \code{FALSE}}}
 

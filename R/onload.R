@@ -2,7 +2,6 @@
 
 .onLoad <- function (libname, pkgname) {
   .envir = rlang::ns_env("UU")
-  browser()
   opts_helpers(.env = .envir)
   dir_folders <- purrr::compact(purrr::map(dirs, ~{
     if (dir.exists(.x()))
