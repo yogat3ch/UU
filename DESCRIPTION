@@ -26,10 +26,12 @@ Imports:
 Collate: 
     'aaa_imports.R'
     'infixes.R'
+    'load_helpers.R'
     'onload.R'
     'opts_helpers.R'
     'setup_helpers.R'
     'shiny_helpers.R'
     'universal_useful.R'
+    'utils_environments_namespaces.R'
     'utils_file_io.R'
     'utils_file_navigation.R'

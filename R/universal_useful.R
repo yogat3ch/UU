@@ -1,17 +1,3 @@
-#' @title Unload namespaces prior to package install
-#' @param ns \code{(chr)} namespaces to unload
-#' @export
-
-unload_namespaces <- function(ns, verbose = FALSE) {
-  if (missing(ns))
-    ns <- loadedNamespaces()
-  .ns <- ns[!ns %in% c("rstudio", "stats", "graphics", "utils", "datasets", "methods",
-                "base", "bit64", "tools")]
-  purrr::walk(.ns, purrr::possibly(unloadNamespace, NA, quiet = TRUE))
-  .ns <- loadedNamespaces()
-  if (length(.ns) < length(ns) && verbose)
-    cli::cli_alert_success("Unloaded: {cli::col_grey(paste0(ns[!ns %in% .ns], sep = ', '))}")
-}
 
 #' Is zero-length character?
 #'
@@ -37,18 +23,6 @@ zchar <- function(x) {
 #' len_unique(c(1,2,1))
 len_unique <- function(x) {
   length(unique(x))
-}
-
-#' Read Javascript file
-#'
-#' @param filename \code{chr}
-#'
-#' @return \code{chr}
-#' @export
-#'
-
-read_js <- function(filename) {
-  glue::glue_collapse(readLines(filename), sep = "\n")
 }
 
 #' @inherit plyr::match_df title params description
@@ -213,28 +187,7 @@ gmsg <- function (
 ) {
   cli::cat_line(cli::format_message(msg, .envir = e))
 }
-#' @title Extract the file extensions from a filepath
-#' @description Given a path, extract the file extension
-#' @param path \code{(character)} path
-#' @param strip \code{(logical)} Whether to strip the extension from the path to return the bare file name
-#' @param new_ext \code{chr} New extension for the filename
-#' @return \code{(character)} with the extensions
-#' @export
 
-ext <- function(path, strip = FALSE, new_ext) {
-  new <- !missing(new_ext)
-  if (new)
-    strip <- TRUE
-
-  if (strip) {
-    out <- fs::path_ext_remove(path)
-  } else {
-    out <- fs::path_ext(path)
-  }
-  if (new)
-    out <- fs::path(out, ext = new_ext)
-  out
-}
 
 
 is_project <- function() {
@@ -246,31 +199,6 @@ is_project <- function() {
 }
 
 
-#' Load project & user-level _.Renviron_ & _.Rprofile_
-#' @export
-startup <- function() {
-  if (!getOption("UU_startup", FALSE)) {
-    options(UU_startup = TRUE)
-    list(
-      .Rprofile_user = Sys.getenv("R_PROFILE_USER", "~/.Rprofile"),
-      .Rprofile = Sys.getenv("R_PROFILE" , ".Rprofile"),
-      .Renviron_user = Sys.getenv("R_ENVIRON_USER", "~/.Renviron"),
-      .Renviron = Sys.getenv("R_ENVIRON", ".Renviron")
-    ) |>
-      purrr::iwalk(~{
-        if (file.exists(.x)) {
-          gmsg("{.path {.x}} loaded.")
-          rlang::exec(switch(.y,
-                             .Rprofile = ,
-                             .Rprofile_user = base::source,
-                             .Renviron = ,
-                             .Renviron_user = base::readRenviron), .x)
-        }
-
-      })
-  }
-  on.exit(unload_namespaces(c("UU", "purrr", "rlang")))
-}
 
 #' Get a function from a package, abort if package not installed.
 #'
@@ -287,36 +215,7 @@ need_pkg <- function(pkg, fn) {
   getFromNamespace(fn, ns = pkg) %|try|% gbort(c("{fn} requires {pkg}. Use {cmd} first."))
 }
 
-#' @title Return the appropriate function for reading the specified path/extension
-#'
-#' @param x \code{(character)} The extension name or the path to the file
-#' @param write \code{(logical)} Return the writing function? **Default** `FALSE` to return the reading function
-#' @return \code{(function)}
-#' @export
-#'
-#' @examples
-#' file_fn("csv")
-#' file_fn("csv", write = TRUE)
 
-file_fn <- function(x, write = FALSE) {
-  purrr::when(
-    x,
-    grepl("csv$", ., ignore.case = TRUE) && write ~ need_pkg("readr", "write_csv"),
-    grepl("feather$", ., ignore.case = TRUE) && write ~ need_pkg("arrow", "write_feather"),
-    grepl("rds$", ., ignore.case = TRUE) && write ~ saveRDS,
-    grepl("(?:rda$)|(?:rdata$)", ., ignore.case = TRUE) && write ~ save,
-    grepl("csv$", ., ignore.case = TRUE) ~ need_pkg("readr", "read_csv"),
-    grepl("feather$", ., ignore.case = TRUE)  ~ need_pkg("arrow", "read_feather"),
-    grepl("rds$", ., ignore.case = TRUE) ~ readRDS,
-    grepl(regex_or(c("rda", "rdata"), suf = "$"), ., ignore.case = TRUE) ~ load_obj,
-    grepl("(?:png$)|(?:jpg$)|(?:jpeg$)", ., ignore.case = TRUE) && write ~ need_pkg("ggplot2", "ggsave"),
-    grepl("(?:png$)|(?:jpg$)|(?:jpeg$)", ., ignore.case = TRUE) ~ need_pkg("magick", "img_read"),
-    grepl(regex_or(c("xlsx", "xls", "xlsm"), suf = "$"), ., ignore.case = TRUE) && write ~ need_pkg("writexl", "write_xlsx"),
-    grepl(regex_or(c("xlsx", "xls", "xlsm"), suf = "$"), ., ignore.case = TRUE) ~ need_pkg("readxl", "read_excel"),
-    ~ readLines
-  )
-
-}
 
 
 load_obj <- function(file) {

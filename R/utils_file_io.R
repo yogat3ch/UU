@@ -1,3 +1,26 @@
+#' @title Extract the file extensions from a filepath
+#' @description Given a path, extract the file extension
+#' @param path \code{(character)} path
+#' @param strip \code{(logical)} Whether to strip the extension from the path to return the bare file name
+#' @param new_ext \code{chr} New extension for the filename
+#' @return \code{(character)} with the extensions
+#' @export
+
+ext <- function(path, strip = FALSE, new_ext) {
+  new <- !missing(new_ext)
+  if (new)
+    strip <- TRUE
+
+  if (strip) {
+    out <- fs::path_ext_remove(path)
+  } else {
+    out <- fs::path_ext(path)
+  }
+  if (new)
+    out <- fs::path(out, ext = new_ext)
+  out
+}
+
 #' Read a dependency from file
 #'
 #' @param filename \code{(chr)} path to the file
@@ -25,6 +48,37 @@ dir_fn <- function(base_dir) {
   rlang::new_function(args = rlang::pairlist2(... =, ext = ""), body = rlang::expr(fs::path(!!base_dir, ..., ext = ext)))
 }
 
+
+#' @title Return the appropriate function for reading the specified path/extension
+#'
+#' @param x \code{(character)} The extension name or the path to the file
+#' @param write \code{(logical)} Return the writing function? **Default** `FALSE` to return the reading function
+#' @return \code{(function)}
+#' @export
+#'
+#' @examples
+#' file_fn("csv")
+#' file_fn("csv", write = TRUE)
+
+file_fn <- function(x, write = FALSE) {
+  purrr::when(
+    x,
+    grepl("csv$", ., ignore.case = TRUE) && write ~ need_pkg("readr", "write_csv"),
+    grepl("feather$", ., ignore.case = TRUE) && write ~ need_pkg("arrow", "write_feather"),
+    grepl("rds$", ., ignore.case = TRUE) && write ~ saveRDS,
+    grepl("(?:rda$)|(?:rdata$)", ., ignore.case = TRUE) && write ~ save,
+    grepl("csv$", ., ignore.case = TRUE) ~ need_pkg("readr", "read_csv"),
+    grepl("feather$", ., ignore.case = TRUE)  ~ need_pkg("arrow", "read_feather"),
+    grepl("rds$", ., ignore.case = TRUE) ~ readRDS,
+    grepl(regex_or(c("rda", "rdata"), suf = "$"), ., ignore.case = TRUE) ~ load_obj,
+    grepl("(?:png$)|(?:jpg$)|(?:jpeg$)", ., ignore.case = TRUE) && write ~ need_pkg("ggplot2", "ggsave"),
+    grepl("(?:png$)|(?:jpg$)|(?:jpeg$)", ., ignore.case = TRUE) ~ need_pkg("magick", "img_read"),
+    grepl(regex_or(c("xlsx", "xls", "xlsm"), suf = "$"), ., ignore.case = TRUE) && write ~ need_pkg("writexl", "write_xlsx"),
+    grepl(regex_or(c("xlsx", "xls", "xlsm"), suf = "$"), ., ignore.case = TRUE) ~ need_pkg("readxl", "read_excel"),
+    ~ readLines
+  )
+
+}
 
 #' Path functions for commonly used directories
 #' @param ... \code{(chr)} directory paths

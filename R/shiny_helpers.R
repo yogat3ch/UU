@@ -26,3 +26,15 @@ shiny_error_recover <- function() {
   else
     options(shiny.error = NULL)
 }
+
+#' Read Javascript file
+#'
+#' @param filename \code{chr}
+#'
+#' @return \code{chr}
+#' @export
+#'
+
+read_js <- function(filename) {
+  glue::glue_collapse(readLines(filename), sep = "\n")
+}
