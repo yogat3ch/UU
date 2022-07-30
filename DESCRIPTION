@@ -19,6 +19,7 @@ Imports:
     purrr,
     utils,
     rlang,
+    rstudioapi,
     stringr,
     tibble,
     plyr,

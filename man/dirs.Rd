@@ -8,7 +8,7 @@
 An object of class \code{list} of length 10.
 }
 \usage{
-dirs
+dirs$data()
 }
 \arguments{
 \item{...}{\code{(chr)} directory paths}

@@ -83,6 +83,7 @@ file_fn <- function(x, write = FALSE) {
 #' Path functions for commonly used directories
 #' @param ... \code{(chr)} directory paths
 #' @param ext \code{(chr)} file extension
+#' @usage dirs$data()
 #' @export
 #' @examples dirs$data("mydata", ext = "csv")
 dirs <- purrr::map(
