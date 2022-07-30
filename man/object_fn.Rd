@@ -24,5 +24,4 @@ Return the appropriate function for writing the supplied object to disk
 }
 \examples{
 object_fn(1:15)
-object_fn(data.frame(a = 2, b = 3))
 }

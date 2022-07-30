@@ -19,6 +19,6 @@ dirs
 Path functions for commonly used directories
 }
 \examples{
-dirs$crmms("crmms_output", "EnsembleOutput_10_mar_2022", ext = "xlsx")
+dirs$data("mydata", ext = "csv")
 }
 \keyword{datasets}

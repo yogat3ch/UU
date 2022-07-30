@@ -35,9 +35,10 @@
 #' @export
 #' @examples
 #' (100 / NA) %|legit|% 4
-#' list(a = 5)$a$value %|legit|% 4
+#' list(a = 5)$a %|legit|% 4
+#' list(a = 5)$b %|legit|% 4
 `%|legit|%` <- Vectorize(function(lhs, rhs) {
-  if (UU::is_legit(try(lhs, silent = TRUE))) {
+  if (is_legit(try(lhs, silent = TRUE))) {
     lhs
   } else {
     rhs
@@ -53,7 +54,7 @@
 #' @export
 #'
 #' @examples
-#' c("a" , "", "c", "") %|nzchar|% "b"
+#' c("a" , "", "c", "") %|zchar|% "b"
 `%|zchar|%` <- Vectorize(function(lhs, rhs) {
   if (nzchar(lhs))
     lhs

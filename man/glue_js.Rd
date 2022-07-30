@@ -20,5 +20,5 @@ Create a JS string with glue insertions
 glue \verb{.open = !@} & \verb{.close = @#}
 }
 \examples{
-gluejs("$(document).ready(() => {let x = *{tolower(F)}*)")
+glue_js("$(document).ready(() => {let x = *{tolower(FALSE)}*)")
 }

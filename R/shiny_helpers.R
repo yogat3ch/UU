@@ -7,11 +7,22 @@
 #' @export
 #'
 #' @examples
-#' gluejs("$(document).ready(() => {let x = *{tolower(F)}*)")
+#' glue_js("$(document).ready(() => {let x = *{tolower(FALSE)}*)")
 glue_js <- function(js, e = rlang::caller_env(), .open = "*{", .close = "}*") {
   if (file.exists(js))
     .js <- glue::glue_collapse(readLines(js))
   else
     .js <- js
   glue::glue(.open = .open, .close = .close, .js, .envir = e)
+}
+
+#' Toggle \link[utils]{recover} on error when obtuse shiny errors are encountered
+#' @export
+
+
+shiny_error_recover <- function() {
+  if (!identical(getOption("shiny.error"), utils::recover))
+    options(shiny.error = utils::recover)
+  else
+    options(shiny.error = NULL)
 }

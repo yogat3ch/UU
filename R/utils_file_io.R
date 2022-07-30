@@ -7,9 +7,9 @@
 
 dep_read <- function(filename, ...) {
   if (file.exists(filename))
-    UU::file_fn(filename)(filename, ...)
+    file_fn(filename)(filename, ...)
   else
-    UU::gbort("{.path {filename}} not found.")
+    gbort("{.path {filename}} not found.")
 }
 
 #' Create a directory path pointing function
@@ -30,7 +30,7 @@ dir_fn <- function(base_dir) {
 #' @param ... \code{(chr)} directory paths
 #' @param ext \code{(chr)} file extension
 #' @export
-#' @examples dirs$crmms("crmms_output", "EnsembleOutput_10_mar_2022", ext = "xlsx")
+#' @examples dirs$data("mydata", ext = "csv")
 dirs <- purrr::map(
   list(
     css = "inst/app/www/css",
@@ -119,7 +119,6 @@ object_ext <- function(object) {
 #'
 #' @examples
 #' object_fn(1:15)
-#' object_fn(data.frame(a = 2, b = 3))
 
 
 object_fn <- function(x, filepath) {
@@ -198,12 +197,12 @@ last_updated <- function(x, path = FALSE, ...) {
   if (!path) {
     .files <- x
   } else {
-    .files <- UU::list.files2(x, ...)
+    .files <- list.files2(x, ...)
   }
   if (is_legit(.files))
     .files <- do.call(c, purrr::map(rlang::set_names(.files), purrr::possibly(~file.info(.x)$mtime, lubridate::NA_POSIXct_)))
   else
-    gwarn("{cli::code_highlight('UU::last_updated', code_theme = 'Twilight')}: No files detected")
+    gwarn("{cli::code_highlight('last_updated', code_theme = 'Twilight')}: No files detected")
   .files
 }
 
@@ -223,7 +222,7 @@ last_updated <- function(x, path = FALSE, ...) {
 #' @export
 
 needs_update <- function(x, path = FALSE, threshold = lubridate::floor_date(Sys.time(), "day")) {
-  .files <- UU::last_updated(x, path)
+  .files <- last_updated(x, path)
   tibble::tibble(full_path = names(.files),
                  basename = basename(full_path),
                  last_updated = .files,

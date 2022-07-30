@@ -22,3 +22,13 @@ Imports:
     stringr,
     tibble,
     plyr
+Collate: 
+    'aaa_imports.R'
+    'infixes.R'
+    'load_helpers.R'
+    'onload.R'
+    'setup_helpers.R'
+    'shiny_helpers.R'
+    'universal_useful.R'
+    'utils_file_io.R'
+    'utils_file_navigation.R'

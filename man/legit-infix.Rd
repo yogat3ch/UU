@@ -20,7 +20,8 @@ If legit lhs, else rhs
 }
 \examples{
 (100 / NA) \%|legit|\% 4
-list(a = 5)$a$value \%|legit|\% 4
+list(a = 5)$a \%|legit|\% 4
+list(a = 5)$b \%|legit|\% 4
 }
 \seealso{
 is_legit

@@ -24,7 +24,7 @@ need_write <- function(creds, file_lines, overwrite = FALSE, rprofile = FALSE) {
 #'
 
 creds_to_renviron <- function(..., scope = c("user", "project")[1], overwrite = FALSE, proj_dir = ".", rprofile = FALSE) {
-  .scope <- UU::match_letters(scope, "user", "project")
+  .scope <- match_letters(scope, "user", "project")
   .fp <- purrr::when(
     rprofile,
     isTRUE(.) ~ list(
@@ -39,7 +39,7 @@ creds_to_renviron <- function(..., scope = c("user", "project")[1], overwrite = 
   fp <- rlang::exec(switch,.scope,
                !!!.fp)
 
-  UU::mkpath(fp, mkfile = TRUE, mkdir = FALSE)
+  mkpath(fp, mkfile = TRUE, mkdir = FALSE)
   l <- readLines(fp)
   l <- l[nzchar(l)]
   creds <- rlang::dots_list(..., .named = TRUE)
@@ -106,11 +106,11 @@ key_pairs_duplicated <- function(x, fromLast = TRUE) {
 
 ignore_files <- function(lines, directory = ".") {
   fp <- file.path(directory, ".gitignore")
-  UU::mkpath(fp, mkfile = TRUE)
+  mkpath(fp, mkfile = TRUE)
   l <- readLines(fp)
   to_ignore <- need_write(lines, l)
   write(to_ignore, file = fp, append = TRUE)
-  if (UU::is_legit(to_ignore))
+  if (is_legit(to_ignore))
     cli::cli_alert_info("{.val {paste0(lines, collapse = ',')}} added to {.path {fp}}")
 
 }
@@ -171,32 +171,35 @@ write_to_rprofile <- function(..., scope = c("user", "project")[1]) {
 #' @param file \code{chr} path to file to write
 #' @export
 
-use_reimports <- function(file = "R/aaa_reimports.R") {
-  write("#' @title Re-imports
-#' @name Re-imports
-#' @description Useful functions from other packages
-#' @importFrom rlang `%||%` `%|%`
-#' @importFrom UU `%|0|%` `%|try|%` `%|zchar|%` `%|legit|%`
-NULL
-
-
-#' @export
-rlang::`%||%`
-
-#' @export
-rlang::`%|%`
-
-#' @export
-UU::`%|try|%`
-
-#' @export
-UU::`%|0|%`
-
-#' @export
-UU::`%|zchar|%`
-
-#' @export
-UU::`%|legit|%`
-
-", file)
+use_UU_reimports <- function(file = "R/aaa_reimports.R") {
+  file.copy(
+    system.file("extdata/reimports.R", package = "UU"),
+    "R/reimports.R"
+  )
+  cli::cli_alert_success("{.path R/reimports.R} written successfully. Document the package to use.")
 }
+
+#' Add a function to reimports
+#'
+#' @param pkg \code{chr} package name
+#' @param fun \code{chr} function name
+#'
+#' @return \code{msg}
+#' @export
+use_reimport <- function(pkg, fun) {
+  imports <- list.files2("R", pattern = "imports") %|0|% gbort("No file in {.path R/} with imports in the name.")
+  l <- readLines(imports)
+  fn <- glue::glue("{pkg}::{fun}")
+  if (!any(stringr::str_detect(l, stringr::fixed(as.character(fn))))) {
+    glue::glue("\n#' @importFrom {pkg} {fun}\n#' @export\n{fn}
+    ") |>
+      write(imports, append = TRUE)
+    l <- readLines(imports)
+    if (any(stringr::str_detect(l, stringr::fixed(as.character(fn)))))
+      cli::cli_alert_success("{.code {fn}} added to {.path {imports}}.")
+  } else {
+    gwarn("{fn} is already imported.")
+  }
+
+}
+

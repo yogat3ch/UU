@@ -352,9 +352,9 @@ load_obj <- function(file) {
 #' size(50, "gb", "mb")
 
 size <- function(x, in_unit = c("b", "Kb", "Mb", "Gb", "Tb", "Pb", "Eb", "Zb", "Yb")[1], out_unit = "b", standard = c("IEC", "SI")[1]) {
-  .standard <- UU::match_letters(standard, "IEC", "SI", ignore.case = TRUE)
-  .in_unit <- UU::match_letters(in_unit, .size$type, ignore.case = TRUE)
-  .out_unit <- UU::match_letters(out_unit, .size$type, ignore.case = TRUE)
+  .standard <- match_letters(standard, "IEC", "SI", ignore.case = TRUE)
+  .in_unit <- match_letters(in_unit, .size$type, ignore.case = TRUE)
+  .out_unit <- match_letters(out_unit, .size$type, ignore.case = TRUE)
   (.size[grepl(paste0("^",.in_unit), .size$type, ignore.case = TRUE), .standard, drop = TRUE] * x) / .size[grepl(paste0("^",.out_unit), .size$type, ignore.case = TRUE), .standard, drop = TRUE]
 }
 
@@ -392,7 +392,7 @@ find_by_class <- function(class, e = rlang::caller_env()) {
     out <- get0(.x, envir = e)
     purrr::when(out, inherits(., class) ~ ., ~NULL)
   }, NULL)))
-  if (UU::is_legit(obj)) {
+  if (is_legit(obj)) {
     if (length(obj) > 1)
       rlang::warn(paste0("More than one object with class: ", class,". Returning the first found."))
     out <- obj[[1]]
