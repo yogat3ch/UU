@@ -24,3 +24,15 @@ unload_namespaces <- function(ns, verbose = FALSE) {
   if (length(.ns) < length(ns) && verbose)
     cli::cli_alert_success("Unloaded: {cli::col_grey(paste0(ns[!ns %in% .ns], sep = ', '))}")
 }
+
+#' Get an object from the global environment
+#'
+#' @return \code{obj}
+#' @export
+#'
+#' @examples
+#' get_global(".Last.value")
+get_global <- function(global = "active") {
+  get0(global, envir = .GlobalEnv)
+
+}

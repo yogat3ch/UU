@@ -203,3 +203,34 @@ use_reimport <- function(pkg, fun) {
 
 }
 
+#' Install a package
+#'
+#' @param pkg \code{chr} package names **Required**
+#' @param remote \code{chr} github remote
+#' @param ... \code{args} passed on to \link[base]{install.packages} if no `remote` supplied or \link[remotes]{install_github} if `remote` supplied
+#' @param to_desc \code{lgl} Add the package dependency to the _DESCRIPTION_ file?
+#' @param snapshot \code{lgl} Run \code{renv::\link[renv]{snapshot}}
+#' @inherit remotes::install_github return
+#' @inheritDotParams remotes::install_github
+#' @return Installs the package, add the version to the _DESCRIPTION_ file, and \link[renv]{snapshot}s the package to the _renv.lock_ file if present.
+#' @export
+#'
+#' @examples
+#' install_remote("rlang")
+
+install_remote <- function(pkg, remote, ..., to_desc = TRUE, snapshot = TRUE) {
+  # If it's a package & user opts to write the description file, add as dependency
+  .write_desc <- (is.character(pkgload::package_file()) %|try|% F) && to_desc
+  if (missing(remote)) {
+    install.packages(pkg, ...)
+    if (.write_desc)
+      purrr::walk(pkg, ~usethis::use_package(.x, min_version = TRUE))
+  } else {
+    .remotes <- glue:::glue("{remote}/{pkg}")
+    remotes::install_github(.remotes, ...)
+    if (.write_desc)
+      purrr::walk2(pkg, .remotes, ~usethis::use_dev_package(.x, remote = .y))
+  }
+  if (file.exists("renv.lock") && snapshot)
+    UU::need_pkg("renv","snapshot")(prompt = FALSE)
+}
