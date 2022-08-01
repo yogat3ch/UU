@@ -7,7 +7,7 @@ need_write <-
     if (is.null(names(creds)))
       creds <- rlang::set_names(creds)
     if (!overwrite) {
-      cred_rgx <- purrr::imap_chr(creds, stringr::regex(paste0(
+      cred_rgx <- purrr::imap_chr(creds, ~stringr::regex(paste0(
         ifelse(rprofile, "^\\s{1,}?", "^"),
         .y,
         "[\\s]*\\="
