@@ -7,16 +7,18 @@ folder_helpers <- function(.envir = rlang::ns_env("UU")) {
 }
 
 file_helpers <- function(.envir = rlang::ns_env("UU")) {
-  file <- purrr::compact(purrr::map(
-    .file,
-    ~{
-      if (file.exists(.x)) {
-        rlang::new_function(
-          rlang::pairlist2(path = .x),
-          body = rlang::expr(rstudioapi::navigateToFile(path))
-        )
-      }
+  if (is.null(file)) {
+    file <- purrr::compact(purrr::map(
+      .file,
+      ~{
+        if (file.exists(.x)) {
+          rlang::new_function(
+            rlang::pairlist2(path = .x),
+            body = rlang::expr(rstudioapi::navigateToFile(path))
+          )
+        }
 
-    }))
-  assign("file", file, envir = .envir)
+      }))
+    assign("file", file, envir = .envir)
+  }
 }
