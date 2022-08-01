@@ -26,6 +26,7 @@ Imports:
     usethis (>= 2.1.6)
 Collate: 
     'aaa_imports.R'
+    'file_helpers.R'
     'infixes.R'
     'load_helpers.R'
     'onload.R'
