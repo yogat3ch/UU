@@ -5,7 +5,7 @@
 \alias{file}
 \title{Go to a specified file in the Virga Labs golem project}
 \format{
-An object of class \code{NULL} of length 0.
+An object of class \code{list} of length 3.
 }
 \usage{
 file

@@ -77,6 +77,3 @@ Installs the package, add the version to the \emph{DESCRIPTION} file, and \link[
 \description{
 Install a package
 }
-\examples{
-install_remote("rlang")
-}

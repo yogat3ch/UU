@@ -20,6 +20,19 @@ need_write <-
     creds[needs_write]
   }
 
+#' Remove zero length strings (or string with all spaces)
+#'
+#' @param x \code{chr}
+#'
+#' @return \code{chr}
+#' @export
+#'
+#' @examples
+#' zchar_remove(c("", "  ", "a"))
+zchar_remove <- function(x) {
+  .x <- trimws(x)
+  .x[nzchar(.x)]
+}
 
 #' Write named keypairs to an _.Renviron_ / _.Rprofile_ file
 #' @description Writes key pairs to _.Renviron_ / _.Rprofile_ and adds .Renviron to _.gitignore_ if not already there.
@@ -224,8 +237,6 @@ use_reimport <- function(pkg, fun) {
 #' @return Installs the package, add the version to the _DESCRIPTION_ file, and \link[renv]{snapshot}s the package to the _renv.lock_ file if present.
 #' @export
 #'
-#' @examples
-#' install_remote("rlang")
 
 install_remote <- function(pkg, remote, ..., to_desc = TRUE, snapshot = TRUE) {
   # If it's a package & user opts to write the description file, add as dependency
