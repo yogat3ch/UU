@@ -1,15 +1,24 @@
 
-need_write <- function(creds, file_lines, overwrite = FALSE, rprofile = FALSE) {
-  if (is.null(names(creds)))
-    creds <- rlang::set_names(creds)
-  creds[purrr::imap_lgl(creds, ~{
-    cred_exists <- stringr::str_detect(file_lines, stringr::regex(paste0(ifelse(rprofile, "^\\s{1,}?", "^"),.y,ifelse(rprofile, "[\\s]*\\=", "[\\n\\s]*$"))))
-    if (!any(cred_exists) || overwrite)
-      TRUE
-    else
-      FALSE
-  })]
-}
+need_write <-
+  function(creds,
+           file_lines,
+           overwrite = FALSE,
+           rprofile = FALSE) {
+    if (is.null(names(creds)))
+      creds <- rlang::set_names(creds)
+    if (!overwrite) {
+      cred_rgx <- purrr::imap_chr(creds, stringr::regex(paste0(
+        ifelse(rprofile, "^\\s{1,}?", "^"),
+        .y,
+        "[\\s]*\\="
+      )))
+      cred_exists <- purrr::imap_lgl(cred_rgx, ~any(stringr::str_detect(file_lines, .x), na.rm = TRUE))
+      needs_write <- !cred_exists
+    } else {
+      needs_write <- rep(TRUE, length(creds))
+    }
+    creds[needs_write]
+  }
 
 
 #' Write named keypairs to an _.Renviron_ / _.Rprofile_ file
