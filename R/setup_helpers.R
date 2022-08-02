@@ -62,16 +62,16 @@ creds_to_renviron <- function(..., scope = c("user", "project")[1], overwrite = 
                !!!.fp)
 
   mkpath(fp, mkfile = TRUE, mkdir = FALSE)
+  creds <- rlang::dots_list(..., .named = TRUE)
   l <- readLines(fp)
   l <- l[nzchar(l)]
-  creds <- rlang::dots_list(..., .named = TRUE)
   creds_to_write <- need_write(creds, l, overwrite, rprofile = rprofile)
 
   if (length(creds_to_write)) {
     if (rprofile)
       c2w <-  paste0("options(\n", paste0(paste0(names(creds_to_write), " = ", creds_to_write), collapse = ",\n") ,"\n)")
     else
-      c2w <- paste0(names(creds_to_write), " = ","'",creds_to_write,"'")
+      c2w <- key_pairs_text(creds_to_write)
 
     write(c2w, fp, append = TRUE)
     # Read the newly added vars/options
