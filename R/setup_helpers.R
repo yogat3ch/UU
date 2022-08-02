@@ -129,12 +129,7 @@ key_pairs_duplicated <- function(x, fromLast = TRUE) {
 ignore_files <- function(lines, directory = ".") {
   fp <- file.path(directory, ".gitignore")
   mkpath(fp, mkfile = TRUE)
-  l <- readLines(fp)
-  to_ignore <- need_write(lines, l)
-  write(to_ignore, file = fp, append = TRUE)
-  if (is_legit(to_ignore))
-    cli::cli_alert_info("{.val {paste0(lines, collapse = ',')}} added to {.path {fp}}")
-
+  usethis::write_union(fp, lines = lines)
 }
 
 #' Write expressions to the _.Rprofile_
