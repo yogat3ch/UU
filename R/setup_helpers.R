@@ -235,7 +235,7 @@ use_reimport <- function(pkg, fun) {
 
 install_remote <- function(pkg, remote, ..., to_desc = TRUE, snapshot = TRUE) {
   # If it's a package & user opts to write the description file, add as dependency
-  .write_desc <- (is.character(pkgload::package_file()) %|try|% F) && to_desc
+  .write_desc <- (is.character(pkgload::package_file()) %|try|% FALSE) && to_desc
   if (missing(remote)) {
     install.packages(pkg, ...)
     if (.write_desc)

@@ -13,13 +13,13 @@ rlang::`%||%`
 rlang::`%|%`
 
 #' @export
-`%|try|%`
+UU::`%|try|%`
 
 #' @export
-`%|0|%`
+UU::`%|0|%`
 
 #' @export
-`%|zchar|%`
+UU::`%|zchar|%`
 
 #' @export
-`%|legit|%`
+UU::`%|legit|%`
