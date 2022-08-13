@@ -131,14 +131,35 @@ smode <- function(x) {
   .u[tab == max(tab)]
 }
 
-#' @title Is path a file path
-#' @description Given a path, is it a filepath?
-#' @param path \code{(character)} path
-#' @return \code{(logical)}
+
+#' Vlookup replace using a lookup column and reference table
+#'
+#' @param base \code{vector} of starting values. Replacements will be made in this vector before it is returned.
+#' @param lookup_col \code{vector} of values with same length as `base` that will be matched to `lookup_ref` to deteremine the replacement indices
+#' @param lookup_ref \code{vector} of reference values, which `lookup_col` will be matched to in order to determine replacement values.
+#' @param value_col \code{vector} of replacement values with same length as `lookup_ref`
+#'
+#' @return \code{vector}
 #' @export
-is_filepath <- function(path) {
-  grepl("\\.\\w{1,}", basename(path))
+#'
+#' @examples
+#' ref <- tibble::tibble(lookup = letters[1:5], value = 1:5)
+#' original <- tibble::tibble(lookup = letters[1:20], base = runif(20, min = 6, max = 20))
+#' dplyr::mutate(original, base = vlookup_from_ref(base, lookup, ref$lookup, ref$value))
+vlookup_from_ref <- function(
+    base,
+    lookup_col,
+    lookup_ref,
+    value_col
+) {
+  col_ref_idx <- match(lookup_col, lookup_ref)
+  replacements <- value_col[na.omit(col_ref_idx)]
+  col_base_idx <- !is.na(col_ref_idx)
+  if (any(col_base_idx))
+    base[which(col_base_idx)] <- replacements
+  return(base)
 }
+
 
 #' Custom error message
 #' @description Throw \link[rlang]{abort} with \link[cli]{format_error}
