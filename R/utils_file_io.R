@@ -284,3 +284,12 @@ needs_update <- function(x, path = FALSE, threshold = lubridate::floor_date(Sys.
                  threshold = threshold,
                  needs_update = (threshold > last_updated) %|% TRUE)
 }
+
+#' @title Is path a file path
+#' @description Given a path, is it a filepath?
+#' @param path \code{(character)} path
+#' @return \code{(logical)}
+#' @export
+is_filepath <- function(path) {
+  grepl("\\.\\w{1,}", basename(path))
+}
