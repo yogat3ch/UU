@@ -45,7 +45,12 @@ dep_read <- function(filename, ...) {
 #' @examples
 #' dir_fn("data")("random_data", "file", ext = "txt")
 dir_fn <- function(base_dir) {
-  rlang::new_function(args = rlang::pairlist2(... =, ext = ""), body = rlang::expr(fs::path(!!base_dir, ..., ext = ext)))
+  rlang::new_function(args = rlang::pairlist2(... =, ext = ""), body = rlang::expr({
+    out <- fs::path(!!base_dir, ..., ext = ext)
+    if (is_package())
+      out <- pkgload:::shim_system.file(out, package = pkgload::pkg_name())
+    return(out)
+  }))
 }
 
 
