@@ -1,6 +1,6 @@
 Package: UU
 Title: Universally Useful
-Version: 0.24.0
+Version: 0.24.1
 Authors@R: person(given = "Stephen", family = "Holsenbeck",
        role = c("aut", "cre"), email =
        "sholsen@alumni.emory.edu")
@@ -14,8 +14,10 @@ Imports:
     cli,
     glue,
     fs,
+    devtools,
     dplyr,
     lubridate,
+    pkgload,
     purrr,
     utils,
     rlang,
@@ -31,6 +33,7 @@ Collate:
     'load_helpers.R'
     'onload.R'
     'opts_helpers.R'
+    'pkg_helpers.R'
     'setup_helpers.R'
     'shiny_helpers.R'
     'universal_useful.R'
