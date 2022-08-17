@@ -63,7 +63,7 @@ write_dir_fn <- function(outfile = "R/utils_dir_fns.R", overwrite = TRUE) {
   purrr::iwalk(dirs, ~{
     base_dir <- stringr::str_remove(.x(), "^inst\\/?")
     fn <- rlang::new_function(args = rlang::pairlist2(... =, ext = ""), body = rlang::expr({
-      pkgload:::shim_system.file(fs::path(!!base_dir, ..., ext = ext), package = !!pkgload::pkg_name())
+      fs::path_package(fs::path(!!base_dir, ..., ext = ext), package = !!pkgload::pkg_name())
     }))
     out <- deparse(fn)
     out[1] <- glue::glue("{.y} <- {out[1]}")
