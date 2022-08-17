@@ -6,7 +6,7 @@
 #' is_package()
 
 is_package <- function () {
-  nzchar(pkgload::pkg_path()) %|try|% FALSE
+  nzchar(pkg_path())
 }
 
 pkg_path <- function() {
