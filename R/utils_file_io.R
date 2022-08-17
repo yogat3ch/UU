@@ -45,19 +45,32 @@ dep_read <- function(filename, ...) {
 #' @examples
 #' dir_fn("data")("random_data", "file", ext = "txt")
 dir_fn <- function(base_dir) {
-  rlang::new_function(args = rlang::pairlist2(... =, ext = ""), body = rlang::expr({
-    .inst <- stringr::str_detect(!!base_dir, "^inst")
-    if (!is_package_dev()) {
-      if (.inst) {
-        base_dir <- !!stringr::str_remove(base_dir, "^inst\\/?")
-      }
-      out <- pkgload:::shim_system.file(fs::path(!!base_dir, ..., ext = ext), package = pkgload::pkg_name())
-    } else
-      out <- fs::path(!!base_dir, ..., ext = "")
-    return(out)
-  }))
+  rlang::new_function(args = rlang::pairlist2(... =, ext = ""), body = rlang::expr(fs::path(!!base_dir, ..., ext = ext)))
 }
 
+#' Write `dir` helper function that are robust to dev vs deployed package states
+#'
+#' @param outfile \code{chr} path to file to write. Default _R/utils_dir_fns.R_
+#' @param overwrite \code{lgl} Whether to overwrite the existing file. Default `TRUE`
+#'
+#' @return \code{msg} and a new file
+#' @export
+
+write_dir_fn <- function(outfile = "R/utils_dir_fns.R", overwrite = TRUE) {
+  if (file.exists(outfile) && overwrite)
+    file.remove(outfile)
+  mkpath(outfile, mkfile = TRUE)
+  purrr::iwalk(dirs, ~{
+    base_dir <- stringr::str_remove(.x(), "^inst\\/?")
+    fn <- rlang::new_function(args = rlang::pairlist2(... =, ext = ""), body = rlang::expr({
+      pkgload:::shim_system.file(fs::path(!!base_dir, ..., ext = ext), package = !!pkgload::pkg_name())
+    }))
+    out <- deparse(fn)
+    out[1] <- glue::glue("{.y} <- {out[1]}")
+    write(out, file = outfile, append = TRUE)
+  })
+
+}
 
 #' @title Return the appropriate function for reading the specified path/extension
 #'

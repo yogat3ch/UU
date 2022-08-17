@@ -1,4 +1,4 @@
-#' Is working directory a packagE?
+#' Is working directory a package?
 #'
 #' @return \code{lgl}
 #' @export
@@ -7,6 +7,10 @@
 
 is_package <- function () {
   nzchar(pkgload::pkg_path()) %|try|% FALSE
+}
+
+pkg_path <- function() {
+  pkgload::pkg_path() %|try|% ""
 }
 
 #' Is package in development or installed

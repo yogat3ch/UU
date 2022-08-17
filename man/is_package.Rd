@@ -2,7 +2,7 @@
 % Please edit documentation in R/pkg_helpers.R
 \name{is_package}
 \alias{is_package}
-\title{Is working directory a packagE?}
+\title{Is working directory a package?}
 \usage{
 is_package()
 }
@@ -10,7 +10,7 @@ is_package()
 \code{lgl}
 }
 \description{
-Is working directory a packagE?
+Is working directory a package?
 }
 \examples{
 is_package()
