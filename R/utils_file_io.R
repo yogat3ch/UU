@@ -64,15 +64,13 @@ write_dir_fn <- function(outfile = "R/utils_dir_fns.R", overwrite = TRUE, for_go
   pkg_nm <- pkg_name()
   app_sys <- function() {}
   fn <- purrr::when(for_golem, isTRUE(.) ~ list("app_sys"), ~ list("path_package", .ns = "fs", package = pkg_nm))
-  purrr::iwalk(dirs, ~{
+  dirs <- purrr::map(dirs, ~{
     exp <- rlang::exec(rlang::call2, !!!fn, rlang::expr(fs::path(!!stringr::str_remove(.x(), "^inst\\/?"), ..., ext = ext)))
-    fn <- rlang::new_function(args = rlang::pairlist2(... =, ext = ""), body = rlang::expr({
+    rlang::new_function(args = rlang::pairlist2(... =, ext = ""), body = rlang::expr({
         !!exp
     }))
-    out <- deparse(fn)
-    out[1] <- glue::glue("{.y} <- {out[1]}")
-    write(out, file = outfile, append = TRUE)
   })
+  suppressWarnings(dump("dirs", outfile))
 
 }
 
