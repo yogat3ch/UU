@@ -4,7 +4,7 @@
 \alias{is_package_dev}
 \title{Is package in development or installed}
 \usage{
-is_package_dev(pkg_nm = pkgload::pkg_name() \%|try|\% NULL)
+is_package_dev(pkg_nm = pkg_name())
 }
 \arguments{
 \item{pkg_nm}{\code{chr} name of package}

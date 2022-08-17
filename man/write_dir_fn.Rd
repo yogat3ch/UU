@@ -4,12 +4,18 @@
 \alias{write_dir_fn}
 \title{Write \code{dir} helper function that are robust to dev vs deployed package states}
 \usage{
-write_dir_fn(outfile = "R/utils_dir_fns.R", overwrite = TRUE)
+write_dir_fn(
+  outfile = "R/utils_dir_fns.R",
+  overwrite = TRUE,
+  for_golem = FALSE
+)
 }
 \arguments{
 \item{outfile}{\code{chr} path to file to write. Default \emph{R/utils_dir_fns.R}}
 
 \item{overwrite}{\code{lgl} Whether to overwrite the existing file. Default \code{TRUE}}
+
+\item{for_golem}{\code{lgl} Whether to use the \code{app_sys} function if package is a golem package}
 }
 \value{
 \code{msg} and a new file

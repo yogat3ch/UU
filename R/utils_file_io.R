@@ -52,18 +52,22 @@ dir_fn <- function(base_dir) {
 #'
 #' @param outfile \code{chr} path to file to write. Default _R/utils_dir_fns.R_
 #' @param overwrite \code{lgl} Whether to overwrite the existing file. Default `TRUE`
-#'
+#' @param for_golem \code{lgl} Whether to use the `app_sys` function if package is a golem package
 #' @return \code{msg} and a new file
 #' @export
 
-write_dir_fn <- function(outfile = "R/utils_dir_fns.R", overwrite = TRUE) {
+write_dir_fn <- function(outfile = "R/utils_dir_fns.R", overwrite = TRUE, for_golem = FALSE) {
   if (file.exists(outfile) && overwrite)
     file.remove(outfile)
   mkpath(outfile, mkfile = TRUE)
+
+  pkg_nm <- pkg_name()
+  app_sys <- function() {}
+  fn <- purrr::when(for_golem, isTRUE(.) ~ list("app_sys"), ~ list("path_package", .ns = "fs", package = pkg_nm))
   purrr::iwalk(dirs, ~{
-    base_dir <- stringr::str_remove(.x(), "^inst\\/?")
+    exp <- rlang::exec(rlang::call2, !!!fn, rlang::expr(fs::path(!!stringr::str_remove(.x(), "^inst\\/?"), ..., ext = ext)))
     fn <- rlang::new_function(args = rlang::pairlist2(... =, ext = ""), body = rlang::expr({
-      fs::path_package(fs::path(!!base_dir, ..., ext = ext), package = !!pkgload::pkg_name())
+        !!exp
     }))
     out <- deparse(fn)
     out[1] <- glue::glue("{.y} <- {out[1]}")
