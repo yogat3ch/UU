@@ -115,6 +115,7 @@ dirs <- purrr::map(
   list(
     css = "inst/app/www/css",
     data = "data",
+    extdata = "inst/extdata",
     img = "inst/app/www/img",
     inst = "inst",
     js = "inst/app/www/js",
