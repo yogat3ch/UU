@@ -71,6 +71,11 @@ write_dir_fn <- function(outfile = "R/utils_dir_fns.R", overwrite = TRUE, for_go
     }))
   })
   suppressWarnings(dump("dirs", outfile))
+  l <- readLines(outfile)
+  write(c("#' directory path generation convenience functions",
+          "#' @export",
+          l), file = outfile)
+
 
 }
 
