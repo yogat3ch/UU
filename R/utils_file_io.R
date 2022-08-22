@@ -56,7 +56,7 @@ dir_fn <- function(base_dir) {
 #' @return \code{msg} and a new file
 #' @export
 
-write_dir_fn <- function(outfile = "R/utils_dir_fns.R", overwrite = TRUE, for_golem = FALSE) {
+write_dir_fn <- function(outfile = "R/utils_dir_fns.R", overwrite = TRUE, for_golem = file.exists("R/app_ui.R")) {
   if (file.exists(outfile) && overwrite)
     file.remove(outfile)
   mkpath(outfile, mkfile = TRUE)
