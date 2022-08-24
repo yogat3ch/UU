@@ -48,36 +48,6 @@ dir_fn <- function(base_dir) {
   rlang::new_function(args = rlang::pairlist2(... =, ext = ""), body = rlang::expr(fs::path(!!base_dir, ..., ext = ext)))
 }
 
-#' Write `dir` helper function that are robust to dev vs deployed package states
-#'
-#' @param outfile \code{chr} path to file to write. Default _R/utils_dir_fns.R_
-#' @param overwrite \code{lgl} Whether to overwrite the existing file. Default `TRUE`
-#' @param for_golem \code{lgl} Whether to use the `app_sys` function if package is a golem package
-#' @return \code{msg} and a new file
-#' @export
-
-write_dir_fn <- function(outfile = "R/utils_dir_fns.R", overwrite = TRUE, for_golem = file.exists("R/app_ui.R")) {
-  if (file.exists(outfile) && overwrite)
-    file.remove(outfile)
-  mkpath(outfile, mkfile = TRUE)
-
-  pkg_nm <- pkg_name()
-  app_sys <- function() {}
-  fn <- purrr::when(for_golem, isTRUE(.) ~ list("app_sys"), ~ list("path_package", .ns = "fs", package = pkg_nm))
-  dirs <- purrr::map(dirs, ~{
-    exp <- rlang::exec(rlang::call2, !!!fn, rlang::expr(fs::path(!!stringr::str_remove(.x(), "^inst\\/?"), ..., ext = ext)))
-    rlang::new_function(args = rlang::pairlist2(... =, ext = ""), body = rlang::expr({
-        !!exp
-    }))
-  })
-  suppressWarnings(dump("dirs", outfile))
-  l <- readLines(outfile)
-  write(c("#' directory path generation convenience functions",
-          "#' @export",
-          l), file = outfile)
-
-
-}
 
 #' @title Return the appropriate function for reading the specified path/extension
 #'
@@ -112,7 +82,9 @@ file_fn <- function(x, write = FALSE) {
 
 #' Path functions for commonly used directories
 #' @param ... \code{(chr)} directory paths
+#' @param mkpath \code{lgl} Whether to return a path regardless of whether the file/dir exists or not
 #' @param ext \code{(chr)} file extension
+#' @param mustWork \code{lgl} If `TRUE`, an error is given if there are no matching files.
 #' @usage dirs$data()
 #' @export
 #' @examples dirs$data("mydata", ext = "csv")
@@ -133,6 +105,50 @@ dirs <- purrr::map(
   ~ dir_fn(.x)
 )
 
+#' Write `dir` helper function that are robust to dev vs deployed package states
+#'
+#' @param outfile \code{chr} path to file to write. Default _R/utils_dir_fns.R_
+#' @param overwrite \code{lgl} Whether to overwrite the existing file. Default `TRUE`
+#' @param for_golem \code{lgl} Whether to use the `app_sys` function if package is a golem package
+#' @return \code{msg} and a new file
+#' @export
+
+write_dir_fn <- function(outfile = "R/utils_dir_fns.R", overwrite = TRUE, for_golem = file.exists("R/app_ui.R")) {
+  if (file.exists(outfile) && overwrite)
+    file.remove(outfile)
+  mkpath(outfile, mkfile = TRUE)
+
+  pkg_nm <- pkg_name()
+  app_sys <- function() {}
+  fn <- purrr::when(for_golem, isTRUE(.) ~ list("app_sys", mustWork = rlang::expr(mustWork)), ~ list("path_package", .ns = "fs", package = pkg_nm))
+
+  dirs <- purrr::map(dirs, ~{
+    .exp <- rlang::expr({
+      .path <- fs::path(!!.x(), ..., ext = ext)
+      if (!mkpath) {
+        .path <- stringr::str_remove(.path, "^inst\\/?")
+        !!rlang::exec(rlang::call2, !!!fn, rlang::expr(.path))
+      } else
+        .path
+    })
+    rlang::new_function(args = rlang::pairlist2(... =, ext = "", mkpath = FALSE, mustWork = FALSE), body = .exp)
+  })
+
+
+  suppressWarnings(dump("dirs", outfile))
+  l <- readLines(outfile)
+  write(c("#' directory path generation convenience functions",
+          "#' @param ... \\code{(chr)} directory paths",
+          "#' @param mkpath \\code{lgl} Whether to return a path regardless of whether the file/dir exists or not",
+          "#' @param ext \\code{(chr)} file extension",
+          "#' @param mustWork \\code{lgl} If `TRUE`, an error is given if there are no matching files.",
+          "#' @usage dirs$data()",
+          "#' @export",
+          "#' @examples dirs$data(\"mydata\", ext = \"csv\")",
+          l), file = outfile)
+
+
+}
 
 #' @title Construct a path
 #' @description Given a path, construct it if it does not exist.
