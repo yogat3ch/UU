@@ -1,9 +1,8 @@
 #' @title Try an expression
-#' @name try-infix
 #' @description Calls the expression (LHS) & if it fails return RHS
 #' @param lhs \code{(expression)} to try
 #' @param rhs \code{(expression)} to replace if expression fails
-#'
+#' @name `%|try|%`
 #' @return results from lhs on success results from rhs on fail
 #' @export
 
@@ -12,11 +11,10 @@
 }
 
 #' @title Replace a 0 length value
-#' @name zero-length-infix
 #' @description If the lhs is length 0, replace with rhs
 #' @param lhs \code{(expression)} to try
 #' @param rhs \code{(expression)} to replace if expression fails
-#'
+#' @name `%|o|%`
 #' @return results from lhs if length > 1 otherwise rhs
 #' @export
 
@@ -28,8 +26,8 @@
 }
 
 #' If legit lhs, else rhs
-#' @inheritParams try-infix
-#' @name legit-infix
+#' @inheritParams `%|try|%`
+#' @name `%|legit|%`
 #' @seealso is_legit
 #' @return If legit lhs else rhs
 #' @export

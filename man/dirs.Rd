@@ -5,7 +5,7 @@
 \alias{dirs}
 \title{Path functions for commonly used directories}
 \format{
-An object of class \code{list} of length 10.
+An object of class \code{list} of length 11.
 }
 \usage{
 dirs$data()
@@ -13,7 +13,11 @@ dirs$data()
 \arguments{
 \item{...}{\code{(chr)} directory paths}
 
+\item{mkpath}{\code{lgl} Whether to return a path regardless of whether the file/dir exists or not}
+
 \item{ext}{\code{(chr)} file extension}
+
+\item{mustWork}{\code{lgl} If \code{TRUE}, an error is given if there are no matching files.}
 }
 \description{
 Path functions for commonly used directories

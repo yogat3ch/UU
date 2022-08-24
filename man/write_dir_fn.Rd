@@ -7,7 +7,7 @@
 write_dir_fn(
   outfile = "R/utils_dir_fns.R",
   overwrite = TRUE,
-  for_golem = FALSE
+  for_golem = file.exists("R/app_ui.R")
 )
 }
 \arguments{

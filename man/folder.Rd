@@ -5,7 +5,7 @@
 \alias{folder}
 \title{Go to a specified folder in the Virga Labs golem project}
 \format{
-An object of class \code{list} of length 3.
+An object of class \code{list} of length 4.
 }
 \usage{
 folder
