@@ -29,3 +29,26 @@ is_package_dev <- function(pkg_nm = pkg_name()) {
   pkgload::is_dev_package(pkg_nm)
 }
 
+#' Assign a variable into a namespace
+#' @description Unlocks and relocks namespaces and bindings as needed
+#' @param x \code{object} to assign
+#' @param nm \code{chr} name for object in the namespace
+#' @param ns_env \code{env} of the namespace
+#'
+#' @return \code{none}
+#' @export
+
+assign_in_ns <- function(x, nm = rlang::expr_deparse(rlang::enexpr(x)), ns_env = rlang::ns_env(pkg_name())) {
+  e_is_locked <- rlang::env_is_locked(ns_env)
+  b_is_locked <- rlang::env_has(ns_env, nm) && rlang::env_binding_are_locked(ns_env, nm)
+  if (e_is_locked)
+    rlang::env_unlock(ns_env)
+  if (b_is_locked)
+    rlang::env_binding_unlock(ns_env, nm)
+  rlang::env_bind(ns_env, !!nm := x)
+  if (b_is_locked)
+    rlang::env_binding_lock(ns_env, nm)
+  if (e_is_locked)
+    rlang::env_lock(ns_env)
+}
+
