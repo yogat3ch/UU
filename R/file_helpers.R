@@ -1,12 +1,12 @@
-folder_helpers <- function(.envir = rlang::ns_env("UU")) {
+folder_helpers <- function(.env = rlang::ns_env("UU")) {
   dir_folders <- purrr::compact(purrr::map(dirs, ~{
     if (dir.exists(.x()))
       rlang::new_function(rlang::pairlist2(path = .x()), body = rlang::expr(rstudioapi::filesPaneNavigate(path)))
   }))
-  assign("folder", dir_folders, envir = .envir)
+  assign("folder", dir_folders, envir = .env)
 }
 
-file_helpers <- function(.envir = rlang::ns_env("UU")) {
+file_helpers <- function(.env = rlang::ns_env("UU")) {
   if (is.null(file)) {
     file <- purrr::compact(purrr::map(
       .file,
@@ -19,6 +19,6 @@ file_helpers <- function(.envir = rlang::ns_env("UU")) {
         }
 
       }))
-    assign("file", file, envir = .envir)
+    assign("file", file, envir = .env)
   }
 }

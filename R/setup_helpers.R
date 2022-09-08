@@ -241,7 +241,7 @@ install_remote <- function(pkg, remote, ..., to_desc = TRUE, snapshot = TRUE) {
     if (.write_desc)
       purrr::walk(pkg, ~usethis::use_package(.x, min_version = TRUE))
   } else {
-    .remotes <- glue:::glue("{remote}/{pkg}")
+    .remotes <- glue::glue("{remote}/{pkg}")
     remotes::install_github(.remotes, ...)
     if (.write_desc)
       purrr::walk2(pkg, .remotes, ~usethis::use_dev_package(.x, remote = .y))
