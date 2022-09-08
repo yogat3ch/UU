@@ -8,7 +8,7 @@ opts <- NULL
 
 
 opts_helpers <- function(.Rprofile = ".Rprofile", .env = rlang::ns_env("UU")) {
-  if (file.exists(.Rprofile) && is.null(opts)) {
+  if (file.exists(.Rprofile) && is.null(UU::opts)) {
     rprofile <- parse(.Rprofile)
     calls <- purrr::keep(rprofile, ~utils::head(as.character(.x[[1]]), 1) == "options")
     if (is_legit(calls)) {
