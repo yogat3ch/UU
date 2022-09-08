@@ -52,7 +52,8 @@ opts_helpers <- function(.Rprofile = ".Rprofile", .env = rlang::ns_env("UU")) {
         })
       assign("opts", opts, .env)
       assign("toggle", toggle, .env)
-      cli::cli_alert_info("{.pkg UU}: {.code opts} & {.code toggle} functions were generated for the following options in {.path {.Rprofile}}: {cli::col_br_blue(paste0(names(.opts), collapse = ', '))}")
+      rp <- .Rprofile
+      cli::cli_alert_info("{.pkg UU}: {.code opts} & {.code toggle} functions were generated for the following options in {.path {rp}}: {cli::col_br_blue(paste0(names(.opts), collapse = ', '))}")
     }
   }
 }
