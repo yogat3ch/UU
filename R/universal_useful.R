@@ -603,7 +603,7 @@ inequality_key <- c(
 #'
 #' @return \code{chr/name/fun} depending on the requested `outtype`
 #' @export
-#'
+#' @seealso inequality_key
 #' @examples
 #' str_inequality(">")
 #' str_inequality("less than or equal to", "fun")

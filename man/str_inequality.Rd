@@ -29,3 +29,6 @@ str_inequality(">")
 str_inequality("less than or equal to", "fun")
 str_inequality("greater than or equal to", "sym")
 }
+\seealso{
+inequality_key
+}
