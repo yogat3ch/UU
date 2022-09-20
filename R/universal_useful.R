@@ -272,10 +272,15 @@ load_obj <- function(file) {
 #' size(50, "gb", "mb")
 
 size <- function(x, in_unit = c("b", "Kb", "Mb", "Gb", "Tb", "Pb", "Eb", "Zb", "Yb")[1], out_unit = "b", standard = c("IEC", "SI")[1]) {
+  if (!inherits(x, "object_size"))
+    x <- object.size(x)
+
   .standard <- match_letters(standard, "IEC", "SI", ignore.case = TRUE)
   .in_unit <- match_letters(in_unit, .size$type, ignore.case = TRUE)
   .out_unit <- match_letters(out_unit, .size$type, ignore.case = TRUE)
-  (.size[grepl(paste0("^",.in_unit), .size$type, ignore.case = TRUE), .standard, drop = TRUE] * x) / .size[grepl(paste0("^",.out_unit), .size$type, ignore.case = TRUE), .standard, drop = TRUE]
+  out <- (.size[grepl(paste0("^",.in_unit), .size$type, ignore.case = TRUE), .standard, drop = TRUE] * x) / .size[grepl(paste0("^",.out_unit), .size$type, ignore.case = TRUE), .standard, drop = TRUE]
+  print(out, units = out_unit)
+  return(as.numeric(out))
 }
 
 
