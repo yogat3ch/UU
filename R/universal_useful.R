@@ -557,3 +557,18 @@ join_check <- function(after, before, halt_fn = rlang::warn) {
   if (is_legit(.msg))
     halt_fn(paste0("Possible join issues detected!\n",.msg))
 }
+
+
+#' Break word every x characters
+#'
+#' @param x \code{chr} vector
+#' @param every \code{num} of chars between each line break
+#'
+#' @return \code{chr}
+#' @export
+#'
+#' @examples
+#' str_break_every("I am a very long string that will broken into pieces", 10)
+str_break_every <- function(x, every) {
+  purrr::map_chr(x, ~paste0(strwrap(.x, every), collapse = "\n"))
+}
