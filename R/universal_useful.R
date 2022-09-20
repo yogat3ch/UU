@@ -578,6 +578,17 @@ str_break_every <- function(x, every) {
   purrr::map_chr(x, ~paste0(strwrap(.x, every), collapse = "\n"))
 }
 
+#' Inequality conversion key
+#' @export
+inequality_key <- c(
+  "less than" = "<",
+  "greater than" = ">",
+  "more than" = ">",
+  "less than or equal to" = "<=",
+  "more than or equal to" = ">=",
+  "greater than or equal to" = ">=",
+  "equal to" = "="
+)
 #' Convert inequality statements between character, mathematic, symbol and function representations
 #'
 #' @param x \code{chr} vector or inequality statements
@@ -598,24 +609,16 @@ str_break_every <- function(x, every) {
 #' str_inequality("less than or equal to", "fun")
 #' str_inequality("greater than or equal to", "sym")
 str_inequality <- function(x, outtype = "chr") {
-  .key <- c(
-    "less than" = "<",
-    "greater than" = ">",
-    "more than" = ">",
-    "less than or equal to" = "<=",
-    "more than or equal to" = ">=",
-    "greater than or equal to" = ">=",
-    "equal to" = "="
-  )
+
   out <- purrr::map_chr(x, ~{
-    .switches <- if (.x %in% names(.key))
-      .key
+    .switches <- if (.x %in% names(inequality_key))
+      inequality_key
     else
-      rlang::set_names(names(.key), .key)
+      rlang::set_names(names(inequality_key), inequality_key)
       rlang::exec(switch, trimws(x),
              !!!.switches)
   })
-  if (all(out %in% .key) && !outtype %in% c("chr","str"))
+  if (all(out %in% inequality_key) && !outtype %in% c("chr","str"))
     out <- switch(outtype,
                   name = ,
                   sym = rlang::syms(out),
