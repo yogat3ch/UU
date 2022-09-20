@@ -577,3 +577,49 @@ join_check <- function(after, before, halt_fn = rlang::warn) {
 str_break_every <- function(x, every) {
   purrr::map_chr(x, ~paste0(strwrap(.x, every), collapse = "\n"))
 }
+
+#' Convert inequality statements between character, mathematic, symbol and function representations
+#'
+#' @param x \code{chr} vector or inequality statements
+#' @param outtype \code{chr} class of the outype
+#' \itemize{
+#'   \item{\code{"chr"}} A character
+#'   \item{\code{"str"}} A character
+#'   \item{\code{"sym"}} A symbol/name
+#'   \item{\code{"name"}} A symbol/name
+#'   \item{\code{"fun"}} A function
+#' }
+#'
+#' @return \code{chr/name/fun} depending on the requested `outtype`
+#' @export
+#'
+#' @examples
+#' str_inequality(">")
+#' str_inequality("less than or equal to", "fun")
+#' str_inequality("greater than or equal to", "sym")
+str_inequality <- function(x, outtype = "chr") {
+  .key <- c(
+    "less than" = "<",
+    "greater than" = ">",
+    "more than" = ">",
+    "less than or equal to" = "<=",
+    "more than or equal to" = ">=",
+    "greater than or equal to" = ">=",
+    "equal to" = "="
+  )
+  out <- purrr::map_chr(x, ~{
+    .switches <- if (.x %in% names(.key))
+      .key
+    else
+      rlang::set_names(names(.key), .key)
+      rlang::exec(switch, trimws(x),
+             !!!.switches)
+  })
+  if (all(out %in% .key) && outtype %in% c("chr","str"))
+    out <- switch(outtype,
+                  name = ,
+                  sym = rlang::syms(out),
+                  fun = purrr::map(out, getFromNamespace, ns = "base"))
+
+  return(out)
+}
