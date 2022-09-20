@@ -615,7 +615,7 @@ str_inequality <- function(x, outtype = "chr") {
       rlang::exec(switch, trimws(x),
              !!!.switches)
   })
-  if (all(out %in% .key) && outtype %in% c("chr","str"))
+  if (all(out %in% .key) && !outtype %in% c("chr","str"))
     out <- switch(outtype,
                   name = ,
                   sym = rlang::syms(out),
