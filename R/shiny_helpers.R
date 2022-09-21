@@ -1,3 +1,12 @@
+js <- function(x) {
+  structure(
+    x,
+    html = TRUE,
+    noWS = TRUE,
+    class = c("html", "character", "JS_EVAL")
+  )
+}
+
 #' Create a JS string with glue insertions
 #' glue `.open = !@` & `.close = @#`
 #' @param js \code{chr} JS code to \link[glue]{glue}
@@ -13,7 +22,7 @@ glue_js <- function(js, e = rlang::caller_env(), .open = "*{", .close = "}*") {
     .js <- glue::glue_collapse(readLines(js))
   else
     .js <- js
-  glue::glue(.open = .open, .close = .close, .js, .envir = e)
+  js(glue::glue(.open = .open, .close = .close, .js, .envir = e))
 }
 
 #' Toggle \link[utils]{recover} on error when obtuse shiny errors are encountered
@@ -36,5 +45,5 @@ shiny_error_recover <- function() {
 #'
 
 read_js <- function(filename) {
-  glue::glue_collapse(readLines(filename), sep = "\n")
+  js(glue::glue_collapse(readLines(filename), sep = "\n"))
 }
