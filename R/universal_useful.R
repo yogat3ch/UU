@@ -626,3 +626,50 @@ str_inequality <- function(x, outtype = "chr") {
 
   return(out)
 }
+
+
+#' Change or apply filters to output type
+#'
+#' @param filters \code{list} of named filters to use. Each filter is named by the column name with the range as a length two numeric vector
+#' @param out_type \code{obj} of desired output type
+#' @param .data \code{tbl} data to use if `out_type = logical()/data.frame()`
+#' @description Useful in concert with axis brushing
+#' @return \code{obj} of same class as out_type
+#' @export
+#'
+#' @examples
+#' f <- list(wt = c(1,5))
+#' d <- data.frame(wt = 1:10)
+#' filter_to(f)
+#' filter_to(f, out_type = data.frame(), .data = d)
+filter_to <- function(filters, out_type = character(), .data) {
+  # Determine the type of output requested tbl/lgl/chr
+  is_lgl <- is.logical(out_type)
+  is_df <- is.data.frame(out_type)
+  df_lgl <- any(is_lgl, is_df)
+  # IF there are filters
+  if (UU::is_legit(unlist(filters))) {
+    # Sort low to high (so dplyr::between works properly)
+    filters <- purrr::map(filters, sort)
+    # if character requested, return as srting
+    if (is.character(out_type))
+      out <- rlang::set_names(names(filters), purrr::imap(filters, ~ paste0(.y, ": ", round(.x[1], 1), " - ", round(.x[2], 1))))
+    # if a tbl/lgl, create a filter expression with dplyr::between
+    if (df_lgl && !missing(.data))
+      .exp <- purrr::imap(filters, ~rlang::parse_expr(glue::glue("dplyr::between(`{.y}`, {.x[1]}, {.x[2]})"))) |>
+        purrr::reduce(~rlang::expr(!!.x & !!.y))
+    # Do the filtering and return the requested data type
+    if (is_df)
+      out <- dplyr::filter(.data, !!.exp)
+    else if (is_lgl)
+      out <- rlang::eval_tidy(.exp, data = rlang::as_data_mask(.data))
+  } else if (!missing(.data) && df_lgl) {
+    # handle case where there's no filters
+    if (is_df)
+      out <- .data
+    else
+      out <- rep(TRUE, nrow(.data))
+  } else
+    out <- filters
+  return(out)
+}
