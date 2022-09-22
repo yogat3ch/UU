@@ -29,6 +29,26 @@ is_package_dev <- function(pkg_nm = pkg_name()) {
   pkgload::is_dev_package(pkg_nm)
 }
 
+#' Get an object from a namespace
+#'
+#' @param nm \code{chr} name of object to retrieve. Current are `active` & `state`.
+#' @param .env \code{env} from which to retrieve the object
+#' \itemize{
+#'   \item{\code{active}}{ tracks app details for internal use}
+#'   \item{\code{state}}{ tracks user-specified variables to be saved/exported}
+#' }
+#'
+#' @return \code{obj}
+#' @export
+
+get_from_ns <- function(nm = c("active", "state")[1], .env = .GlobalEnv) {
+  .global <- get0(nm, envir = .env, inherits = FALSE)
+  if (!inherits(.global, c("R6", "reactivevalues")))
+    UU::gwarn("`{nm}` object was not found")
+  .global
+}
+
+
 #' Assign a variable into a namespace
 #' @description Unlocks and relocks namespaces and bindings as needed
 #' @param x \code{object} to assign
