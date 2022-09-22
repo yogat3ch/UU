@@ -1,4 +1,13 @@
-js <- function(x) {
+
+#' Preserve a string as JS/HTML (prevent translation of characters)
+#'
+#' @param x \code{chr}
+#'
+#' @return \code{chr, HTML, JS_EVAL}
+#' @export
+#'
+
+as_js <- function(x) {
   structure(
     x,
     html = TRUE,
@@ -22,7 +31,7 @@ glue_js <- function(js, e = rlang::caller_env(), .open = "*{", .close = "}*") {
     .js <- glue::glue_collapse(readLines(js))
   else
     .js <- js
-  js(glue::glue(.open = .open, .close = .close, .js, .envir = e))
+  as_js(glue::glue(.open = .open, .close = .close, .js, .envir = e))
 }
 
 #' Toggle \link[utils]{recover} on error when obtuse shiny errors are encountered
@@ -45,5 +54,5 @@ shiny_error_recover <- function() {
 #'
 
 read_js <- function(filename) {
-  js(glue::glue_collapse(readLines(filename), sep = "\n"))
+  as_js(glue::glue_collapse(readLines(filename), sep = "\n"))
 }
