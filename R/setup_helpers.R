@@ -191,9 +191,9 @@ write_to_rprofile <- function(..., scope = c("user", "project")[1]) {
 use_UU_reimports <- function(file = "R/aaa_reimports.R") {
   file.copy(
     system.file("extdata/reimports.R", package = "UU"),
-    "R/reimports.R"
+    file
   )
-  cli::cli_alert_success("{.path R/reimports.R} written successfully. Document the package to use.")
+  cli::cli_alert_success("{.path {file}} written successfully. Document the package to use.")
 }
 
 #' Add a function to reimports
