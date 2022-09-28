@@ -35,13 +35,13 @@
 #' (100 / NA) %|legit|% 4
 #' list(a = 5)$a %|legit|% 4
 #' list(a = 5)$b %|legit|% 4
-`%|legit|%` <- Vectorize(function(lhs, rhs) {
+`%|legit|%` <-function(lhs, rhs) {
   if (is_legit(try(lhs, silent = TRUE))) {
     lhs
   } else {
     rhs
   }
-}, vectorize.args = "lhs", SIMPLIFY = TRUE)
+}
 
 #' Replace zero-length character strings with right hand side
 #'
