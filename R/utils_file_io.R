@@ -62,15 +62,17 @@ dir_fn <- function(base_dir) {
 time_elapsed <- function(file = ".interval_timer.rds", interval = lubridate::weeks(1)) {
   if (file.exists(".gitignore"))
     usethis::use_git_ignore(".interval_timer.rds")
-  if (file.exists(file))
+  if (file.exists(file)) {
     prev_time <- readRDS(file)
-  else {
+    first_run <- FALSE
+  } else {
     prev_time <- Sys.time()
     saveRDS(prev_time, file)
+    first_run <- TRUE
   }
 
 
-  if (Sys.time() > prev_time + interval) {
+  if (Sys.time() > prev_time + interval || first_run) {
     saveRDS(Sys.time(), file)
     TRUE
   } else
