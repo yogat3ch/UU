@@ -174,7 +174,7 @@ gbort <- function (
   message = NULL,
   class = NULL,
   ...,
-  trace = rlang::trace_back(bottom = 5),
+  trace = rlang::trace_back(bottom = 2),
   parent = NULL,
   e = rlang::caller_env()
 ) {
