@@ -35,6 +35,7 @@ Collate:
     'onload.R'
     'opts_helpers.R'
     'pkg_helpers.R'
+    'profiling_helpers.R'
     'setup_helpers.R'
     'shiny_helpers.R'
     'universal_useful.R'
