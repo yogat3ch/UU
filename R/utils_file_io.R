@@ -49,6 +49,34 @@ dir_fn <- function(base_dir) {
 }
 
 
+#' Return a logical on an interval
+#'
+#' @param file \code{chr} filename in which to store the interval time
+#' @param interval \code{period/duration} Default 1 week
+#'
+#' @return \code{lgl}
+#' @export
+#'
+#' @examples
+#' time_elapsed()
+time_elapsed <- function(file = ".interval_timer.rds", interval = lubridate::weeks(1)) {
+  if (file.exists(".gitignore"))
+    usethis::use_git_ignore(".interval_timer.rds")
+  if (file.exists(file))
+    prev_time <- readRDS(file)
+  else {
+    prev_time <- Sys.time()
+    saveRDS(prev_time, file)
+  }
+
+
+  if (Sys.time() > prev_time + interval) {
+    saveRDS(Sys.time(), file)
+    TRUE
+  } else
+    FALSE
+}
+
 #' @title Return the appropriate function for reading the specified path/extension
 #'
 #' @param x \code{(character)} The extension name or the path to the file
