@@ -7,7 +7,7 @@
 #' @param nested_tag_contains \code{chr} of text that the nested_tag element contains (in order to identify it. The nested tag element itself will be selected).
 #'
 #' @return \code{chr} xpath statement
-#'
+#' @export
 
 xpath_sibling_between <- function(start_tag, following_sibling, preceding_sibling, nested_tag, nested_tag_contains) {
   out <- glue::glue("//{start_tag}")
