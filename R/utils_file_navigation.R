@@ -21,8 +21,8 @@ file <- NULL
   renv_settings = "renv/settings.dcf",
   desc = "DESCRIPTION",
   news = "NEWS.md",
-  Readme = "README.md",
-  Readme = "README.Rmd",
+  Readme.Rmd = "README.Rmd",
+  Readme.md = "README.md",
   gitignore = ".gitignore"
 )
 
