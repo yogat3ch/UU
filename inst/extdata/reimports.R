@@ -23,8 +23,6 @@ UU::`%|zchar|%`
 
 #' @export
 UU::`%|legit|%`
+
 #' @export
 UU::`%|nin|%`
-`
-#' @export
-UU::`%|legit|%`
