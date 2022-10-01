@@ -66,17 +66,16 @@
 #' @author Think.fr
 #' @export
 #' @examples
-#' 1 %not_in% 1:10
-
-`%not_in%` <- Negate(`%in%`)
+#' 1 %nin% 1:10
+`%nin%` <- Negate(`%in%`)
 
 #' Is value non-null?
 #' @author Think.fr
 #' @seealso is_legit
 #' @export
 #' @examples
-#' not_null(NULL)
-not_null <- Negate(is.null)
+#' nonull(NULL)
+nonull <- Negate(is.null)
 
 #' Is value non-NA?
 #' @seealso is_legit
