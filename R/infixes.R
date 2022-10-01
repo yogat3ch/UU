@@ -59,3 +59,29 @@
   else
     rhs
 }, vectorize.args = "lhs", SIMPLIFY = TRUE)
+
+
+#' Are lhs values absent from set on rhs?
+#' @seealso is_legit
+#' @author Think.fr
+#' @export
+#' @examples
+#' 1 %not_in% 1:10
+
+`%not_in%` <- Negate(`%in%`)
+
+#' Is value non-null?
+#' @author Think.fr
+#' @seealso is_legit
+#' @export
+#' @examples
+#' not_null(NULL)
+not_null <- Negate(is.null)
+
+#' Is value non-NA?
+#' @seealso is_legit
+#' @author Think.fr
+#' @export
+#' @examples
+#' not_na(c("a", NA))
+not_na <- Negate(is.na)
