@@ -87,6 +87,11 @@ is_error <- function(x) {
 #' @examples
 #' num2str(10000)
 num2str <- function(n, sf = 2) {
+  if (!is.numeric(n))
+    n <- as.numeric(n)
+  if (!is.numeric(n))
+    gbort("{.code n} must be numeric")
+
   divisors <- purrr::map_dbl(1:3 * 3, ~{
     n / 10 ^ .x
   })
@@ -366,6 +371,56 @@ match_letters <- function(x, ..., n = 1, multiple = FALSE, ignore.case = FALSE, 
     if (capitalize && !is.null(out))
       out <- purrr::map_chr(out, ~purrr::when(nchar(.x) == 1,. ~ toupper(.x), ~ gsub("^(\\w)(\\w+)","\\U\\1\\L\\2", .x, perl = TRUE)))
   }
+  out
+}
+
+hash <- tibble::tribble(~ typ, ~ hud, ~ fun, ~ chr,
+                       "integer", "I", readr::parse_integer, "i",
+                       "numeric", "I", readr::parse_number, "n",
+                       "character", "S", readr::parse_character, "c",
+                       "logical", "S", readr::parse_logical, "l",
+                       "factor", "I", readr::parse_factor, "f",
+                       "Date", "D", readr::parse_date, "D",
+                       "POSIXct", "T", readr::parse_datetime, "T",
+                       "list", "", readr::guess_parser, "?"
+)
+
+#' @title Converts input to a specified type output
+#' @description Given various inputs, provide a col_type specification in the format indicated by `outtype`
+#' @param x \code{(vector/function)} One of:
+#' \itemize{
+#'   \item{column}{ \code{(any)}}
+#'   \item{a type specification from HUD}{ \code{(character)}}
+#'   \item{a readr `parse_*` function (See \link[readr]{parse_logical})}{ \code{(function)}}
+#'   \item{a readr type specification (See \link[readr]{cols})}{ \code{(character)}}
+#' }
+#' @param outtype \code{(character)} One of:
+#' \itemize{
+#'   \item{\code{"chr"}}{ Returns the class as a readr abbreviation (See \link[readr]{cols})}
+#'   \item{\code{"hud"}}{ \code{(character)} a type specification from HUD}
+#'   \item{\code{"fun"}}{a readr `parse_*` function (See \link[readr]{parse_logical})}{ \code{(function)}}
+#'   \item{\code{"type"}}{ \code{(character)} The R data class}
+#' }
+#' @return See outtype
+#' @export
+
+col_types <- function(x, outtype = c("chr", "hud", "fun", "typ")[1]) {
+
+  intype <- purrr::when(x,
+                        length(.) == 1 && all(stringr::str_detect(., stringr::regex(paste0("^", hash$hud, "$", collapse = "|"), ignore_case = FALSE))) ~ "hud",
+                        is.function(.) ~ "fun",
+                        length(.) == 1 && all(stringr::str_detect(., stringr::regex(paste0("^", hash$chr, "$", collapse = "|"), ignore_case = FALSE))) ~ "chr",
+                        ~ "typ")
+
+  type <- switch(intype,
+                 typ = hash$typ[hash$typ %in% class(x)],
+                 hud = hash$typ[stringr::str_which(hash$hud, x)[1]],
+                 fun = hash$typ[purrr::map_lgl(hash$fun, identical, y = x)],
+                 chr = hash$typ[hash$chr %in% x])
+
+  out <- hash[[outtype]][hash$typ %in% type]
+  if (outtype == "fun")
+    out <- out[[1]]
   out
 }
 
