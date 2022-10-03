@@ -121,13 +121,13 @@ key_pairs_duplicated <- function(x, fromLast = TRUE) {
 #' Add lines to _.gitignore_
 #'
 #' @param lines \code{chr}
-#' @param directory \code{(chr)} directory path of _.gitignore_ to be modified
-#'
+#' @param directory \code{(chr)} directory path to `ignore_file`
+#' @param ignore_file \code{chr} filename holding ignores to be modified. Default _.gitignore_
 #' @return \code{informative messages}
 #' @export
 
-ignore_files <- function(lines, directory = ".") {
-  fp <- file.path(directory, ".gitignore")
+ignore_files <- function(lines, directory = ".", ignore_file = ".gitignore") {
+  fp <- file.path(directory, ignore_file)
   mkpath(fp, mkfile = TRUE)
   usethis::write_union(fp, lines = lines)
 }
