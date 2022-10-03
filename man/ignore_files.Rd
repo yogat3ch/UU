@@ -4,12 +4,14 @@
 \alias{ignore_files}
 \title{Add lines to \emph{.gitignore}}
 \usage{
-ignore_files(lines, directory = ".")
+ignore_files(lines, directory = ".", ignore_file = ".gitignore")
 }
 \arguments{
 \item{lines}{\code{chr}}
 
-\item{directory}{\code{(chr)} directory path of \emph{.gitignore} to be modified}
+\item{directory}{\code{(chr)} directory path to \code{ignore_file}}
+
+\item{ignore_file}{\code{chr} filename holding ignores to be modified. Default \emph{.gitignore}}
 }
 \value{
 \code{informative messages}
