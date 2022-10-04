@@ -407,10 +407,10 @@ hash <- tibble::tribble(~ typ, ~ hud, ~ fun, ~ chr,
 col_types <- function(x, outtype = c("chr", "hud", "fun", "typ")[1]) {
 
   intype <- purrr::when(x,
-                        length(.) == 1 && all(stringr::str_detect(., stringr::regex(paste0("^", hash$hud, "$", collapse = "|"), ignore_case = FALSE))) ~ "hud",
+                        length(.) == 1 && all(stringr::str_detect(., stringr::regex(UU::regex_or(hash$typ, prefix = "^", suffix = "$"), ignore_case = TRUE))) ~ "typ",
+                        length(.) == 1 && all(stringr::str_detect(., stringr::regex(UU::regex_or(hash$hud, prefix = "^", suffix = "$"), ignore_case = FALSE))) ~ "hud",
                         is.function(.) ~ "fun",
-                        length(.) == 1 && all(stringr::str_detect(., stringr::regex(paste0("^", hash$chr, "$", collapse = "|"), ignore_case = FALSE))) ~ "chr",
-                        ~ "typ")
+                        ~ "chr")
 
   type <- switch(intype,
                  typ = hash$typ[hash$typ %in% class(x)],
