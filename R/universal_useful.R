@@ -91,12 +91,14 @@ num2str <- function(x, sf = 2, suffix_lb = "K", just_suffix = FALSE) {
     x <- as.numeric(x)
   if (!is.numeric(x))
     gbort("{.code x} must be numeric")
+  if (all(is.na(x)))
+    gwarn("{.code x} is entirely NA")
 
   if (length(suffix_lb) != 1 && !just_suffix) {
     gbort("{.code suffix_lb} must be one of {num_chr_suffi}")
   }
   divisors <- purrr::map_dbl(1:length(num_chr_suffi) * 3, ~{
-    max(x, na.rm = TRUE) / 10 ^ .x
+    suppressWarnings(max(x, na.rm = TRUE)) / 10 ^ .x
   })
   i <- which.max(which(divisors >= 1))
 
@@ -107,7 +109,10 @@ num2str <- function(x, sf = 2, suffix_lb = "K", just_suffix = FALSE) {
   else
     as.character(round(x, sf))
 }
-num2str <- Vectorize(num2str)
+
+#' @inherit num2str title params return examples
+#' @export
+num2str_vec <- Vectorize(num2str)
 
 #' What is the human-readable suffix for a number
 #'
