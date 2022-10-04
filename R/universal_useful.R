@@ -423,7 +423,7 @@ col_types <- function(x, outtype = c("chr", "hud", "fun", "typ")[1]) {
                  fun = hash$typ[purrr::map_lgl(hash$fun, identical, y = x)],
                  chr = hash$typ[hash$chr %in% x])
 
-  out <- hash[[outtype]][hash$typ %in% type]
+  out <- unique(hash[[outtype]][hash$typ %in% type])
   if (outtype == "fun")
     out <- out[[1]]
   out
