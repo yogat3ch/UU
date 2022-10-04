@@ -305,8 +305,8 @@ size <- function(x, in_unit = c("b", "Kb", "Mb", "Gb", "Tb", "Pb", "Eb", "Zb", "
 #' @export
 #'
 #' @examples
-#' max(c(a = 1, b = 2))
-max <- function(x) {
+#' max2(c(a = 1, b = 2))
+max2 <- function(x) {
   x[which.max(x) %|0|% 1]
 }
 

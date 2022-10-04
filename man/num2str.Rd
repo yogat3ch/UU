@@ -4,10 +4,10 @@
 \alias{num2str}
 \title{Convert numeric value to a string abbreviation with K, M, B for Thousand, Million & Billion}
 \usage{
-num2str(n, sf = 2)
+num2str(x, sf = 2, suffix_lb = "K", just_suffix = FALSE)
 }
 \arguments{
-\item{n}{\code{num}}
+\item{x}{\code{num}}
 
 \item{sf}{\code{num} significant figures to round to}
 }
