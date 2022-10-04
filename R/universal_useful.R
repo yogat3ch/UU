@@ -382,6 +382,7 @@ hash <- tibble::tribble(~ typ, ~ hud, ~ fun, ~ chr,
                        "factor", "I", readr::parse_factor, "f",
                        "Date", "D", readr::parse_date, "D",
                        "POSIXct", "T", readr::parse_datetime, "T",
+                       "POSIXlt", "T", readr::parse_datetime, "T",
                        "list", "", readr::guess_parser, "?"
 )
 
@@ -407,13 +408,16 @@ hash <- tibble::tribble(~ typ, ~ hud, ~ fun, ~ chr,
 col_types <- function(x, outtype = c("chr", "hud", "fun", "typ")[1]) {
 
   intype <- purrr::when(x,
-                        length(.) == 1 && all(stringr::str_detect(., stringr::regex(UU::regex_or(hash$typ, prefix = "^", suffix = "$"), ignore_case = TRUE))) ~ "typ",
-                        length(.) == 1 && all(stringr::str_detect(., stringr::regex(UU::regex_or(hash$hud, prefix = "^", suffix = "$"), ignore_case = FALSE))) ~ "hud",
+                        all(. %in% hash$type) ~ "typ",
+                        all(. %in% hash$hud) ~ "hud",
                         is.function(.) ~ "fun",
-                        ~ "chr")
+                        all(. %in% hash$chr) ~ "chr",
+                        ~ "col")
+
 
   type <- switch(intype,
-                 typ = hash$typ[hash$typ %in% class(x)],
+                 col = hash$typ[hash$typ %in% class(x)],
+                 typ = hash$typ[hash$typ %in% type],
                  hud = hash$typ[stringr::str_which(hash$hud, x)[1]],
                  fun = hash$typ[purrr::map_lgl(hash$fun, identical, y = x)],
                  chr = hash$typ[hash$chr %in% x])
