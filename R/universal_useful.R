@@ -76,30 +76,36 @@ is_legit <- function(x) {
 is_error <- function(x) {
   inherits(x, c("try-error", "error"))
 }
-
+num_chr_suffi <- c("K", "M", "B", "T")
 #' Convert numeric value to a string abbreviation with K, M, B for Thousand, Million & Billion
 #'
-#' @param n \code{num}
+#' @param x \code{num}
 #' @param sf \code{num} significant figures to round to
 #' @return \code{chr}
 #' @export
 #'
 #' @examples
 #' num2str(10000)
-num2str <- function(n, sf = 2) {
-  if (!is.numeric(n))
-    n <- as.numeric(n)
-  if (!is.numeric(n))
-    gbort("{.code n} must be numeric")
+num2str <- function(x, sf = 2, suffix_lb = "K", just_suffix = FALSE) {
+  if (!is.numeric(x))
+    x <- as.numeric(x)
+  if (!is.numeric(x))
+    gbort("{.code x} must be numeric")
 
-  divisors <- purrr::map_dbl(1:3 * 3, ~{
-    n / 10 ^ .x
+  if (length(suffix_lb) != 1 && !just_suffix) {
+    gbort("{.code suffix_lb} must be one of {num_chr_suffi}")
+  }
+  divisors <- purrr::map_dbl(1:length(num_chr_suffi) * 3, ~{
+    max(x, na.rm = TRUE) / 10 ^ .x
   })
   i <- which.max(which(divisors >= 1))
-  if (is_legit(i))
-    paste0(round(divisors[i], 2), c("K", "M", "B")[i])
+
+  if (just_suffix)
+    return(num_chr_suffi[i])
+  if (is_legit(i) && i >= which(num_chr_suffi == suffix_lb))
+    paste0(round(divisors[i], 2), num_chr_suffi[i])
   else
-    as.character(round(n, sf))
+    as.character(round(x, sf))
 }
 num2str <- Vectorize(num2str)
 
