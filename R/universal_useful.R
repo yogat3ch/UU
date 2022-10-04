@@ -408,7 +408,7 @@ hash <- tibble::tribble(~ typ, ~ hud, ~ fun, ~ chr,
 col_types <- function(x, outtype = c("chr", "hud", "fun", "typ")[1]) {
 
   intype <- purrr::when(x,
-                        all(. %in% hash$type) ~ "typ",
+                        all(. %in% hash$typ) ~ "typ",
                         all(. %in% hash$hud) ~ "hud",
                         is.function(.) ~ "fun",
                         all(. %in% hash$chr) ~ "chr",
