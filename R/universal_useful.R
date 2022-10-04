@@ -416,8 +416,8 @@ col_types <- function(x, outtype = c("chr", "hud", "fun", "typ")[1]) {
 
 
   type <- switch(intype,
-                 col = hash$typ[hash$typ %in% class(x)],
-                 typ = hash$typ[hash$typ %in% x],
+                 col = hash$typ[hash$typ %in% class(x)[1]],
+                 typ = hash$typ[hash$typ %in% x[1]],
                  hud = hash$typ[stringr::str_which(hash$hud, x)[1]],
                  fun = hash$typ[purrr::map_lgl(hash$fun, identical, y = x)],
                  chr = hash$typ[hash$chr %in% x])
