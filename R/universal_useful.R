@@ -382,6 +382,7 @@ hash <- tibble::tribble(~ typ, ~ hud, ~ fun, ~ chr,
                        "factor", "I", readr::parse_factor, "f",
                        "Date", "D", readr::parse_date, "D",
                        "POSIXct", "T", readr::parse_datetime, "T",
+                       "POSIXt", "T", readr::parse_datetime, "T",
                        "POSIXlt", "T", readr::parse_datetime, "T",
                        "list", "", readr::guess_parser, "?"
 )
