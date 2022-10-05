@@ -76,7 +76,9 @@ is_legit <- function(x) {
 is_error <- function(x) {
   inherits(x, c("try-error", "error"))
 }
-num_chr_suffi <- c("K", "M", "B", "T")
+#' @title Abbreviations of numeric magnitude
+#' @export
+num_chr_suffi <- c("K" = "in thousands", "M" = "in millions", "B" = "in billions", "T" = "in trillions")
 #' Convert numeric value to a string abbreviation with K, M, B for Thousand, Million & Billion
 #'
 #' @param x \code{num}
@@ -104,8 +106,8 @@ num2str <- function(x, sf = 2, suffix_lb = "K", just_suffix = FALSE) {
 
   if (just_suffix)
     return(num_chr_suffi[i])
-  if (is_legit(i) && i >= which(num_chr_suffi == suffix_lb))
-    paste0(round(divisors[i], 2), num_chr_suffi[i])
+  if (is_legit(i) && i >= which(names(num_chr_suffi) == suffix_lb))
+    paste0(round(divisors[i], 2), names(num_chr_suffi)[i])
   else
     as.character(round(x, sf))
 }
