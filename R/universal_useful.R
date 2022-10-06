@@ -104,7 +104,7 @@ unit_conversion <- tibble::tribble(
 #' @examples
 #' magnitude_order(10^(1:10))
 magnitude_order <- function (x) {
-  floor(log10(x))
+  floor(log10(abs(x)))
 }
 
 #' Is object an error
