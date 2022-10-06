@@ -90,7 +90,7 @@ color_separate <- function(x) {
 #'
 #' @param colors \code{chr} vector of colors in hex format
 #' @param n \code{num} length of color vector needed
-#' @param transform_fn \code{fun} See \link[colorspace] for examples
+#' @param transform_fn \code{fun} See \link[colorspace]{lighten} for examples
 #' @param ... \code{args} passed on to `transform_fn`
 #'
 #' @return \code{chr} vector of `n` length
