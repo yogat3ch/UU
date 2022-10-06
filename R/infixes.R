@@ -14,7 +14,7 @@
 #' @description If the lhs is length 0, replace with rhs
 #' @param lhs \code{(expression)} to try
 #' @param rhs \code{(expression)} to replace if expression fails
-#' @name `%|0|%`
+#' @name %|0|%
 #' @return results from lhs if length > 1 otherwise rhs
 #' @export
 
@@ -27,7 +27,7 @@
 
 #' If legit lhs, else rhs
 #' @inheritParams `%|try|%`
-#' @name `%|legit|%`
+#' @name %|legit|%
 #' @seealso is_legit
 #' @return If legit lhs else rhs
 #' @export
@@ -44,7 +44,7 @@
 }
 
 #' Replace zero-length character strings with right hand side
-#'
+#' @name %|zchar|%
 #' @param lhs \code{chr}
 #' @param rhs \code{chr}
 #'
@@ -62,7 +62,7 @@
 
 
 #' Are lhs values absent from set on rhs?
-#' @name `%nin%`
+#' @name %nin%
 #' @seealso is_legit
 #' @author Think.fr
 #' @export
