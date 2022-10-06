@@ -173,19 +173,26 @@ unit_string <- function(x) {
   stringr::str_replace(x, "(?<=\\()[^\\)]+", value)
 }
 
-#' Select unit abbreviations
+#' Modify unit abbreviations
 #'
 #' @param unit \code{chr} Type of units, supported values are: \code{`r glue::glue("{unique(unit_conversion$unit)}")`}
 #' @param magnitude \code{num} The order of magnitude for the unit. The highest triplet will be used. See `magnitude_triplet`
-#' @param outtype \code{chr} The type of output requested. Current possibilities are: \code{`r glue::glue("{names(unit_conversion)[-c(1:2)]}")`}
+#' @param outtype \code{chr} The type of output to be added. Current possibilities are: \code{`r glue::glue("{names(unit_conversion)[-c(1:2)]}")`}
 #'
 #' @return \code{chr}
 #' @export
 #'
 #' @examples
-#' unit_select("AF", 10^7, "abbrev")
-unit_select <- Vectorize(function(x, unit, outtype) {
-  unit_conversion[unit_conversion$unit == unit & unit_conversion$magnitude == 10 ^ (3 * max(magnitude_triplet(x), na.rm = TRUE)), ][[outtype]]
+#' unit_modify("AF", 10^7, "abbrev")
+unit_modify <- Vectorize(function(x, unit, outtype) {
+  outtype <- ifelse(unit == "AF", "begin", outtype)
+  out <- unit_conversion[unit_conversion$unit == unit & unit_conversion$magnitude == 10 ^ (3 * max(magnitude_triplet(x), na.rm = TRUE)), ][[outtype]]
+  switch(outtype,
+         begin = paste0(out, unit),
+         end = paste(unit, out),
+         abbrev = paste0(unit, out),
+         unit_end = out)
+
 })
 
 
@@ -193,12 +200,18 @@ unit_select <- Vectorize(function(x, unit, outtype) {
 #'
 #' @param x \code{num}
 #' @param sf \code{num} significant figures to round to
+#' @param outtype \code{chr} Format of the outtype
+#' \itemize{
+#'   \item{\code{abbreviated}}{  takes the form `XX` where X are digits}
+#'   \item{\code{with_suffix}}{ takes the form `XXS` where X are digits and S is the suffix}
+#'   \item{\code{rounded}}{  takes the form `XX.XX` rounded with `sf` sig figs}
+#' }
 #' @return \code{chr}
 #' @export
 #'
 #' @examples
 #' num2str(10000)
-num2str <- function(x, sf = 2, suffix_lb = "K", just_suffix = FALSE) {
+num2str <- function(x, sf = 2, outtype = c("abbreviated", "with_suffix", "rounded"), suffix_lb = "K") {
   if (!is.numeric(x))
     x <- as.numeric(x)
   if (!is.numeric(x))
