@@ -67,18 +67,115 @@ is_legit <- function(x) {
 }
 
 
-#' @title Is object an error class?
-#' @description Is object of class `try-error`
-#' @param x \code{(object)}
-#' @return \code{(logical)}
-#' @export
-
-is_error <- function(x) {
-  inherits(x, c("try-error", "error"))
-}
 #' @title Abbreviations of numeric magnitude
 #' @export
 num_chr_suffi <- c("K" = "in thousands", "M" = "in millions", "B" = "in billions", "T" = "in trillions")
+
+#' @title Abbreviations of numeric magnitude for various units
+#' @export
+unit_conversion <- tibble::tribble(
+  ~ unit,  ~magnitude, ~ begin, ~end, ~abbrev, ~unit_eng,
+  "AF" , 10^3, "T", "in thousands", "k", "acre_feet",
+  "AF" , 10^6, "M", "in millions", "M","acre_feet",
+  "AF" , 10^9, "B", "in billions", "B","acre_feet",
+  "F" , 10^3, NA, "in thousands", "k", "feet",
+  "F" , 10^6, NA, "in millions", "M","feet",
+  "F" , 10^9, NA, "in billions", "B","feet",
+  "$", 10^3, NA, "in thousands", "k",  "dollars",
+  "$", 10^6, NA, "in millions", "mn", "dollars",
+  "$", 10^9, NA, "in billions", "bn", "dollars",
+  "$" , 10^12, NA, "in trillions", "tr", "dollars",
+  "W", 10^3, "k", "in thousands", "k",  "watts",
+  "W", 10^6, "M", "in millions", "M", "watts",
+  "W" , 10^9, "G", "in billions", "G", "watts",
+  "MW", 10^3, NA, "in thousands", "k",  "megawatts",
+  "MW", 10^6, NA, "in millions", "M", "megawatts",
+  "MW" , 10^9,NA, "in billions", "G", "megawatts",
+)
+
+
+#' Compute the order of magnitude
+#' @description Uses the \link[base]{floor} to round
+#' @param x \code{num}
+#'
+#' @return \code{num}
+#' @export
+#'
+#' @examples
+#' magnitude_order(10^(1:10))
+magnitude_order <- function (x) {
+  floor(log10(x))
+}
+
+#' Is object an error
+#'
+#' @param x \code{obj}
+#'
+#' @return \code{lgl}
+#' @export
+#'
+#' @examples
+#' is_error(try(stop()))
+is_error <- function(x) {
+  inherits(x, c("error", "try-error"))
+}
+
+#' Compute the order of magnitude triplet ie thousand, million, trillion
+#'
+#' @param x \code{num}
+#'
+#' @return \code{num}
+#' @export
+#'
+#' @examples
+#' magnitude_triplet(10^(1:10))
+magnitude_triplet <- function(x) {
+  magnitude_order(x) %/% 3
+}
+
+unit_find_vze <- Vectorize(function(x) {
+  names(unit_conversion)[purrr::map_lgl(unit_conversion, ~x %in% .x)]
+})
+unit_find <- function(x) {
+  smode(unlist(unit_find_vze(x)))
+}
+
+
+#' Extract the units from a string
+#' @description It is assumed that units are encased in parentheses at the end of the string
+#' @param x \code{chr} String(s) to extract units from/assign units to
+#'
+#' @return \code{chr}
+#' @export
+#'
+#' @examples
+#' unit_string("Elevation (F)")
+unit_string <- function(x) {
+  stringr::str_extract(x, "(?<=\\()[^\\)]+")
+}
+
+#' @rdname unit_string
+#' @export
+`unit_string<-` <- function(x, value) {
+  stringr::str_replace(x, "(?<=\\()[^\\)]+", value)
+}
+
+#' Select unit abbreviations
+#'
+#' @param unit \code{chr} Type of units, supported values are: \code{`r glue::glue("{unique(unit_conversion$unit)}")`}
+#' @param magnitude \code{num} The order of magnitude for the unit. The highest triplet will be used. See `magnitude_triplet`
+#' @param outtype \code{chr} The type of output requested. Current possibilities are: \code{`r glue::glue("{names(unit_conversion)[-c(1:2)]}")`}
+#'
+#' @return \code{chr}
+#' @export
+#'
+#' @examples
+#' unit_select("AF", 10^7, "abbrev")
+unit_select <- Vectorize(function(x, unit, outtype) {
+  unit_conversion[unit_conversion$unit == unit & unit_conversion$magnitude == 10 ^ (3 * max(magnitude_triplet(x), na.rm = TRUE)), ][[outtype]]
+})
+
+
 #' Convert numeric value to a string abbreviation with K, M, B for Thousand, Million & Billion
 #'
 #' @param x \code{num}
@@ -99,15 +196,13 @@ num2str <- function(x, sf = 2, suffix_lb = "K", just_suffix = FALSE) {
   if (length(suffix_lb) != 1 && !just_suffix) {
     gbort("{.code suffix_lb} must be one of {num_chr_suffi}")
   }
-  divisors <- purrr::map_dbl(1:length(num_chr_suffi) * 3, ~{
-    suppressWarnings(max(x, na.rm = TRUE)) / 10 ^ .x
-  })
-  i <- which.max(which(divisors >= 1))
+
+  i <- max(magnitude_triplet(x), na.rm = TRUE)
 
   if (just_suffix)
     return(num_chr_suffi[i])
   if (is_legit(i) && i >= which(names(num_chr_suffi) == suffix_lb))
-    paste0(round(divisors[i], 2), names(num_chr_suffi)[i])
+    paste0(round(x / 10^(3 * i), 2), names(num_chr_suffi)[i])
   else
     as.character(round(x, sf))
 }
@@ -116,26 +211,6 @@ num2str <- function(x, sf = 2, suffix_lb = "K", just_suffix = FALSE) {
 #' @export
 num2str_vec <- Vectorize(num2str)
 
-#' What is the human-readable suffix for a number
-#'
-#' @param n \code{num/chr} Either a numeric or number as a string with suffix input.
-#' @seealso num2str
-#' @return \code{chr}
-#' @export
-#'
-#' @examples
-#' num_suf(30000)
-num_suf <- function(n) {
-  UseMethod("num_suf")
-}
-#' @export
-num_suf.numeric <- function(n) {
-  stringr::str_extract(num2str(n), "[[:alpha:]]+")
-}
-#' @export
-num_suf.character <- function(n) {
-  stringr::str_extract(n, "[[:alpha:]]+")
-}
 
 #' @title Statistical mode
 #' @description Return the most frequenctly occuring item in a dataset
