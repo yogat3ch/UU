@@ -5,6 +5,7 @@
 \alias{reexports}
 \alias{\%||\%}
 \alias{\%|\%}
+\alias{round_any}
 \title{Objects exported from other packages}
 \keyword{internal}
 \description{
@@ -12,6 +13,8 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
+  \item{plyr}{\code{\link[plyr]{round_any}}}
+
   \item{rlang}{\code{\link[rlang:op-na-default]{\%|\%}}, \code{\link[rlang:op-null-default]{\%||\%}}}
 }}
 

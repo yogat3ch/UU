@@ -11,7 +11,7 @@ color_cycle(colors, n, transform_fn = colorspace::lighten, ...)
 
 \item{n}{\code{num} length of color vector needed}
 
-\item{transform_fn}{\code{fun} See \link\link{colorspace} for examples}
+\item{transform_fn}{\code{fun} See \link[colorspace]{lighten} for examples}
 
 \item{...}{\code{args} passed on to \code{transform_fn}}
 }

@@ -2,16 +2,19 @@
 % Please edit documentation in R/universal_useful.R
 \name{is_error}
 \alias{is_error}
-\title{Is object an error class?}
+\title{Is object an error}
 \usage{
 is_error(x)
 }
 \arguments{
-\item{x}{\code{(object)}}
+\item{x}{\code{obj}}
 }
 \value{
-\code{(logical)}
+\code{lgl}
 }
 \description{
-Is object of class \code{try-error}
+Is object an error
+}
+\examples{
+is_error(try(stop()))
 }
