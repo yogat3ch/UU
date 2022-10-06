@@ -4,12 +4,24 @@
 \alias{num2str}
 \title{Convert numeric value to a string abbreviation with K, M, B for Thousand, Million & Billion}
 \usage{
-num2str(x, sf = 2, suffix_lb = "K", just_suffix = FALSE)
+num2str(
+  x,
+  sf = 2,
+  outtype = c("abbreviated", "with_suffix", "rounded"),
+  suffix_lb = "K"
+)
 }
 \arguments{
 \item{x}{\code{num}}
 
 \item{sf}{\code{num} significant figures to round to}
+
+\item{outtype}{\code{chr} Format of the outtype
+\itemize{
+\item{\code{abbreviated}}{  takes the form \code{XX} where X are digits}
+\item{\code{with_suffix}}{ takes the form \code{XXS} where X are digits and S is the suffix}
+\item{\code{rounded}}{  takes the form \code{XX.XX} rounded with \code{sf} sig figs}
+}}
 }
 \value{
 \code{chr}
