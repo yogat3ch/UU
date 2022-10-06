@@ -140,6 +140,19 @@ unit_find <- function(x) {
   smode(unlist(unit_find_vze(x)))
 }
 
+#' Are most values TRUE
+#' @description IF more than half the values are TRUE, returns TRUE
+#' @param x \code{lgl}
+#'
+#' @return \code{lgl}
+#' @export
+#'
+#' @examples
+#' most(c(T,T,F))
+#' most(c(T,F,F))
+most <- function(x) {
+  (sum(x, na.rm = TRUE) / length(na.omit(x))) > .5
+}
 
 #' Extract the units from a string
 #' @description It is assumed that units are encased in parentheses at the end of the string
