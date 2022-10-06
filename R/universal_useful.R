@@ -219,18 +219,16 @@ num2str <- function(x, sf = 2, outtype = c("abbreviated", "with_suffix", "rounde
   if (all(is.na(x)))
     gwarn("{.code x} is entirely NA")
 
-  if (length(suffix_lb) != 1 && !just_suffix) {
+  if (length(suffix_lb) != 1) {
     gbort("{.code suffix_lb} must be one of {num_chr_suffi}")
   }
 
   i <- max(magnitude_triplet(x), na.rm = TRUE)
 
-  if (just_suffix)
-    return(num_chr_suffi[i])
-  if (is_legit(i) && i >= which(names(num_chr_suffi) == suffix_lb))
-    paste0(round(x / 10^(3 * i), 2), names(num_chr_suffi)[i])
-  else
+  if (identical(outtype, "rounded"))
     as.character(round(x, sf))
+  else if (is_legit(i) && i >= which(names(num_chr_suffi) == suffix_lb))
+    paste0(round(x / 10^(3 * i), ifelse("rounded" %in% outtype, sf, 0)), ifelse("with_suffix" %in% outtype, names(num_chr_suffi)[i], ""))
 }
 
 #' @inherit num2str title params return examples
