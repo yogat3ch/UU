@@ -25,7 +25,8 @@ Imports:
     stringr,
     tibble,
     plyr,
-    usethis (>= 2.1.6)
+    usethis (>= 2.1.6),
+    readr
 Collate: 
     'aaa_imports.R'
     'css_color_helpers.R'
