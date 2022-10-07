@@ -148,8 +148,8 @@ unit_find <- function(x) {
 #' @export
 #'
 #' @examples
-#' most(c(T,T,F))
-#' most(c(T,F,F))
+#' most(c(TRUE,TRUE,FALSE))
+#' most(c(TRUE,FALSE,FALSE))
 most <- function(x) {
   (sum(x, na.rm = TRUE) / length(na.omit(x))) > .5
 }
