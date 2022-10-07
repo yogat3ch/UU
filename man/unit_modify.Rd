@@ -14,11 +14,11 @@ unit_modify(x, unit, outtype)
 \item{magnitude}{\code{num} The order of magnitude for the unit. The highest triplet will be used. See \code{magnitude_triplet}}
 }
 \value{
-\code{chr}
+\code{chr} updated units
 }
 \description{
 Modify unit abbreviations
 }
 \examples{
-unit_modify("AF", 10^7, "abbrev")
+unit_modify(10^7, "AF", "abbrev")
 }

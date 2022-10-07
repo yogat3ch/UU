@@ -16,6 +16,6 @@ most(x)
 IF more than half the values are TRUE, returns TRUE
 }
 \examples{
-most(c(T,T,F))
-most(c(T,F,F))
+most(c(TRUE,TRUE,FALSE))
+most(c(TRUE,FALSE,FALSE))
 }

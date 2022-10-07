@@ -22,7 +22,7 @@ size(
 \item{standard}{\code{(character)}}
 }
 \value{
-\code{(numeric)}
+\code{(numeric)} value in \code{out_unit}s
 }
 \description{
 Digital storage size conversion
