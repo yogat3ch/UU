@@ -367,6 +367,7 @@ load_obj <- function(file) {
   }
   out
 }
+
 .size <- data.frame(
   stringsAsFactors = FALSE,
   check.names = FALSE,
@@ -380,7 +381,7 @@ load_obj <- function(file) {
 #' @param in_unit \code{(character)} units of x
 #' @param out_unit \code{(character)} units of output number
 #' @param standard \code{(character)}
-#' @return \code{(numeric)}
+#' @return \code{(numeric)} value in `out_unit`s
 #' @export
 #'
 #' @examples
@@ -395,8 +396,9 @@ size <- function(x, in_unit = c("b", "Kb", "Mb", "Gb", "Tb", "Pb", "Eb", "Zb", "
   .standard <- match_letters(standard, "IEC", "SI", ignore.case = TRUE)
   .in_unit <- match_letters(in_unit, .size$type, ignore.case = TRUE)
   .out_unit <- match_letters(out_unit, .size$type, ignore.case = TRUE)
-  out <- (.size[grepl(paste0("^",.in_unit), .size$type, ignore.case = TRUE), .standard, drop = TRUE] * x) / .size[grepl(paste0("^",.out_unit), .size$type, ignore.case = TRUE), .standard, drop = TRUE]
-  print(out, units = out_unit)
+  out_bytes <- (.size[grepl(paste0("^",.in_unit), .size$type, ignore.case = TRUE), .standard, drop = TRUE] * x)
+  out <-  out_bytes / .size[grepl(paste0("^",.out_unit), .size$type, ignore.case = TRUE), .standard, drop = TRUE]
+  print(out_bytes, units = .out_unit)
   return(as.numeric(out))
 }
 
