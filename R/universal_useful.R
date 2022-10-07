@@ -179,11 +179,11 @@ unit_string <- function(x) {
 #' @param magnitude \code{num} The order of magnitude for the unit. The highest triplet will be used. See `magnitude_triplet`
 #' @param outtype \code{chr} The type of output to be added. Current possibilities are: \code{`r glue::glue("{names(unit_conversion)[-c(1:2)]}")`}
 #'
-#' @return \code{chr}
+#' @return \code{chr} updated units
 #' @export
 #'
 #' @examples
-#' unit_modify("AF", 10^7, "abbrev")
+#' unit_modify(10^7, "AF", "abbrev")
 unit_modify <- Vectorize(function(x, unit, outtype) {
   outtype <- ifelse(unit == "AF", "begin", outtype)
   out <- unit_conversion[unit_conversion$unit == unit & unit_conversion$magnitude == 10 ^ (3 * max(magnitude_triplet(x), na.rm = TRUE)), ][[outtype]]
