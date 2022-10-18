@@ -4,10 +4,10 @@ startup <- function() {
   if (!getOption("UU_startup", FALSE)) {
     options(UU_startup = TRUE)
     list(
-      .Rprofile_user = Sys.getenv("R_PROFILE_USER", "~/.Rprofile"),
-      .Rprofile = Sys.getenv("R_PROFILE" , ".Rprofile"),
       .Renviron_user = Sys.getenv("R_ENVIRON_USER", "~/.Renviron"),
-      .Renviron = Sys.getenv("R_ENVIRON", ".Renviron")
+      .Renviron = Sys.getenv("R_ENVIRON", ".Renviron"),
+      .Rprofile_user = Sys.getenv("R_PROFILE_USER", "~/.Rprofile"),
+      .Rprofile = Sys.getenv("R_PROFILE" , ".Rprofile")
     ) |>
       purrr::iwalk(~{
         if (file.exists(.x)) {
