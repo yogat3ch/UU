@@ -3,14 +3,14 @@
 #'
 #' @param red \code{chr/num} Either a CSS `rgb()` or `rgba()` declaration as a string, or the red value as numeric.
 #' @inheritParams grDevices::rgb
-#' @param alpha \code{lgl/num} Whether to include the alpha value (an 8 digit hex) in the output or not, or the alpha value to apply
+#' @param alpha \code{lgl/num} Whether to include the alpha value (an 8 digit hex) in the output or not, or the alpha value to apply, If set to TRUE, and alpha is not set, an alpha value of 1 will be appended. If numeric, a value between 0 & 1 inclusive to set as the alpha value.
 #'
 #' @return \code{chr} The hex value
 #' @export
 #'
 #' @examples
-#' rgb2hex("rgba(18,180,211,1)", with_alpha = TRUE)
-#' rgb2hex("rgba(18,180,211,1)", with_alpha = FALSE)
+#' rgb2hex("rgba(18,180,211,1)", alpha = TRUE)
+#' rgb2hex("rgba(18,180,211,1)", alpha = FALSE)
 rgb2hex <- function(red, green, blue, alpha = FALSE) {
   if (is.character(red))
     v <- css_col2vec(red)
@@ -28,6 +28,9 @@ rgb2hex <- function(red, green, blue, alpha = FALSE) {
     v <- v[-4]
   i <- which(v < 1)
   v[i] <- round(v[i] * 255)
+  if (isTRUE(v[4] == 1))
+    v[4] <- 255
+
   rlang::exec(grDevices::rgb, !!!v, maxColorValue = 255)
 }
 
