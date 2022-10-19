@@ -3,7 +3,7 @@
 #'
 #' @param red \code{chr/num} Either a CSS `rgb()` or `rgba()` declaration as a string, or the red value as numeric.
 #' @inheritParams grDevices::rgb
-#' @param with_alpha \code{lgl} Whether to include the alpha value (an 8 digit hex) in the output or not
+#' @param alpha \code{lgl/num} Whether to include the alpha value (an 8 digit hex) in the output or not, or the alpha value to apply
 #'
 #' @return \code{chr} The hex value
 #' @export
@@ -11,17 +11,24 @@
 #' @examples
 #' rgb2hex("rgba(18,180,211,1)", with_alpha = TRUE)
 #' rgb2hex("rgba(18,180,211,1)", with_alpha = FALSE)
-rgb2hex <- function(red, green, blue, with_alpha = FALSE) {
+rgb2hex <- function(red, green, blue, alpha = FALSE) {
   if (is.character(red))
     v <- css_col2vec(red)
   else
     v <- c(red,green,blue)
 
-  if (length(v) == 3 && with_alpha)
-    v <- c(v, 1)
-  else if (length(v) == 4 && !with_alpha)
+
+  if (alpha) {
+    num_alpha <- is.numeric(alpha)
+    if (length(v) == 3)
+      v <- c(v, alpha = ifelse(num_alpha, alpha, 1))
+    else
+      v[4] <- ifelse(num_alpha, alpha, v[4])
+  } else if (length(v) == 4 && !alpha)
     v <- v[-4]
-  rlang::exec(rgb, !!!v, maxColorValue = 255)
+  i <- which(v < 1)
+  v[i] <- round(v[i] * 255)
+  rlang::exec(grDevices::rgb, !!!v, maxColorValue = 255)
 }
 
 #' Convert a CSS representation of a color to an r,g,b numeric
@@ -35,11 +42,13 @@ rgb2hex <- function(red, green, blue, with_alpha = FALSE) {
 #' css_col2vec("#12B4D3")
 #' css_col2vec("rgba(111,96,140,1)")
 css_col2vec <- function(x) {
-  if (stringr::str_detect(x, "rgb"))
-    out <- as.numeric(stringr::str_extract_all(x, "\\d{1,3}")[[1]][1:3])
-  else
-    out <- col2rgb(x)[,1]
-  rlang::set_names(out, c("r","g","b"))
+  if (stringr::str_detect(x, "rgb")) {
+    out <- as.numeric(stringr::str_extract_all(x, "[\\d\\.]+")[[1]])
+  } else
+    out <- col2rgb(x, alpha = TRUE)[[1]]
+  if (length(out) != 4)
+    out <- c(out, alpha = ifelse(all(out < 1), 1, 255))
+  rlang::set_names(out, c("red","green","blue","alpha"))
 }
 
 

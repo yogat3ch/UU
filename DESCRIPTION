@@ -26,7 +26,8 @@ Imports:
     tibble,
     plyr,
     usethis (>= 2.1.6),
-    readr
+    readr,
+    grDevices
 Collate: 
     'aaa_imports.R'
     'css_color_helpers.R'
