@@ -116,9 +116,13 @@ color_cycle <- function(colors, n, transform_fn = colorspace::lighten, ...) {
   col_len <- length(colors)
   out <- colors
   i <- 1
+  if (!n)
+    gbort("{.code n} must be greater than 0")
   while (length(out) != n) {
     out <- c(out, transform_fn(out[i], ...))
     i <- i + 1
+    if (i > 100 && i > n)
+      gbort("{.code color_cycle} while loop exceeds {.code n} and 100 without completion")
   }
   out
 }
