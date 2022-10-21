@@ -248,6 +248,23 @@ smode <- function(x) {
   .u[tab == max(tab)]
 }
 
+#' Get numeric day of the week
+#'
+#' @param x \code{chr} Days of the week. Abbreviations are fine, case insensitive
+#'
+#' @return \code{num/factor} If `x` is provided, the day of the week as integer with Monday as 1. If `x` is not provided, an ordered factor with Monday as 1.
+#' @export
+#'
+#' @examples
+#' week_factor()
+#' week_factor('Tu')
+week_factor <- function(x) {
+  days <- c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
+  if (missing(x))
+    factor(days, days)
+  else
+    grep(paste0("^", x), days, perl = TRUE, ignore.case = TRUE)
+}
 
 #' Vlookup replace using a lookup column and reference table
 #'
