@@ -64,7 +64,7 @@ opts_helpers <- function(.Rprofile = ".Rprofile", .env = rlang::ns_env("UU")) {
 #' @return \code{msg}
 #' @export
 #'
-write_opts <- function(file = "R/opts.R") {
+write_opts <- function(file = "R/utils_opts.R") {
   if (UU::is_legit(opts)) {
     dump("opts", file = "R/opts.R", envir = rlang::ns_env("UU"))
   }
