@@ -27,11 +27,11 @@ as_js <- function(x) {
 #' @examples
 #' glue_js("$(document).ready(() => {let x = *{tolower(FALSE)}*)")
 glue_js <- function(js, e = rlang::caller_env(), .open = "*{", .close = "}*") {
-  if (length(js) == 1 && file.exists(js))
-    .js <- glue::glue_collapse(readLines(js))
+  .js <- if (length(js) == 1 && file.exists(js))
+    readLines(js)
   else
-    .js <- js
-  as_js(glue::glue(.open = .open, .close = .close, .js, .envir = e))
+    js
+  as_js(glue::glue(.open = .open, .close = .close, glue::glue_collapse(.js), .envir = e))
 }
 
 #' Toggle \link[utils]{recover} on error when obtuse shiny errors are encountered
