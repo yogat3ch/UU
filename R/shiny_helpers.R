@@ -27,7 +27,7 @@ as_js <- function(x) {
 #' @examples
 #' glue_js("$(document).ready(() => {let x = *{tolower(FALSE)}*)")
 glue_js <- function(js, e = rlang::caller_env(), .open = "*{", .close = "}*") {
-  if (file.exists(js))
+  if (length(js) == 1 && file.exists(js))
     .js <- glue::glue_collapse(readLines(js))
   else
     .js <- js
