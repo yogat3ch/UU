@@ -31,7 +31,7 @@ glue_js <- function(js, e = rlang::caller_env(), .open = "*{", .close = "}*") {
     readLines(js)
   else
     js
-  as_js(glue::glue(.open = .open, .close = .close, glue::glue_collapse(.js), .envir = e))
+  as_js(glue::glue(.open = .open, .close = .close, glue::glue_collapse(.js, sep = "\n"), .envir = e))
 }
 
 #' Toggle \link[utils]{recover} on error when obtuse shiny errors are encountered
