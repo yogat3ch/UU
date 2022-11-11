@@ -4,7 +4,7 @@
 \alias{write_opts}
 \title{Write all the option checking functions to a file}
 \usage{
-write_opts(file = "R/opts.R")
+write_opts(file = "R/utils_opts.R")
 }
 \arguments{
 \item{file}{\code{chr} Default \emph{R/opts.R}}

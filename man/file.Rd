@@ -5,15 +5,15 @@
 \alias{file}
 \title{Go to a specified file in the Virga Labs golem project}
 \format{
-An object of class \code{list} of length 3.
+An object of class \code{list} of length 4.
 }
 \usage{
 file
 }
 \arguments{
-\item{path}{\code{chr} file to go to. Each method has a preset default based on the function name, but any method can be used to go to any file specified.}
+\item{path}{\code{chr} file to go to. Each method has a preset default based on the function name, but any path can be used to go to any file specified.}
 }
 \description{
-Go to a specified file in the Virga Labs golem project
+A List object with convenience functions that open the named file in RStudio. An \code{R} named sublist of all files in the \emph{R} folder if such a folder exists
 }
 \keyword{datasets}
