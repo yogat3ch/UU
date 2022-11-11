@@ -22,6 +22,11 @@ file_helpers <- function(.env = rlang::ns_env("UU")) {
         }
 
       }))
+    if (dir.exists("R"))
+      file$R <- purrr::map(list.files2("R"), ~rlang::new_function(
+        rlang::pairlist2(path = .x),
+        body = rlang::expr(rstudioapi::navigateToFile(path))
+      ))
     assign("file", file, envir = .env)
   }
 }
