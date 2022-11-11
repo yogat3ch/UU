@@ -122,12 +122,14 @@ dirs <- purrr::map(
   list(
     css = "inst/app/www/css",
     data = "data",
+    dev = "dev",
     extdata = "inst/extdata",
     img = "inst/app/www/img",
     inst = "inst",
     js = "inst/app/www/js",
     R = "R",
     renv = "renv",
+    tests = "tests/testthat",
     top = ".",
     vault = "inst/vault",
     www = "inst/app/www"
