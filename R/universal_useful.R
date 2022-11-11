@@ -505,17 +505,17 @@ match_letters <- function(x, ..., n = 1, multiple = FALSE, ignore.case = FALSE, 
   out
 }
 
-hash <- tibble::tribble(~ typ, ~ hud, ~ fun, ~ chr,
-                       "integer", "I", readr::parse_integer, "i",
-                       "numeric", "I", readr::parse_number, "n",
-                       "character", "S", readr::parse_character, "c",
-                       "logical", "S", readr::parse_logical, "l",
-                       "factor", "I", readr::parse_factor, "f",
-                       "Date", "D", readr::parse_date, "D",
-                       "POSIXct", "T", readr::parse_datetime, "T",
-                       "POSIXt", "T", readr::parse_datetime, "T",
-                       "POSIXlt", "T", readr::parse_datetime, "T",
-                       "list", "", readr::guess_parser, "?"
+hash <- tibble::tribble(~ typ, ~ hud, ~ fun, ~ chr, ~col,
+                       "integer", "I", readr::parse_integer, "i", readr::col_integer(),
+                       "numeric", "I", readr::parse_number, "n", readr::col_number(),
+                       "character", "S", readr::parse_character, "c", readr::col_character(),
+                       "logical", "S", readr::parse_logical, "l", readr::col_logical(),
+                       "factor", "I", readr::parse_factor, "f", readr::col_factor(),
+                       "Date", "D", readr::parse_date, "D", readr::col_date(),
+                       "POSIXct", "T", readr::parse_datetime, "T", readr::col_datetime(),
+                       "POSIXt", "T", readr::parse_datetime, "T", readr::col_datetime(),
+                       "POSIXlt", "T", readr::parse_datetime, "T", readr::col_datetime(),
+                       "list", "", readr::guess_parser, "?", readr::col_guess()
 )
 
 #' @title Converts input to a specified type output
@@ -532,12 +532,13 @@ hash <- tibble::tribble(~ typ, ~ hud, ~ fun, ~ chr,
 #'   \item{\code{"chr"}}{ Returns the class as a readr abbreviation (See \link[readr]{cols})}
 #'   \item{\code{"hud"}}{ \code{(character)} a type specification from HUD}
 #'   \item{\code{"fun"}}{a readr `parse_*` function (See \link[readr]{parse_logical})}{ \code{(function)}}
-#'   \item{\code{"type"}}{ \code{(character)} The R data class}
+#'   \item{\code{"typ"}}{ \code{(character)} The R data class}
+#'   \item{\code{"col"}}{ \code{(character)} The \code{\link[readr]{collector}}}
 #' }
 #' @return See outtype
 #' @export
 
-col_types <- function(x, outtype = c("chr", "hud", "fun", "typ")[1]) {
+col_types <- function(x, outtype = c("chr", "hud", "fun", "typ", "col")[1]) {
 
   intype <- purrr::when(x,
                         all(. %in% hash$typ) ~ "typ",

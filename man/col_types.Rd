@@ -4,7 +4,7 @@
 \alias{col_types}
 \title{Converts input to a specified type output}
 \usage{
-col_types(x, outtype = c("chr", "hud", "fun", "typ")[1])
+col_types(x, outtype = c("chr", "hud", "fun", "typ", "col")[1])
 }
 \arguments{
 \item{x}{\code{(vector/function)} One of:
@@ -20,7 +20,8 @@ col_types(x, outtype = c("chr", "hud", "fun", "typ")[1])
 \item{\code{"chr"}}{ Returns the class as a readr abbreviation (See \link[readr]{cols})}
 \item{\code{"hud"}}{ \code{(character)} a type specification from HUD}
 \item{\code{"fun"}}{a readr \verb{parse_*} function (See \link[readr]{parse_logical})}{ \code{(function)}}
-\item{\code{"type"}}{ \code{(character)} The R data class}
+\item{\code{"typ"}}{ \code{(character)} The R data class}
+\item{\code{"col"}}{ \code{(character)} The \code{\link[readr]{collector}}}
 }}
 }
 \value{
