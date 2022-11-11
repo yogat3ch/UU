@@ -506,16 +506,16 @@ match_letters <- function(x, ..., n = 1, multiple = FALSE, ignore.case = FALSE, 
 }
 
 hash <- tibble::tribble(~ typ, ~ hud, ~ fun, ~ chr, ~col,
-                       "integer", "I", readr::parse_integer, "i", readr::col_integer(),
-                       "numeric", "I", readr::parse_number, "n", readr::col_number(),
-                       "character", "S", readr::parse_character, "c", readr::col_character(),
-                       "logical", "S", readr::parse_logical, "l", readr::col_logical(),
-                       "factor", "I", readr::parse_factor, "f", readr::col_factor(),
-                       "Date", "D", readr::parse_date, "D", readr::col_date(),
-                       "POSIXct", "T", readr::parse_datetime, "T", readr::col_datetime(),
-                       "POSIXt", "T", readr::parse_datetime, "T", readr::col_datetime(),
-                       "POSIXlt", "T", readr::parse_datetime, "T", readr::col_datetime(),
-                       "list", "", readr::guess_parser, "?", readr::col_guess()
+                       "integer", "I", readr::parse_integer, "i", rlang::expr(readr::col_integer()),
+                       "numeric", "I", readr::parse_number, "n", rlang::expr(readr::col_number()),
+                       "character", "S", readr::parse_character, "c", rlang::expr(readr::col_character()),
+                       "logical", "S", readr::parse_logical, "l", rlang::expr(readr::col_logical()),
+                       "factor", "I", readr::parse_factor, "f", rlang::expr(readr::col_factor()),
+                       "Date", "D", readr::parse_date, "D", rlang::expr(readr::col_date()),
+                       "POSIXct", "T", readr::parse_datetime, "T", rlang::expr(readr::col_datetime()),
+                       "POSIXt", "T", readr::parse_datetime, "T", rlang::expr(readr::col_datetime()),
+                       "POSIXlt", "T", readr::parse_datetime, "T", rlang::expr(readr::col_datetime()),
+                       "list", "", readr::guess_parser, "?", rlang::expr(readr::col_guess())
 )
 
 #' @title Converts input to a specified type output
