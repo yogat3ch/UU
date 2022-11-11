@@ -556,7 +556,7 @@ col_types <- function(x, outtype = c("chr", "hud", "fun", "typ", "col")[1]) {
                  chr = hash$typ[hash$chr %in% x])
 
   out <- unique(hash[[outtype]][hash$typ %in% type])
-  if (outtype == "fun")
+  if (outtype %in% c("fun", "col"))
     out <- out[[1]]
   out
 }
