@@ -248,6 +248,19 @@ smode <- function(x) {
   .u[tab == max(tab)]
 }
 
+
+#' Are all items in `x` in `y`?
+#'
+#' @param x \code{vector}
+#' @param y \code{vector}
+#'
+#' @return \code{lgl/chr} See \link[base]{all.equal}
+#' @export
+#'
+
+all_in <- function(x, y) {
+  all.equal(sort(x), sort(y))
+}
 #' Get numeric day of the week
 #'
 #' @param x \code{chr} Days of the week. Abbreviations are fine, case insensitive
