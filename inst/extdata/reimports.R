@@ -2,7 +2,7 @@
 #' @name Re-imports
 #' @description Useful functions from other packages
 #' @importFrom rlang `%||%` `%|%`
-#' @importFrom UU `%|0|%` `%|try|%` `%|zchar|%` `%|legit|%`
+#' @importFrom UU `%|0|%` `%|try|%` `%|zchar|%` `%|legit|%` `%nin%`
 NULL
 
 
@@ -25,4 +25,4 @@ UU::`%|zchar|%`
 UU::`%|legit|%`
 
 #' @export
-UU::`%|nin|%`
+UU::`%nin%`
