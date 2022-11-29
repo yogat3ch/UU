@@ -19,7 +19,7 @@ as_js <- function(x) {
 #' Create a JS string with glue insertions
 #' glue `.open = !@` & `.close = @#`
 #' @param js \code{chr} JS code to \link[glue]{glue}
-#' @param as_js \code{lgl} Whether to use \code{\link[UU]{as_js}} on the output or leave it as a character. **Default TRUE**
+#' @param as_chr \code{lgl} Whether to use \code{\link[UU]{as_js}} on the output `FALSE` or \link[base]{as.character} `TRUE`. **Default FALSE**
 #' @param e \code{env} calling environment
 #' @inheritParams glue::glue
 #' @return \code{chr}
@@ -27,13 +27,15 @@ as_js <- function(x) {
 #'
 #' @examples
 #' glue_js("$(document).ready(() => {let x = *{tolower(FALSE)}*)")
-glue_js <- function(js, as_js = TRUE, e = rlang::caller_env(), .open = "*{", .close = "}*") {
+glue_js <- function(js, as_chr = FALSE, e = rlang::caller_env(), .open = "*{", .close = "}*") {
   .js <- if (length(js) == 1 && file.exists(js))
     readLines(js)
   else
     js
   out <- glue::glue(.open = .open, .close = .close, glue::glue_collapse(.js, sep = "\n"), .envir = e)
-  if (as_js)
+  if (as_chr)
+    out <- as.character(out)
+  else
     out <- as_js(out)
   return(out)
 }
