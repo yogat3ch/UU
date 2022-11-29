@@ -19,19 +19,23 @@ as_js <- function(x) {
 #' Create a JS string with glue insertions
 #' glue `.open = !@` & `.close = @#`
 #' @param js \code{chr} JS code to \link[glue]{glue}
+#' @param as_js \code{lgl} Whether to use \code{\link[UU]{as_js}} on the output or leave it as a character. **Default TRUE**
 #' @param e \code{env} calling environment
-#'
+#' @inheritParams glue::glue
 #' @return \code{chr}
 #' @export
 #'
 #' @examples
 #' glue_js("$(document).ready(() => {let x = *{tolower(FALSE)}*)")
-glue_js <- function(js, e = rlang::caller_env(), .open = "*{", .close = "}*") {
+glue_js <- function(js, as_js = TRUE, e = rlang::caller_env(), .open = "*{", .close = "}*") {
   .js <- if (length(js) == 1 && file.exists(js))
     readLines(js)
   else
     js
-  as_js(glue::glue(.open = .open, .close = .close, glue::glue_collapse(.js, sep = "\n"), .envir = e))
+  out <- glue::glue(.open = .open, .close = .close, glue::glue_collapse(.js, sep = "\n"), .envir = e)
+  if (as_js)
+    out <- as_js(out)
+  return(out)
 }
 
 #' Toggle \link[utils]{recover} on error when obtuse shiny errors are encountered

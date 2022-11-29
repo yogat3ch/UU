@@ -5,12 +5,20 @@
 \title{Create a JS string with glue insertions
 glue \verb{.open = !@} & \verb{.close = @#}}
 \usage{
-glue_js(js, e = rlang::caller_env(), .open = "*{", .close = "}*")
+glue_js(js, as_js = TRUE, e = rlang::caller_env(), .open = "*{", .close = "}*")
 }
 \arguments{
 \item{js}{\code{chr} JS code to \link[glue]{glue}}
 
+\item{as_js}{\code{lgl} Whether to use \code{\link[UU]{as_js}} on the output or leave it as a character. \strong{Default TRUE}}
+
 \item{e}{\code{env} calling environment}
+
+\item{.open}{[\code{character(1)}: \sQuote{\\{}]\cr The opening delimiter. Doubling the
+full delimiter escapes it.}
+
+\item{.close}{[\code{character(1)}: \sQuote{\\}}]\cr The closing delimiter. Doubling the
+full delimiter escapes it.}
 }
 \value{
 \code{chr}
