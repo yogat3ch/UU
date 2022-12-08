@@ -32,3 +32,6 @@ Convert numeric value to a string abbreviation with K, M, B for Thousand, Millio
 \examples{
 num2str(10000)
 }
+\seealso{
+num2str_vec
+}

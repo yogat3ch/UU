@@ -75,7 +75,7 @@ num_chr_suffi <- c("K" = "in thousands", "M" = "in millions", "B" = "in billions
 #' @export
 unit_conversion <- tibble::tribble(
   ~ unit,  ~magnitude, ~ begin, ~end, ~abbrev, ~unit_eng,
-  "AF" , 10^3, "T", "in thousands", "k", "acre_feet",
+  "AF" , 10^3, "K", "in thousands", "k", "acre_feet",
   "AF" , 10^6, "M", "in millions", "M","acre_feet",
   "AF" , 10^9, "B", "in billions", "B","acre_feet",
   "F" , 10^3, NA, "in thousands", "k", "feet",
@@ -181,10 +181,10 @@ unit_string <- function(x) {
 #'
 #' @return \code{chr} updated units
 #' @export
-#'
+#' @seealso unit_modify_vec
 #' @examples
 #' unit_modify(10^7, "AF", "abbrev")
-unit_modify <- Vectorize(function(x, unit, outtype) {
+unit_modify <- function(x, unit, outtype) {
   outtype <- ifelse(unit == "AF", "begin", outtype)
   out <- unit_conversion[unit_conversion$unit == unit & unit_conversion$magnitude == 10 ^ (3 * max(magnitude_triplet(x), na.rm = TRUE)), ][[outtype]]
   switch(outtype,
@@ -193,8 +193,12 @@ unit_modify <- Vectorize(function(x, unit, outtype) {
          abbrev = paste0(unit, out),
          unit_end = out)
 
-})
-
+}
+#' Modify unit abbreviation, vectorized version
+#' @inherit unit_modify  params return examples
+#' @seealso unit_modify
+#' @export
+unit_modify_vec <- Vectorize(unit_modify)
 
 #' Convert numeric value to a string abbreviation with K, M, B for Thousand, Million & Billion
 #'
@@ -208,7 +212,7 @@ unit_modify <- Vectorize(function(x, unit, outtype) {
 #' }
 #' @return \code{chr}
 #' @export
-#'
+#' @seealso num2str_vec
 #' @examples
 #' num2str(10000)
 num2str <- function(x, sf = 2, outtype = c("abbreviated", "with_suffix", "rounded"), suffix_lb = "K") {
@@ -231,7 +235,9 @@ num2str <- function(x, sf = 2, outtype = c("abbreviated", "with_suffix", "rounde
     paste0(round(x / 10^(3 * i), ifelse("rounded" %in% outtype, sf, 0)), ifelse("with_suffix" %in% outtype, names(num_chr_suffi)[i], ""))
 }
 
-#' @inherit num2str title params return examples
+#' @title Convert number to string Vectorized version
+#' @inherit num2str params return examples
+#' @seealso num2str
 #' @export
 num2str_vec <- Vectorize(num2str)
 

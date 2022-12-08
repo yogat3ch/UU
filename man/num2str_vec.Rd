@@ -2,7 +2,7 @@
 % Please edit documentation in R/universal_useful.R
 \name{num2str_vec}
 \alias{num2str_vec}
-\title{Convert numeric value to a string abbreviation with K, M, B for Thousand, Million & Billion}
+\title{Convert number to string Vectorized version}
 \usage{
 num2str_vec(
   x,
@@ -27,8 +27,11 @@ num2str_vec(
 \code{chr}
 }
 \description{
-Convert numeric value to a string abbreviation with K, M, B for Thousand, Million & Billion
+Convert number to string Vectorized version
 }
 \examples{
 num2str(10000)
+}
+\seealso{
+num2str
 }
