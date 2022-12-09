@@ -60,6 +60,11 @@ get_from_ns <- function(nm = c("active", "state")[1], .env = .GlobalEnv) {
 
 assign_in_ns <- function(x, nm = rlang::expr_deparse(rlang::enexpr(x)), ns_env = rlang::ns_env(pkg_name())) {
   e_is_locked <- rlang::env_is_locked(ns_env)
+  if (is.character(x)) {
+    nm <- x
+    x <- get0(x, envir = rlang::caller_env())
+  }
+
   b_is_locked <- rlang::env_has(ns_env, nm) && rlang::env_binding_are_locked(ns_env, nm)
   if (e_is_locked)
     rlang::env_unlock(ns_env)
