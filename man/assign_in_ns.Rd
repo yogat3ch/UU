@@ -11,7 +11,7 @@ assign_in_ns(
 )
 }
 \arguments{
-\item{x}{\code{object} to assign}
+\item{x}{\code{object/chr} either the object itself or the name of the object to assign}
 
 \item{nm}{\code{chr} name for object in the namespace}
 

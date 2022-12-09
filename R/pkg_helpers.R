@@ -51,7 +51,7 @@ get_from_ns <- function(nm = c("active", "state")[1], .env = .GlobalEnv) {
 
 #' Assign a variable into a namespace
 #' @description Unlocks and relocks namespaces and bindings as needed
-#' @param x \code{object} to assign
+#' @param x \code{object/chr} either the object itself or the name of the object to assign
 #' @param nm \code{chr} name for object in the namespace
 #' @param ns_env \code{env} of the namespace
 #'
