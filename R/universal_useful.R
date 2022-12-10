@@ -271,7 +271,7 @@ all_in <- function(x, y) {
 #'
 #' @param x \code{chr} Days of the week. Abbreviations are fine, case insensitive
 #'
-#' @return \code{num/factor} If `x` is provided, the day of the week as integer with Monday as 1. If `x` is not provided, an ordered factor with Monday as 1.
+#' @return \code{factor} If `x` is provided, the day of the week as a factor. If `x` is not provided, an ordered factor with Monday as 1.
 #' @export
 #'
 #' @examples
@@ -280,9 +280,10 @@ all_in <- function(x, y) {
 week_factor <- function(x) {
   days <- c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
   if (missing(x))
-    factor(days, days)
+    out <- days
   else
-    grep(paste0("^", x), days, perl = TRUE, ignore.case = TRUE)
+    out <- purrr::map_chr(x, ~stringr::str_subset(days, stringr::regex(paste0("^", .x), ignore_case = TRUE)))
+  return(factor(out, days))
 }
 
 #' Vlookup replace using a lookup column and reference table
