@@ -10,7 +10,7 @@ week_factor(x)
 \item{x}{\code{chr} Days of the week. Abbreviations are fine, case insensitive}
 }
 \value{
-\code{num/factor} If \code{x} is provided, the day of the week as integer with Monday as 1. If \code{x} is not provided, an ordered factor with Monday as 1.
+\code{factor} If \code{x} is provided, the day of the week as a factor. If \code{x} is not provided, an ordered factor with Monday as 1.
 }
 \description{
 Get numeric day of the week
