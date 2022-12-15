@@ -187,11 +187,11 @@ unit_string <- function(x) {
 unit_modify <- function(x, unit, outtype) {
   outtype <- ifelse(unit == "AF", "begin", outtype)
   out <- unit_conversion[unit_conversion$unit == unit & unit_conversion$magnitude == 10 ^ (3 * max(magnitude_triplet(x), na.rm = TRUE)), ][[outtype]]
-  switch(outtype,
+  trimws(switch(outtype,
          begin = paste0(out, unit),
          end = paste(unit, out),
          abbrev = paste0(unit, out),
-         unit_end = out)
+         unit_eng = out))
 
 }
 #' Modify unit abbreviation, vectorized version
