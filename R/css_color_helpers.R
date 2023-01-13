@@ -75,6 +75,27 @@ color_rgb_table <- function(colors) {
   return(out)
 }
 
+#' Find the luminance of a particular color, scaled 0-1
+#'
+#' @inheritParams grDevices::rgb
+#' @param ... additional arguments
+
+#' @return \code{num}
+#' @export
+#'
+#' @examples
+#' color_luminance(css_col2vec('white'))
+color_luminance <- function(red, green, blue, alpha, ...) {
+  .rgb <- c(red = red, green = green, blue = blue)
+  .rgb <- .rgb / 255
+  lt <- .rgb <= .04045
+  .rgb[lt] <- .rgb[lt] / 12.92
+  .rgb[!lt] <- ((.rgb[!lt] + .055) / 1.055) ^ 2.4
+
+  unname(0.2126*.rgb["red"] + 0.7152*.rgb["green"] + 0.0722*.rgb["blue"])
+}
+
+
 #' Compute color distance
 #'
 #' @param x \code{num/chr} A CSS hex or rgb/rgba color, or a numeric vector of r,g,b values
