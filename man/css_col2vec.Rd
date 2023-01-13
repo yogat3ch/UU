@@ -18,4 +18,8 @@ Convert a CSS representation of a color to an r,g,b numeric
 \examples{
 css_col2vec("#12B4D3")
 css_col2vec("rgba(111,96,140,1)")
+css_col2vec("green")
+}
+\seealso{
+css_col2vec_
 }
