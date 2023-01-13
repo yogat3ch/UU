@@ -40,20 +40,23 @@ rgb2hex <- function(red, green, blue, alpha = FALSE) {
 #'
 #' @return \code{num} with names r,g,b
 #' @export
-#'
+#' @seealso css_col2vec_
 #' @examples
 #' css_col2vec("#12B4D3")
 #' css_col2vec("rgba(111,96,140,1)")
+#' css_col2vec("green")
 css_col2vec <- function(x) {
-  if (stringr::str_detect(x, "rgb")) {
+  if (stringr::str_detect(x, "^rgb")) {
     out <- as.numeric(stringr::str_extract_all(x, "[\\d\\.]+")[[1]])
   } else
-    out <- col2rgb(x, alpha = TRUE)[[1]]
+    out <- col2rgb(x, alpha = TRUE)[,1]
   if (length(out) != 4)
     out <- c(out, alpha = ifelse(all(out < 1), 1, 255))
   rlang::set_names(out, c("red","green","blue","alpha"))
 }
 
+#' @export
+css_col2vec_ <- Vectorize(css_col2vec)
 
 #' Compute color distance
 #'
