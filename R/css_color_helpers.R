@@ -58,6 +58,23 @@ css_col2vec <- function(x) {
 #' @export
 css_col2vec_ <- Vectorize(css_col2vec)
 
+#' Convert vector of colors to named tbl
+#'
+#' @param colors \code{chr} vector of css color representations
+#'
+#' @return \code{tbl} Columns `red`, `green`, `blue`, `alpha` and each color is a row
+#' @export
+#'
+#' @examples
+#' color_rgb_table(c("red", "green", "#45fa32"))
+color_rgb_table <- function(colors) {
+  x <- t(css_col2vec_(colors))
+  out <- tibble::as_tibble(x)
+  if (!is.null(rownames(x)))
+    out <- tibble::add_column(out, name = rownames(x), .before = 1)
+  return(out)
+}
+
 #' Compute color distance
 #'
 #' @param x \code{num/chr} A CSS hex or rgb/rgba color, or a numeric vector of r,g,b values
