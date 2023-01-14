@@ -195,17 +195,66 @@ color_distance <- function(x, y) {
 
 #' Match colors by visual distance
 #' @description Helpful for pairing colors across light/dark palettes
-#' @param x \code{chr} CSS representations of colors that will be matched
-#' @param x \code{chr} CSS representations of colors that will be selected from as matches
+#' @param x \code{chr} Named CSS representations of colors that will be matched
+#' @param y \code{chr} Named CSS representations of colors that will be selected from as matches
+#' @param with_replacement \code{lgl} Whether colors in x should have unique matches in y, or if y can be matched with replacement. Default TRUE to match with the closest color in y, regardless if it's already been matched with a previous color in x.
 #' @return \code{tbl} Of matches for all of `x` with the associated distance
 #' @export
-color_match <- function(x, y) {
-  tidyr::expand_grid(x ,y) |>
-    tidyr::unnest() |>
-    dplyr::mutate(dist = purrr::map2_dbl(x, y, UU::color_distance)) |>
-    dplyr::group_by(x) |>
-    dplyr::filter(min(dist) == dist) |>
-    dplyr::arrange(dist)
+#' @examples
+#' color_match(c(a = "rgba(111,96,140,1)"), c(b = "#12B4D3", green = "green"))
+color_match <- function(x, y, with_replacement = TRUE) {
+  dist <- color_distance(x, y)
+  if (length(dist) > 1) {
+    out <- if (with_replacement) {
+      out <- apply(dist, 2, \(.x) {
+        .x[which.min(.x)]
+      }, simplify = FALSE)
+      out <- tibble::tibble(x = names(out), y = unname(sapply(out, names)), dist = unname(unlist(out)))
+
+    } else {
+      # Need to find global minima :-/
+      dd <- dim(dist)
+      ld <- length(dist)
+      cn <- colnames(dist)
+      rn <- rownames(dist)
+      out <- purrr::map_dfr(order(dist), \(.x) {
+        .col <- plyr::round_any(.x, 10, f = ceiling) %/% dd[1]
+        .row <- .x %% dd[1]
+        .row <- if (.row == 0)
+          dd[1]
+        else
+          .row
+
+        c(x = cn[.col], y = rn[.row], dist = dist[.x])
+      })
+      out_x <- out[!duplicated(out$x),]
+      dup_y <- which(duplicated(out_x$y))
+      used_y <- out_x$y[setdiff(1:nrow(out_x), dup_y)]
+      unused_y <- setdiff(names(y), used_y)
+      while (length(used_y) != length(y)) {
+        dup_y <- which(duplicated(out_x$y))
+        left_to_match <- out_x$x[dup_y]
+        o <- dplyr::filter(out, x %in% left_to_match & !y %in% used_y)
+        o_x <- o[!duplicated(o$x),]
+        to_add <- o_x[1,]
+        out_x[out_x$x == to_add$x, ] <- o_x[1,]
+        used_y <- c(to_add$y, used_y)
+        unused_y <- setdiff(names(y), used_y)
+      }
+      out <- out_x
+    }
+  } else
+    UU::gbort("Must supply more than 1 color for y")
+
+  out <- dplyr::mutate(
+    out,
+    x_nm = x,
+    x = unname(unlist(.env$x)[match(x_nm, names(.env$x))]),
+    y_nm = y,
+    y = unname(unlist(.env$y)[match(y_nm, names(.env$y))])
+  ) |>
+    dplyr::select(dplyr::starts_with("x"),dplyr::starts_with("y"), dist)
+  out
 }
 
 #' Separate a vector of colors based on their distance
