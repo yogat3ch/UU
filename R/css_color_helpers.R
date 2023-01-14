@@ -144,22 +144,53 @@ luminance_filter <- function(colors, dark_mode, luminance_threshold = .5) {
 
 #' Compute color distance
 #'
-#' @param x \code{num/chr} A CSS hex or rgb/rgba color, or a numeric vector of r,g,b values
-#' @param y \code{num/chr} A CSS hex or rgb/rgba color, or a numeric vector of r,g,b values
+#' @param x \code{num/chr} A Named vector of CSS hex or rgb/rgba color
+#' @param y \code{num/chr} A Named vector of CSS hex or rgb/rgba color
 #'
 #' @return \code{num} A representation of the distance for comparison with other distances
 #' @export
 #'
 #' @examples
-#' color_distance("rgba(111,96,140,1)", "#12B4D3")
+#' color_distance(c(a = "rgba(111,96,140,1)"), c("#12B4D3", "green"))
 
 color_distance <- function(x, y) {
-  .cols <- css_col2vec_(c(x, y))
-  dc <- .cols[,1] - .cols[,2]
-  rb <- .5 * (.cols[,1][1] + .cols[,2][1])
-  unname(sqrt(
-    (2 + rb / 256) * dc[1] ^ 2 + 4 * dc[2] ^ 2 + (2 + (255 - rb / 256)) * dc[3] ^ 2
-  ))
+  x <- unlist(x)
+  y <- unlist(y)
+
+  LAB <- purrr::map(list(x = x, y = y), \(.x) {
+    t(UU::css_col2vec_(.x))[,1:3] |>
+      grDevices::convertColor(from = "sRGB", to = "Lab")
+  })
+
+  #https://gist.github.com/ryancat/9972419b2a78f329ce3aebb7f1a09152
+  out <- apply(LAB$x, 1, \(.x) {
+    dL <- .x["L"] - LAB$y[,"L"]
+    dA <- .x["a"] - LAB$y[,"a"]
+    dB <- .x["b"] - LAB$y[,"b"]
+    c1 <- sqrt(.x["L"] * .x["L"] + .x["a"] * .x["a"])
+    c2 <- sqrt(LAB$y[,"L"] * LAB$y[,"L"] + LAB$y[,"a"] * LAB$y[,"a"])
+    dC <- c1 - c2
+    dH <- dA * dA + dB * dB - dC * dC
+    dH[dH < 0] <- 0
+    dH <- sqrt(dH)
+    sc <- 1 + .045 * c1
+    sh <- 1 + .015 * c1
+    dCk <- dC / sc
+    dHk <- dH / sh
+    out <- dL * dL  + dCk * dCk + dHk * dHk
+    out[out < 0] <- 0
+    sqrt(out)
+  })
+
+  if (dim(out)[2] == 1) {
+    nm <- if (!is.null(names(x))) {
+      names(x)
+    } else {
+      "x"
+    }
+    colnames(out) <- nm
+  }
+  return(out)
 }
 
 #' Match colors by visual distance
