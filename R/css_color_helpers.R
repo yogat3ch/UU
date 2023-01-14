@@ -171,8 +171,8 @@ color_distance <- function(x, y) {
 color_match <- function(x, y) {
   tidyr::expand_grid(x ,y) |>
     tidyr::unnest() |>
-    dplyr::mutate(dist = purrr::map2_dbl(light, dark, UU::color_distance)) |>
-    dplyr::group_by(light) |>
+    dplyr::mutate(dist = purrr::map2_dbl(x, y, UU::color_distance)) |>
+    dplyr::group_by(x) |>
     dplyr::filter(min(dist) == dist) |>
     dplyr::arrange(dist)
 }
