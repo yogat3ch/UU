@@ -162,6 +162,21 @@ color_distance <- function(x, y) {
   ))
 }
 
+#' Match colors by visual distance
+#' @description Helpful for pairing colors across light/dark palettes
+#' @param x \code{chr} CSS representations of colors that will be matched
+#' @param x \code{chr} CSS representations of colors that will be selected from as matches
+#' @return \code{tbl} Of matches for all of `x` with the associated distance
+#' @export
+color_match <- function(x, y) {
+  tidyr::expand_grid(x ,y) |>
+    tidyr::unnest() |>
+    dplyr::mutate(dist = purrr::map2_dbl(light, dark, UU::color_distance)) |>
+    dplyr::group_by(light) |>
+    dplyr::filter(min(dist) == dist) |>
+    dplyr::arrange(dist)
+}
+
 #' Separate a vector of colors based on their distance
 #'
 #' @param x \code{chr} Vector of hex or rgb/rgba color values
