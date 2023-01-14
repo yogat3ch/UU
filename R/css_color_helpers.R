@@ -154,12 +154,12 @@ luminance_filter <- function(colors, dark_mode, luminance_threshold = .5) {
 #' color_distance("rgba(111,96,140,1)", "#12B4D3")
 
 color_distance <- function(x, y) {
-  .cols <- purrr::map(list(x, y), ~purrr::when(!is.numeric(.x), isTRUE(.) ~ css_col2vec(.x), ~ .x))
-  dc <- .cols[[1]] - .cols[[2]]
-  rb <- .5 * (.cols[[1]][1] + .cols[[2]][1])
-  sqrt(
+  .cols <- css_col2vec_(c(x, y))
+  dc <- .cols[,1] - .cols[,2]
+  rb <- .5 * (.cols[,1][1] + .cols[,2][1])
+  unname(sqrt(
     (2 + rb / 256) * dc[1] ^ 2 + 4 * dc[2] ^ 2 + (2 + (255 - rb / 256)) * dc[3] ^ 2
-  )
+  ))
 }
 
 #' Separate a vector of colors based on their distance
