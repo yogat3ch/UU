@@ -21,3 +21,7 @@ Convert r,g,b,a values as string or numeric to hex
 rgb2hex("rgba(18,180,211,1)", alpha = TRUE)
 rgb2hex("rgba(18,180,211,1)", alpha = FALSE)
 }
+\seealso{
+rgb2hex_
+}
+\concept{color}

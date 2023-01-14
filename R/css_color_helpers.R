@@ -1,13 +1,13 @@
 
 #' Convert r,g,b,a values as string or numeric to hex
-#'
+#' @family color
 #' @param red \code{chr/num} Either a CSS `rgb()` or `rgba()` declaration as a string, or the red value as numeric.
 #' @inheritParams grDevices::rgb
 #' @param alpha \code{lgl/num} Whether to include the alpha value (an 8 digit hex) in the output or not, or the alpha value to apply, If set to TRUE, and alpha is not set, an alpha value of 1 will be appended. If numeric, a value between 0 & 1 inclusive to set as the alpha value.
 #'
 #' @return \code{chr} The hex value
 #' @export
-#'
+#' @seealso rgb2hex_
 #' @examples
 #' rgb2hex("rgba(18,180,211,1)", alpha = TRUE)
 #' rgb2hex("rgba(18,180,211,1)", alpha = FALSE)
@@ -33,7 +33,8 @@ rgb2hex <- function(red, green, blue, alpha = FALSE) {
 
   rlang::exec(grDevices::rgb, !!!v, maxColorValue = 255)
 }
-
+#' @export
+rgb2hex_ <- Vectorize(rgb2hex)
 #' Convert a CSS representation of a color to an r,g,b numeric
 #'
 #' @param x \code{chr} CSS Vector in hexadecimal or rgb/rgba format
@@ -182,14 +183,17 @@ color_distance <- function(x, y) {
     sqrt(out)
   })
 
-  if (dim(out)[2] == 1) {
-    nm <- if (!is.null(names(x))) {
-      names(x)
-    } else {
-      "x"
+  if (length(out) != 1) {
+    if (dim(out)[2] == 1) {
+      nm <- if (!is.null(names(x))) {
+        names(x)
+      } else {
+        "x"
+      }
+      colnames(out) <- nm
     }
-    colnames(out) <- nm
   }
+
   return(out)
 }
 
@@ -201,7 +205,34 @@ color_distance <- function(x, y) {
 #' @return \code{tbl} Of matches for all of `x` with the associated distance
 #' @export
 #' @examples
-#' color_match(c(a = "rgba(111,96,140,1)"), c(b = "#12B4D3", green = "green"))
+#' a <- list(
+#'   light = list(
+#'     aquamarine = "rgb(137,210,215)",
+#'     teal = "rgb(79,194,198)",
+#'     turquoise = "rgb(3,119,132)",
+#'     evergreen = "rgb(0,84,92)",
+#'     brown = "rgb(72,36,18)",
+#'     lightbrown = "rgb(132,96,78)",
+#'     orange = "rgb(250,173,25)",
+#'     darkorange = "rgb(198,143,44)",
+#'     aliceblue = "rgb(180,243,249)",
+#'     gainsboro = "rgb(223,254,255)"
+#'   ),
+#'   dark = list(
+#'     lightblue = "rgba(18,180,211,1)",
+#'     darkblue = "rgba(2,120,170,1)",
+#'     navyblue = "rgba(0,57,73,1)",
+#'     brown = "rgba(72,36,18,1)",
+#'     lightbrown = "rgb(132,96,78)",
+#'     lighterbrown = "rgba(181,141,122, 1)",
+#'     purple = "rgba(111,96,140,1)",
+#'     lightpurple = "rgba(165,150,194,1)",
+#'     darkcyan = "rgba(0,166,212,1)",
+#'     darkturquoise = "rgba(9,119,168,1)"
+#'   )
+#' )
+#' color_match(a$light, a$dark)
+
 color_match <- function(x, y, with_replacement = TRUE) {
   dist <- color_distance(x, y)
   if (length(dist) > 1) {
@@ -273,7 +304,7 @@ color_separate <- function(x) {
   sep_cols <- c(x[1])
   x <- x[-1]
   while (length(x)) {
-    i <- which.max(purrr::map_dbl(x, ~ color_distance(utils::tail(sep_cols, 1), .x)))
+    i <- which.max(color_distance(utils::tail(sep_cols, 1), x))
     sep_cols <- c(sep_cols, x[i])
     x <- x[-i]
   }

@@ -20,5 +20,31 @@ color_match(x, y, with_replacement = TRUE)
 Helpful for pairing colors across light/dark palettes
 }
 \examples{
-color_match(c(a = "rgba(111,96,140,1)"), c(b = "#12B4D3", green = "green"))
+a <- list(
+  light = list(
+    aquamarine = "rgb(137,210,215)",
+    teal = "rgb(79,194,198)",
+    turquoise = "rgb(3,119,132)",
+    evergreen = "rgb(0,84,92)",
+    brown = "rgb(72,36,18)",
+    lightbrown = "rgb(132,96,78)",
+    orange = "rgb(250,173,25)",
+    darkorange = "rgb(198,143,44)",
+    aliceblue = "rgb(180,243,249)",
+    gainsboro = "rgb(223,254,255)"
+  ),
+  dark = list(
+    lightblue = "rgba(18,180,211,1)",
+    darkblue = "rgba(2,120,170,1)",
+    navyblue = "rgba(0,57,73,1)",
+    brown = "rgba(72,36,18,1)",
+    lightbrown = "rgb(132,96,78)",
+    lighterbrown = "rgba(181,141,122, 1)",
+    purple = "rgba(111,96,140,1)",
+    lightpurple = "rgba(165,150,194,1)",
+    darkcyan = "rgba(0,166,212,1)",
+    darkturquoise = "rgba(9,119,168,1)"
+  )
+)
+color_match(a$light, a$dark)
 }
