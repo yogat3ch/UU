@@ -7,9 +7,9 @@
 color_distance(x, y)
 }
 \arguments{
-\item{x}{\code{num/chr} A CSS hex or rgb/rgba color, or a numeric vector of r,g,b values}
+\item{x}{\code{num/chr} A Named vector of CSS hex or rgb/rgba color}
 
-\item{y}{\code{num/chr} A CSS hex or rgb/rgba color, or a numeric vector of r,g,b values}
+\item{y}{\code{num/chr} A Named vector of CSS hex or rgb/rgba color}
 }
 \value{
 \code{num} A representation of the distance for comparison with other distances
@@ -18,5 +18,5 @@ color_distance(x, y)
 Compute color distance
 }
 \examples{
-color_distance("rgba(111,96,140,1)", "#12B4D3")
+color_distance(c(a = "rgba(111,96,140,1)"), c("#12B4D3", "green"))
 }

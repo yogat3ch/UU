@@ -4,14 +4,21 @@
 \alias{color_match}
 \title{Match colors by visual distance}
 \usage{
-color_match(x, y)
+color_match(x, y, with_replacement = TRUE)
 }
 \arguments{
-\item{x}{\code{chr} CSS representations of colors that will be selected from as matches}
+\item{x}{\code{chr} Named CSS representations of colors that will be matched}
+
+\item{y}{\code{chr} Named CSS representations of colors that will be selected from as matches}
+
+\item{with_replacement}{\code{lgl} Whether colors in x should have unique matches in y, or if y can be matched with replacement. Default TRUE to match with the closest color in y, regardless if it's already been matched with a previous color in x.}
 }
 \value{
 \code{tbl} Of matches for all of \code{x} with the associated distance
 }
 \description{
 Helpful for pairing colors across light/dark palettes
+}
+\examples{
+color_match(c(a = "rgba(111,96,140,1)"), c(b = "#12B4D3", green = "green"))
 }
