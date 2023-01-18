@@ -29,3 +29,16 @@ week_factor <- function(x) {
 duration_print <- function(duration) {
   stringr::str_extract(as.character(duration), "(?<=\\()[^\\)]+")
 }
+
+#' Convert Excel character date representation to a Date
+#'
+#' @param .x \code{chr} representation of Dates from Excel, usually a 5 digit number
+#'
+#' @return \code{Date}
+#' @export
+#'
+#' @examples
+#' excel_date(c("44567", "44568"))
+excel_date <- function(.x) {
+  base::as.Date(as.integer(.x), origin = as.Date("1899-12-30"))
+}
