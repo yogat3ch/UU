@@ -345,3 +345,28 @@ color_cycle <- function(colors, n, transform_fn = colorspace::lighten, ...) {
 
   out
 }
+
+#' Convert a list of colors to SCSS/Sass variables or classes
+#'
+#' @param color_theme \code{2-layer list} with dark/light themes
+#' @inheritParams base::cat
+#' @return \code{msg} Sass/SCSS formatted variables or classes
+#' @export
+#'
+#' @examples
+#' colors2css(c(a = "white", b = "green"))
+colors2css <- function(colors, file = "", sass_vars = TRUE) {
+  colors_formatted <- unlist(colors)
+  # Format w/ CSS compliant chrs
+  colors_formatted <- rlang::set_names(colors_formatted, paste0(ifelse(sass_vars, "$", "."), stringr::str_replace(names(colors_formatted), "\\.", "\\-")))
+
+  fmt <- if (sass_vars) {
+    "%s: %s;"
+  } else {
+    "%s { color : %s; }"
+  }
+  out <- sprintf(fmt, names(colors_formatted), colors_formatted)
+  if (nzchar(file))
+    cat(out, file = file, sep = "\n")
+  return(out)
+}
