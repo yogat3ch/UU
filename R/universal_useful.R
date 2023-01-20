@@ -107,6 +107,39 @@ magnitude_order <- function (x) {
   floor(log10(abs(x)))
 }
 
+
+#' Find the global minima/maxima of input vectors
+#'
+#' @param ... \code{num} vectors
+#' @inheritParams plyr::round_any
+#' @param fn \code{fun} \link[base]{min}/\link[base]{max}
+#' @description If accuracy is omitted, number will be rounded to the nearest order of magnitude IE 145, if `fn = min`, will round to 100
+#' @return \code{num}
+#' @export
+#'
+#' @examples
+#' round_to(runif(10, 5:10), runif(2, 2:5))
+#' round_to(145)
+round_to <- function(..., accuracy = NULL, fn = min, f = NULL) {
+  d <- do.call(c, rlang::dots_list(...))
+  n <- fn(d)
+  if (is.null(f)) {
+    f <- if (identical(fn, min)) {
+      floor
+    } else {
+      ceiling
+    }
+  }
+  if (is.null(accuracy)) {
+    accuracy <- 10 ^ UU::magnitude_order(n)
+  }
+  plyr::round_any(
+    n,
+    accuracy = accuracy,
+    f = f
+  )
+}
+
 #' Is object an error
 #'
 #' @param x \code{obj}
