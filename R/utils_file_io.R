@@ -35,6 +35,26 @@ dep_read <- function(filename, ...) {
     gbort("{.path {filename}} not found.")
 }
 
+#' Write a dependency to file
+#'
+#' @param x \code{(object)} to be written
+#' @inheritParams dep_read
+#' @param ... Passed on to write function. See \link[UU]{file_fn} for which function will be used based on the filename
+#' @return \code{(message)} indicating success
+#' @export
+
+dep_write <- function(x, filename, ...) {
+  .x <- cli::code_highlight(rlang::expr_deparse(rlang::enexpr(x)), code_theme = "Twilight")
+  if (UU::ext(filename) == "feather")
+    UU::need_pkg("arrow", "write_feather")(x, filename, compression = "uncompressed")
+  else
+    UU::file_fn(filename, write = TRUE)(x, filename, ...)
+  if (file.exists(filename) && file.info(filename)$mtime > (Sys.time() - lubridate::seconds(10)))
+    cli::cli_alert_success("{.x} written to {.path {filename}} ")
+  else
+    UU::gwarn("Failed to write {.x} to {.path {filename}}")
+}
+
 #' Create a directory path pointing function
 #'
 #' @param base_dir \code{(chr)} the base directory to which the path should point
