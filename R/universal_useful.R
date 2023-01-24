@@ -166,11 +166,23 @@ magnitude_triplet <- function(x) {
   magnitude_order(x) %/% 3
 }
 
-unit_find_vze <- Vectorize(function(x) {
+unit_find_ <- Vectorize(function(x) {
   names(unit_conversion)[purrr::map_lgl(unit_conversion, ~x %in% .x)]
 })
+#' Find the row corresponding to a value in `unit_conversion`
+#'
+#' @param x \code{chr/num} vector to find
+#'
+#' @return \code{tbl}
+#' @export
+#'
+#' @examples
+#' unit_find("B")
 unit_find <- function(x) {
-  smode(unlist(unit_find_vze(x)))
+  .cols <- smode(unlist(unit_find_(x)))
+  dplyr::filter(unit_conversion, !!purrr::reduce(.cols[2], \(.x, .y) {
+    rlang::expr(!!.x & !!rlang::sym(.y) == !!x)
+  }, .init = rlang::expr(!!rlang::sym(.cols[1]) == !!x)))
 }
 
 #' Are most values TRUE
@@ -207,19 +219,22 @@ unit_string <- function(x) {
 }
 
 #' Modify unit abbreviations
-#'
+#' @param x \code{num} The maximum number in the dataset
 #' @param unit \code{chr} Type of units, supported values are: \code{`r glue::glue("{unique(unit_conversion$unit)}")`}
-#' @param magnitude \code{num} The order of magnitude for the unit. The highest triplet will be used. See `magnitude_triplet`
 #' @param outtype \code{chr} The type of output to be added. Current possibilities are: \code{`r glue::glue("{names(unit_conversion)[-c(1:2)]}")`}
+#' @param magnitude \code{num} The order of magnitude for the unit. The highest triplet will be used. See `magnitude_triplet`
 #'
 #' @return \code{chr} updated units
 #' @export
 #' @seealso unit_modify_vec
 #' @examples
 #' unit_modify(10^7, "AF", "abbrev")
-unit_modify <- function(x, unit, outtype) {
+unit_modify <- function(x, unit, outtype, magnitude = magnitude_order(x)) {
   outtype <- ifelse(unit == "AF", "begin", outtype)
-  out <- unit_conversion[unit_conversion$unit == unit & unit_conversion$magnitude == 10 ^ (3 * max(magnitude_triplet(x), na.rm = TRUE)), ][[outtype]]
+
+  mt <- magnitude %/% 3
+
+  out <- unit_conversion[unit_conversion$unit == unit & unit_conversion$magnitude == 10 ^ (3 * mt), ][[outtype]]
   trimws(switch(outtype,
          begin = paste0(out, unit),
          end = paste(unit, out),

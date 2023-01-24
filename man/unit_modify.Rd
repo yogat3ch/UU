@@ -4,9 +4,11 @@
 \alias{unit_modify}
 \title{Modify unit abbreviations}
 \usage{
-unit_modify(x, unit, outtype)
+unit_modify(x, unit, outtype, magnitude = magnitude_order(x))
 }
 \arguments{
+\item{x}{\code{num} The maximum number in the dataset}
+
 \item{unit}{\code{chr} Type of units, supported values are: \code{AF, F, $, W, MW}}
 
 \item{outtype}{\code{chr} The type of output to be added. Current possibilities are: \code{begin, end, abbrev, unit_eng}}
