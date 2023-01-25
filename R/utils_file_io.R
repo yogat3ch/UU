@@ -172,16 +172,23 @@ write_dir_fn <- function(outfile = "R/utils_dir_fns.R", overwrite = TRUE, for_go
 
   pkg_nm <- pkg_name()
   app_sys <- function() {}
-  fn <- purrr::when(for_golem, isTRUE(.) ~ list("app_sys", mustWork = rlang::expr(mustWork)), ~ list("path_package", .ns = "fs", package = pkg_nm))
+  fn <- if (for_golem)
+    list("app_sys", mustWork = rlang::expr(mustWork))
+  else
+    list("path_package", .ns = "fs", package = pkg_nm)
 
   dirs <- purrr::map(dirs, ~{
     .exp <- rlang::expr({
       .path <- fs::path(!!.x(), ..., ext = ext)
-      if (!mkpath) {
+      out <- if (!mkpath) {
         .path <- stringr::str_remove(.path, "^inst\\/?")
-        !!rlang::exec(rlang::call2, !!!fn, rlang::expr(.path))
+        if (!(!!for_golem) && mustWork)
+          !!rlang::exec(rlang::call2, !!!fn, rlang::expr(.path))
+        else
+          .path
       } else
         .path
+      return(out)
     })
     rlang::new_function(args = rlang::pairlist2(... =, ext = "", mkpath = FALSE, mustWork = FALSE), body = .exp)
   })
