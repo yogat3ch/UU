@@ -56,6 +56,42 @@ key_out.numeric <- function(x, keys, out) {
 key_out.logical <- function(x, keys, out) {
   keys$y %in% keys$x
 }
+
+#' Return a list of expressions all piped together as a single expression
+#'
+#' @param exprs \code{expressions} See \code{\link[rlang]{exprs}}
+#' @return \code{expression}
+#' @export
+#'
+#' @examples
+#'
+#' ex <- tibble::tibble(cat = rep(letters, length.out = 6, each = 2), val = #' runif(6, 0, 10))
+#' exps <- rlang::exprs(
+#'   data,
+#'   dplyr::mutate(data, val = val  + 3)
+#' )
+#' make_exp <- function(data, addtl_exp, summarise = TRUE) {
+#'   if (summarise) {
+#'     addtl_exp <- append(
+#'       addtl_exp,
+#'       rlang::exprs(
+#'         dplyr::group_by(cat),
+#'         dplyr::summarise(val = sum(val))
+#'       )
+#'     )
+#'   }
+#'   rlang::eval_bare(expr_pipe(addtl_exp))
+#' }
+#' make_exp(ex, exps)
+#' make_exp(ex, exps, FALSE)
+
+expr_pipe <- function(exprs) {
+  rlang::parse_expr(glue::glue_collapse(purrr::reduce(exprs, \(.x, .y) {
+    paste0(.x ," |>\n\t", rlang::expr_deparse(.y))
+  })))
+}
+
+
 #' @title Is object legit?
 #' @description Is object non-null, non-empty, non-NA, and not a try-error?
 #' @param x \code{(object)}
@@ -247,6 +283,8 @@ unit_modify <- function(x, unit, outtype, magnitude = magnitude_order(x)) {
 #' @seealso unit_modify
 #' @export
 unit_modify_vec <- Vectorize(unit_modify)
+
+
 
 #' Convert numeric value to a string abbreviation with K, M, B for Thousand, Million & Billion
 #'
