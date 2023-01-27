@@ -1,6 +1,6 @@
 Package: UU
 Title: Universally Useful
-Version: 1.14.0
+Version: 1.15.0
 Authors@R: person(given = "Stephen", family = "Holsenbeck",
        role = c("aut", "cre"), email =
        "sholsen@alumni.emory.edu")
@@ -27,7 +27,8 @@ Imports:
     plyr,
     usethis (>= 2.1.6),
     readr,
-    grDevices
+    grDevices,
+    tools
 Collate: 
     'aaa_imports.R'
     'css_color_helpers.R'

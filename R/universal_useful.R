@@ -130,6 +130,35 @@ unit_conversion <- tibble::tribble(
 )
 
 
+#' Create a table of functions and their uses
+#'
+#' @param package \code{chr} package name
+#'
+#' @return \code{shiny.tag}
+#' @export
+#'
+
+fun_docs_table <- function(package = pkgload::pkg_name()) {
+  rds <- purrr::map(list.files2("man"), \(.x) {
+    doc <- tools::parse_Rd(.x)
+    rlang::set_names(doc, vapply(
+      doc,
+      function(.x) { gsub("\\\\", "", attr(.x, 'Rd_tag')) },
+      character(1)
+    ))
+  })
+  table <- purrr::map_dfr(rds, \(.x) {
+    doc <- .x
+    desc <- purrr::map_chr(rlang::set_names(c("name", "title", "description")), \(.x) {
+      glue::glue_collapse(as.character(unlist(doc[[.x]])))
+    })
+    names(desc) <- stringr::str_to_title(names(desc))
+    tibble::tibble_row(
+      !!!desc
+    )
+  })
+}
+
 #' Compute the order of magnitude
 #' @description Uses the \link[base]{floor} to round
 #' @param x \code{num}
