@@ -64,7 +64,6 @@ key_out.logical <- function(x, keys, out) {
 #' @export
 #'
 #' @examples
-#'
 #' ex <- tibble::tibble(cat = rep(letters, length.out = 6, each = 2), val = #' runif(6, 0, 10))
 #' exps <- rlang::exprs(
 #'   data,
