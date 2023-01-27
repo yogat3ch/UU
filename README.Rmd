@@ -1,0 +1,38 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+devtools::load_all(".")
+knitr::opts_chunk$set(
+  warning = FALSE,
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# UU
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+A collection of *U*niversally *U*seful functions!
+
+## Installation
+
+You can install the development version of UU from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("yogat3ch/UU")
+```
+
+All the fun(s)!
+
+```{r echo = FALSE, results='asis'}
+knitr::kable(fun_docs_table())
+```
