@@ -34,5 +34,5 @@ devtools::install_github("yogat3ch/UU")
 All the fun(s)!
 
 ```{r echo = FALSE, results='asis'}
-knitr::kable(fun_docs_table())
+bs4Dash::bs4Table(fun_docs_table()) 
 ```

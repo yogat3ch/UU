@@ -146,10 +146,10 @@ fun_docs_table <- function(package = pkgload::pkg_name()) {
       character(1)
     ))
   })
-  table <- purrr::map_dfr(rds, \(.x) {
+  purrr::map_dfr(rds, \(.x) {
     doc <- .x
-    desc <- purrr::map_chr(rlang::set_names(c("name", "title", "description")), \(.x) {
-      glue::glue_collapse(as.character(unlist(doc[[.x]])))
+    desc <- purrr::map_chr(rlang::set_names(c("name","family", "title", "description")), \(.x) {
+      glue::glue_collapse(as.character(unlist(doc[[.x]] %||% "")))
     })
     names(desc) <- stringr::str_to_title(names(desc))
     tibble::tibble_row(

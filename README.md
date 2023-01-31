@@ -20,180 +20,957 @@ devtools::install_github("yogat3ch/UU")
 
 All the fun(s)!
 
-| Name                                    | Title                                                                                            | Description                                                                                                                                                             |
-|:----------------------------------------|:-------------------------------------------------------------------------------------------------|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| all_in                                  | Are all items in x in y?                                                                         | Are all items in x in y?                                                                                                                                                |
-| as_js                                   | Preserve a string as JS/HTML (prevent translation of characters)                                 | Preserve a string as JS/HTML (prevent translation of characters)                                                                                                        |
-| assign_in_ns                            | Assign a variable into a namespace                                                               | Unlocks and relocks namespaces and bindings as needed                                                                                                                   |
-| col_types                               | Converts input to a specified type output                                                        | Given various inputs, provide a col_type specification in the format indicated by outtype                                                                               |
-| color_cycle                             | Makes a cyclic color palette of a specified length using the specified transformation each cycle | Makes a cyclic color palette of a specified length using the specified transformation each cycle                                                                        |
-| color_distance                          | Compute color distance                                                                           | Compute color distance                                                                                                                                                  |
-| color_luminance                         | Find the luminance of a particular color, scaled 0-1                                             | Find the luminance of a particular color, scaled 0-1                                                                                                                    |
-| color_match                             | Match colors by visual distance                                                                  | Helpful for pairing colors across light/dark palettes                                                                                                                   |
-| color_rgb_table                         | Convert vector of colors to named tbl                                                            | Convert vector of colors to named tbl                                                                                                                                   |
-| color_separate                          | Separate a vector of colors based on their distance                                              | Separate a vector of colors based on their distance                                                                                                                     |
-| colors2css                              | Convert a list of colors to SCSS/Sass variables or classes                                       | Convert a list of colors to SCSS/Sass variables or classes                                                                                                              |
-| common_names                            | Find the names in common                                                                         | Given named objects, find the names in common                                                                                                                           |
-| creds_to_renviron                       | Write named keypairs to an .Renviron / .Rprofile file                                            | Writes key pairs to .Renviron / .Rprofile and adds .Renviron to .gitignore if not already there.                                                                        |
-| css_col2vec                             | Convert a CSS representation of a color to an r,g,b numeric                                      | Convert a CSS representation of a color to an r,g,b numeric                                                                                                             |
-| dep_read                                | Read a dependency from file                                                                      | Read a dependency from file                                                                                                                                             |
-| dep_write                               | Write a dependency to file                                                                       | Write a dependency to file                                                                                                                                              |
-| dir_fn                                  | Create a directory path pointing function                                                        | Create a directory path pointing function                                                                                                                               |
-| dirs                                    | Path functions for commonly used directories                                                     | Path functions for commonly used directories                                                                                                                            |
-| .file                                   | All the files that can be navigated to with file if they exist                                   | All the files that can be navigated to with file if they exist                                                                                                          |
-| duration_print                          | Translate a duration into the human-legible estimation as a character                            | Translate a duration into the human-legible estimation as a character                                                                                                   |
-| excel_date                              | Convert Excel character date representation to a Date                                            | Convert Excel character date representation to a Date                                                                                                                   |
-| expr_pipe                               | Return a list of expressions all piped together as a single expression                           | Return a list of expressions all piped together as a single expression                                                                                                  |
-| ext                                     | Extract the file extensions from a filepath                                                      | Given a path, extract the file extension                                                                                                                                |
-| file_fn                                 | Return the appropriate function for reading the specified path/extension                         | Return the appropriate function for reading the specified path/extension                                                                                                |
-| file                                    | Go to a specified file in the Virga Labs golem project                                           | A List object with convenience functions that open the named file in RStudio. An R named sublist of all files in the R folder if such a folder exists                   |
-| filter_to                               | Change or apply filters to output type                                                           | Useful in concert with axis brushing                                                                                                                                    |
-| find_by_class                           | Find an object by it’s class                                                                     | Find an object by it’s class                                                                                                                                            |
-| fn_name                                 | Retrieve the function name                                                                       | Sometimes a function is passed down the call stack and it’s name is unknown. This function finds the name without having to pass it down the call stack as an argument. |
-| folder                                  | Go to a specified folder in the Virga Labs golem project                                         | Go to a specified folder in the Virga Labs golem project                                                                                                                |
-| fun_docs_table                          | Create a table of functions and their uses                                                       | Create a table of functions and their uses                                                                                                                              |
-| gbort                                   | Custom error message                                                                             | Throw abort with format_error                                                                                                                                           |
-| get_from_ns                             | Get an object from a namespace                                                                   | Get an object from a namespace                                                                                                                                          |
-| get_global                              | Get an object from the global environment                                                        | Get an object from the global environment                                                                                                                               |
-| get_package_fns                         | Get the names of all exported functions in a package                                             | Get the names of all exported functions in a package                                                                                                                    |
-| glue_js                                 | Create a JS string with glue insertions                                                          |                                                                                                                                                                         |
-| glue .open = !@ & .close = @#           | Create a JS string with glue insertions                                                          |                                                                                                                                                                         |
-| glue .open = !@ & .close = @#           |                                                                                                  |                                                                                                                                                                         |
-| gmsg                                    | Custom message                                                                                   |                                                                                                                                                                         |
-| Message using format_message & cat_line | Custom message                                                                                   |                                                                                                                                                                         |
-| Message using format_message & cat_line |                                                                                                  |                                                                                                                                                                         |
-| %nin%                                   | Are lhs values absent from set on rhs?                                                           | Are lhs values absent from set on rhs?                                                                                                                                  |
-| %\|0\|%                                 | Replace a 0 length value                                                                         | If the lhs is length 0, replace with rhs                                                                                                                                |
-| %\|legit\|%                             | If legit lhs, else rhs                                                                           | If legit lhs, else rhs                                                                                                                                                  |
-| %\|zchar\|%                             | Replace zero-length character strings with right hand side                                       | Replace zero-length character strings with right hand side                                                                                                              |
-| gwarn                                   | Custom warning message                                                                           | Throw cli_alert_warning with format_warning                                                                                                                             |
-| if_debug                                | Run expressions only when option use_debug = TRUE                                                | Run expressions only when option use_debug = TRUE                                                                                                                       |
-| ignore_files                            | Add lines to .gitignore                                                                          | Add lines to .gitignore                                                                                                                                                 |
-| inequality_key                          | Inequality conversion key                                                                        | Inequality conversion key                                                                                                                                               |
-| install_remote                          | Install a package                                                                                | Install a package                                                                                                                                                       |
-| is_error                                | Is object an error                                                                               | Is object an error                                                                                                                                                      |
-| is_filepath                             | Is path a file path                                                                              | Given a path, is it a filepath?                                                                                                                                         |
-| is_legit                                | Is object legit?                                                                                 | Is object non-null, non-empty, non-NA, and not a try-error?                                                                                                             |
-| is_package_dev                          | Is package in development or installed                                                           | Is package in development or installed                                                                                                                                  |
-| is_package                              | Is working directory a package?                                                                  | Is working directory a package?                                                                                                                                         |
-| join_check                              | Detect possible duplicates of rows or columns after a join                                       | Detect possible duplicates of rows or columns after a join                                                                                                              |
-| key_out                                 | Handle different output type requests for match_df                                               | Handle different output type requests for match_df                                                                                                                      |
-| key_pairs_duplicated                    | Find duplicates in key pairs                                                                     | Find duplicates in key pairs                                                                                                                                            |
-| key_pairs_text                          | Make key-pairs from a named character vector                                                     | Make key-pairs from a named character vector                                                                                                                            |
-| last_updated                            | Gather last updated times for on-disk files                                                      | Check the last modified time files or paths                                                                                                                             |
-| len_unique                              | The length of unique values in a vector                                                          | The length of unique values in a vector                                                                                                                                 |
-| list.files2                             | List full file paths with the file name as the name                                              | List full file paths with the file name as the name                                                                                                                     |
-| luminance_filter                        | Filter colors based on a luminance threshold                                                     | Filter colors based on a luminance threshold                                                                                                                            |
-| magnitude_order                         | Compute the order of magnitude                                                                   | Uses the floor to round                                                                                                                                                 |
-| magnitude_triplet                       | Compute the order of magnitude triplet ie thousand, million, trillion                            | Compute the order of magnitude triplet ie thousand, million, trillion                                                                                                   |
-| make_names                              | Make a file path name with underscores                                                           | Make a file path name with underscores                                                                                                                                  |
-| map_class                               | Match the classes of one object to that of another object                                        | Match the classes of one object to that of another object                                                                                                               |
-| match_df                                | Extract matching rows of a data frame.                                                           | Match works in the same way as join, but instead of return the combined                                                                                                 |
+<table class="table">
+<thead>
+<tr>
+<th>Name</th>
+<th>Family</th>
+<th>Title</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>all_in</td>
+<td></td>
+<td>Are all items in x in y?</td>
+<td>
+Are all items in x in y?
+</td>
+</tr>
+<tr>
+<td>as_js</td>
+<td></td>
+<td>Preserve a string as JS/HTML (prevent translation of characters)</td>
+<td>
+Preserve a string as JS/HTML (prevent translation of characters)
+</td>
+</tr>
+<tr>
+<td>assign_in_ns</td>
+<td></td>
+<td>Assign a variable into a namespace</td>
+<td>
+Unlocks and relocks namespaces and bindings as needed
+</td>
+</tr>
+<tr>
+<td>col_types</td>
+<td></td>
+<td>Converts input to a specified type output</td>
+<td>
+Given various inputs, provide a col_type specification in the format indicated by outtype
+</td>
+</tr>
+<tr>
+<td>color_cycle</td>
+<td></td>
+<td>Makes a cyclic color palette of a specified length using the specified transformation each cycle</td>
+<td>
+Makes a cyclic color palette of a specified length using the specified transformation each cycle
+</td>
+</tr>
+<tr>
+<td>color_distance</td>
+<td></td>
+<td>Compute color distance</td>
+<td>
+Compute color distance
+</td>
+</tr>
+<tr>
+<td>color_luminance</td>
+<td></td>
+<td>Find the luminance of a particular color, scaled 0-1</td>
+<td>
+Find the luminance of a particular color, scaled 0-1
+</td>
+</tr>
+<tr>
+<td>color_match</td>
+<td></td>
+<td>Match colors by visual distance</td>
+<td>
+Helpful for pairing colors across light/dark palettes
+</td>
+</tr>
+<tr>
+<td>color_rgb_table</td>
+<td></td>
+<td>Convert vector of colors to named tbl</td>
+<td>
+Convert vector of colors to named tbl
+</td>
+</tr>
+<tr>
+<td>color_separate</td>
+<td></td>
+<td>Separate a vector of colors based on their distance</td>
+<td>
+Separate a vector of colors based on their distance
+</td>
+</tr>
+<tr>
+<td>colors2css</td>
+<td></td>
+<td>Convert a list of colors to SCSS/Sass variables or classes</td>
+<td>
+Convert a list of colors to SCSS/Sass variables or classes
+</td>
+</tr>
+<tr>
+<td>common_names</td>
+<td></td>
+<td>Find the names in common</td>
+<td>
+Given named objects, find the names in common
+</td>
+</tr>
+<tr>
+<td>creds_to_renviron</td>
+<td></td>
+<td>Write named keypairs to an .Renviron / .Rprofile file</td>
+<td>
+Writes key pairs to .Renviron / .Rprofile and adds .Renviron to .gitignore if not already there.
+</td>
+</tr>
+<tr>
+<td>css_col2vec</td>
+<td></td>
+<td>Convert a CSS representation of a color to an r,g,b numeric</td>
+<td>
+Convert a CSS representation of a color to an r,g,b numeric
+</td>
+</tr>
+<tr>
+<td>dep_read</td>
+<td></td>
+<td>Read a dependency from file</td>
+<td>
+Read a dependency from file
+</td>
+</tr>
+<tr>
+<td>dep_write</td>
+<td></td>
+<td>Write a dependency to file</td>
+<td>
+Write a dependency to file
+</td>
+</tr>
+<tr>
+<td>dir_fn</td>
+<td></td>
+<td>Create a directory path pointing function</td>
+<td>
+Create a directory path pointing function
+</td>
+</tr>
+<tr>
+<td>dirs</td>
+<td></td>
+<td>Path functions for commonly used directories</td>
+<td>
+Path functions for commonly used directories
+</td>
+</tr>
+<tr>
+<td>.file</td>
+<td></td>
+<td>All the files that can be navigated to with file if they exist</td>
+<td>
+All the files that can be navigated to with file if they exist
+</td>
+</tr>
+<tr>
+<td>duration_print</td>
+<td></td>
+<td>Translate a duration into the human-legible estimation as a character</td>
+<td>
+Translate a duration into the human-legible estimation as a character
+</td>
+</tr>
+<tr>
+<td>excel_date</td>
+<td></td>
+<td>Convert Excel character date representation to a Date</td>
+<td>
+Convert Excel character date representation to a Date
+</td>
+</tr>
+<tr>
+<td>expr_pipe</td>
+<td></td>
+<td>Return a list of expressions all piped together as a single expression</td>
+<td>
+Return a list of expressions all piped together as a single expression
+</td>
+</tr>
+<tr>
+<td>ext</td>
+<td></td>
+<td>Extract the file extensions from a filepath</td>
+<td>
+Given a path, extract the file extension
+</td>
+</tr>
+<tr>
+<td>file_fn</td>
+<td></td>
+<td>Return the appropriate function for reading the specified path/extension</td>
+<td>
+Return the appropriate function for reading the specified path/extension
+</td>
+</tr>
+<tr>
+<td>file</td>
+<td></td>
+<td>Go to a specified file in the Virga Labs golem project</td>
+<td>
+A List object with convenience functions that open the named file in RStudio. An R named sublist of all files in the R folder if such a folder exists
+</td>
+</tr>
+<tr>
+<td>filter_to</td>
+<td></td>
+<td>Change or apply filters to output type</td>
+<td>
+Useful in concert with axis brushing
+</td>
+</tr>
+<tr>
+<td>find_by_class</td>
+<td></td>
+<td>Find an object by it's class</td>
+<td>
+Find an object by it's class
+</td>
+</tr>
+<tr>
+<td>fn_name</td>
+<td></td>
+<td>Retrieve the function name</td>
+<td>
+Sometimes a function is passed down the call stack and it's name is unknown. This function finds the name without having to pass it down the call stack as an argument.
+</td>
+</tr>
+<tr>
+<td>folder</td>
+<td></td>
+<td>Go to a specified folder in the Virga Labs golem project</td>
+<td>
+Go to a specified folder in the Virga Labs golem project
+</td>
+</tr>
+<tr>
+<td>fun_docs_table</td>
+<td></td>
+<td>Create a table of functions and their uses</td>
+<td>
+Create a table of functions and their uses
+</td>
+</tr>
+<tr>
+<td>gbort</td>
+<td></td>
+<td>Custom error message</td>
+<td>
+Throw abort with format_error
+</td>
+</tr>
+<tr>
+<td>get_from_ns</td>
+<td></td>
+<td>Get an object from a namespace</td>
+<td>
+Get an object from a namespace
+</td>
+</tr>
+<tr>
+<td>get_global</td>
+<td></td>
+<td>Get an object from the global environment</td>
+<td>
+Get an object from the global environment
+</td>
+</tr>
+<tr>
+<td>get_package_fns</td>
+<td></td>
+<td>Get the names of all exported functions in a package</td>
+<td>
+Get the names of all exported functions in a package
+</td>
+</tr>
+<tr>
+<td>glue_js</td>
+<td></td>
+<td>Create a JS string with glue insertions
+glue .open = !@ &amp; .close = @#</td>
+<td>
+Create a JS string with glue insertions
+glue .open = !@ &amp; .close = @#
+</td>
+</tr>
+<tr>
+<td>gmsg</td>
+<td></td>
+<td>Custom message
+Message using format_message &amp; cat_line</td>
+<td>
+Custom message
+Message using format_message &amp; cat_line
+</td>
+</tr>
+<tr>
+<td>%nin%</td>
+<td></td>
+<td>Are lhs values absent from set on rhs?</td>
+<td>
+Are lhs values absent from set on rhs?
+</td>
+</tr>
+<tr>
+<td>%|0|%</td>
+<td></td>
+<td>Replace a 0 length value</td>
+<td>
+If the lhs is length 0, replace with rhs
+</td>
+</tr>
+<tr>
+<td>%|legit|%</td>
+<td></td>
+<td>If legit lhs, else rhs</td>
+<td>
+If legit lhs, else rhs
+</td>
+</tr>
+<tr>
+<td>%|zchar|%</td>
+<td></td>
+<td>Replace zero-length character strings with right hand side</td>
+<td>
+Replace zero-length character strings with right hand side
+</td>
+</tr>
+<tr>
+<td>gwarn</td>
+<td></td>
+<td>Custom warning message</td>
+<td>
+Throw cli_alert_warning with format_warning
+</td>
+</tr>
+<tr>
+<td>if_debug</td>
+<td></td>
+<td>Run expressions only when option use_debug = TRUE</td>
+<td>
+Run expressions only when option use_debug = TRUE
+</td>
+</tr>
+<tr>
+<td>ignore_files</td>
+<td></td>
+<td>Add lines to .gitignore</td>
+<td>
+Add lines to .gitignore
+</td>
+</tr>
+<tr>
+<td>inequality_key</td>
+<td></td>
+<td>Inequality conversion key</td>
+<td>
+Inequality conversion key
+</td>
+</tr>
+<tr>
+<td>install_remote</td>
+<td></td>
+<td>Install a package</td>
+<td>
+Install a package
+</td>
+</tr>
+<tr>
+<td>is_error</td>
+<td></td>
+<td>Is object an error</td>
+<td>
+Is object an error
+</td>
+</tr>
+<tr>
+<td>is_filepath</td>
+<td></td>
+<td>Is path a file path</td>
+<td>
+Given a path, is it a filepath?
+</td>
+</tr>
+<tr>
+<td>is_legit</td>
+<td></td>
+<td>Is object legit?</td>
+<td>
+Is object non-null, non-empty, non-NA, and not a try-error?
+</td>
+</tr>
+<tr>
+<td>is_package_dev</td>
+<td></td>
+<td>Is package in development or installed</td>
+<td>
+Is package in development or installed
+</td>
+</tr>
+<tr>
+<td>is_package</td>
+<td></td>
+<td>Is working directory a package?</td>
+<td>
+Is working directory a package?
+</td>
+</tr>
+<tr>
+<td>join_check</td>
+<td></td>
+<td>Detect possible duplicates of rows or columns after a join</td>
+<td>
+Detect possible duplicates of rows or columns after a join
+</td>
+</tr>
+<tr>
+<td>key_out</td>
+<td></td>
+<td>Handle different output type requests for match_df</td>
+<td>
+Handle different output type requests for match_df
+</td>
+</tr>
+<tr>
+<td>key_pairs_duplicated</td>
+<td></td>
+<td>Find duplicates in key pairs</td>
+<td>
+Find duplicates in key pairs
+</td>
+</tr>
+<tr>
+<td>key_pairs_text</td>
+<td></td>
+<td>Make key-pairs from a named character vector</td>
+<td>
+Make key-pairs from a named character vector
+</td>
+</tr>
+<tr>
+<td>last_updated</td>
+<td></td>
+<td>Gather last updated times for on-disk files</td>
+<td>
+Check the last modified time files or paths
+</td>
+</tr>
+<tr>
+<td>len_unique</td>
+<td></td>
+<td>The length of unique values in a vector</td>
+<td>
+The length of unique values in a vector
+</td>
+</tr>
+<tr>
+<td>list.files2</td>
+<td></td>
+<td>List full file paths with the file name as the name</td>
+<td>
+List full file paths with the file name as the name
+</td>
+</tr>
+<tr>
+<td>luminance_filter</td>
+<td></td>
+<td>Filter colors based on a luminance threshold</td>
+<td>
+Filter colors based on a luminance threshold
+</td>
+</tr>
+<tr>
+<td>magnitude_order</td>
+<td></td>
+<td>Compute the order of magnitude</td>
+<td>
+Uses the floor to round
+</td>
+</tr>
+<tr>
+<td>magnitude_triplet</td>
+<td></td>
+<td>Compute the order of magnitude triplet ie thousand, million, trillion</td>
+<td>
+Compute the order of magnitude triplet ie thousand, million, trillion
+</td>
+</tr>
+<tr>
+<td>make_names</td>
+<td></td>
+<td>Make a file path name with underscores</td>
+<td>
+Make a file path name with underscores
+</td>
+</tr>
+<tr>
+<td>map_class</td>
+<td></td>
+<td>Match the classes of one object to that of another object</td>
+<td>
+Match the classes of one object to that of another object
+</td>
+</tr>
+<tr>
+<td>match_df</td>
+<td></td>
+<td>Extract matching rows of a data frame.</td>
+<td>
+Match works in the same way as join, but instead of return the combined
+dataset, it only returns the matching rows from the first dataset. This is
+particularly useful when you've summarised the data in some way
+and want to subset the original data by a characteristic of the subset.
+</td>
+</tr>
+<tr>
+<td>match_letters</td>
+<td></td>
+<td>Match the first n letters to supplied arguments</td>
+<td>
+Case insensitive matching of argument to possibilities provided in ellipsis.
+</td>
+</tr>
+<tr>
+<td>max2</td>
+<td></td>
+<td>An alternative to max that preserves names</td>
+<td>
+An alternative to max that preserves names
+</td>
+</tr>
+<tr>
+<td>missing_args</td>
+<td></td>
+<td>Get the missing arguments from the function as character</td>
+<td>
+Get the missing arguments from the function as character
+</td>
+</tr>
+<tr>
+<td>mkpath</td>
+<td></td>
+<td>Construct a path</td>
+<td>
+Given a path, construct it if it does not exist.
+</td>
+</tr>
+<tr>
+<td>most</td>
+<td></td>
+<td>Are most values TRUE</td>
+<td>
+IF more than half the values are TRUE, returns TRUE
+</td>
+</tr>
+<tr>
+<td>move_js_to_folder</td>
+<td></td>
+<td>Move all js files to js folder</td>
+<td>
+Move all js files to js folder
+</td>
+</tr>
+<tr>
+<td>need_pkg</td>
+<td></td>
+<td>Get a function from a package, abort if package not installed.</td>
+<td>
+Get a function from a package, abort if package not installed.
+</td>
+</tr>
+<tr>
+<td>needs_update</td>
+<td></td>
+<td>Check if files need to be updated</td>
+<td>
+Check if files need to be updated
+</td>
+</tr>
+<tr>
+<td>nonull</td>
+<td></td>
+<td>Is value non-null?</td>
+<td>
+Is value non-null?
+</td>
+</tr>
+<tr>
+<td>not_na</td>
+<td></td>
+<td>Is value non-NA?</td>
+<td>
+Is value non-NA?
+</td>
+</tr>
+<tr>
+<td>num_chr_suffi</td>
+<td></td>
+<td>Abbreviations of numeric magnitude</td>
+<td>
+Abbreviations of numeric magnitude
+</td>
+</tr>
+<tr>
+<td>num2str_vec</td>
+<td></td>
+<td>Convert number to string Vectorized version</td>
+<td>
+Convert number to string Vectorized version
+</td>
+</tr>
+<tr>
+<td>num2str</td>
+<td></td>
+<td>Convert numeric value to a string abbreviation with K, M, B for Thousand, Million &amp; Billion</td>
+<td>
+Convert numeric value to a string abbreviation with K, M, B for Thousand, Million &amp; Billion
+</td>
+</tr>
+<tr>
+<td>object_ext</td>
+<td></td>
+<td>Provide the appropriate file extension for a given object</td>
+<td>
+Provide the appropriate file extension for a given object
+</td>
+</tr>
+<tr>
+<td>object_fn</td>
+<td></td>
+<td>Return the appropriate function for writing the supplied object to disk</td>
+<td>
+Return the appropriate function for writing the supplied object to disk
+</td>
+</tr>
+<tr>
+<td>object_write</td>
+<td></td>
+<td>Provide the appropriate file read/write function</td>
+<td>
+Write an object to disk
+</td>
+</tr>
+<tr>
+<td>opts</td>
+<td></td>
+<td>Check option value. Use interactively only!</td>
+<td>
+Check option value. Use interactively only!
+</td>
+</tr>
+<tr>
+<td>pkg_ns</td>
+<td></td>
+<td>Return the current package namespace</td>
+<td>
+Return the current package namespace
+</td>
+</tr>
+<tr>
+<td>profile_script</td>
+<td></td>
+<td>profile_script</td>
+<td>
+This function will add profiling code to a script wherever the following flags are found in the first non-spacing characters on the line:
 
-dataset, it only returns the matching rows from the first dataset. This
-is particularly useful when you’ve summarised the data in some way and
-want to subset the original data by a characteristic of the subset. \|
-\|match_letters \|Match the first n letters to supplied arguments \|Case
-insensitive matching of argument to possibilities provided in ellipsis.
-\| \|max2 \|An alternative to max that preserves names \|An alternative
-to max that preserves names \| \|missing_args \|Get the missing
-arguments from the function as character \|Get the missing arguments
-from the function as character \| \|mkpath \|Construct a path \|Given a
-path, construct it if it does not exist. \| \|most \|Are most values
-TRUE \|IF more than half the values are TRUE, returns TRUE \|
-\|move_js_to_folder \|Move all js files to js folder \|Move all js files
-to js folder \| \|need_pkg \|Get a function from a package, abort if
-package not installed. \|Get a function from a package, abort if package
-not installed. \| \|needs_update \|Check if files need to be updated
-\|Check if files need to be updated \| \|nonull \|Is value non-null?
-\|Is value non-null? \| \|not_na \|Is value non-NA? \|Is value non-NA?
-\| \|num_chr_suffi \|Abbreviations of numeric magnitude \|Abbreviations
-of numeric magnitude \| \|num2str_vec \|Convert number to string
-Vectorized version \|Convert number to string Vectorized version \|
-\|num2str \|Convert numeric value to a string abbreviation with K, M, B
-for Thousand, Million & Billion \|Convert numeric value to a string
-abbreviation with K, M, B for Thousand, Million & Billion \|
-\|object_ext \|Provide the appropriate file extension for a given object
-\|Provide the appropriate file extension for a given object \|
-\|object_fn \|Return the appropriate function for writing the supplied
-object to disk \|Return the appropriate function for writing the
-supplied object to disk \| \|object_write \|Provide the appropriate file
-read/write function \|Write an object to disk \| \|opts \|Check option
-value. Use interactively only! \|Check option value. Use interactively
-only! \| \|pkg_ns \|Return the current package namespace \|Return the
-current package namespace \| \|profile_script \|profile_script \|This
-function will add profiling code to a script wherever the following
-flags are found in the first non-spacing characters on the line:
+#&lt;p Opening comment flag where profile_open will be inserted.
+#&gt;p Closing comment flag where profile_close will be inserted.
 
-\#\<p Opening comment flag where profile_open will be inserted. \#\>p
-Closing comment flag where profile_close will be inserted. \| \|read_js
-\|Read Javascript file \|Read Javascript file \| \|reexports \|Objects
-exported from other packages \|These objects are imported from other
-packages. Follow the links below to see their documentation.
+</td>
+</tr>
+<tr>
+<td>read_js</td>
+<td></td>
+<td>Read Javascript file</td>
+<td>
+Read Javascript file
+</td>
+</tr>
+<tr>
+<td>reexports</td>
+<td></td>
+<td>Objects exported from other packages</td>
+<td>
+These objects are imported from other packages. Follow the links
+below to see their documentation.
 
-plyrround_any
 
-rlang%\|%, %\|\|% \| \|regex_op \|Create a compound regex grouped
-statement \|Create a compound regex grouped statement \| \|regex_or
-\|Create a compound regex grouped OR statement \|Create a compound regex
-grouped OR statement \| \|rgb2hex \|Convert r,g,b,a values as string or
-numeric to hex \|Convert r,g,b,a values as string or numeric to hex \|
-\|rle_df \|rle_df - create a run-length-encoding data.frame \|Given an
-rle this function will return a data.frame of starts, ends, and indexes
-thereof of the run lengths. Credit:
-<https://stackoverflow.com/questions/43875716/find-start-and-end-positions-indices-of-runs-consecutive-values>
-\| \|rle_seq \|Create a sequence from the start to the end for a given
-value from an rle_df for indexing \|Create a sequence from the start to
-the end for a given value from an rle_df for indexing \| \|round_to
-\|Find the global minima/maxima of input vectors \|If accuracy is
-omitted, number will be rounded to the nearest order of magnitude IE
-145, if fn = min, will round to 100 \| \|shiny_error_recover \|Toggle
-recover on error when obtuse shiny errors are encountered \|Toggle
-recover on error when obtuse shiny errors are encountered \| \|size
-\|Digital storage size conversion See object.size \|Digital storage size
-conversion See object.size \| \|smode \|Statistical mode \|Return the
-most frequenctly occuring item in a dataset \| \|startup \|Load project
-& user-level .Renviron & .Rprofile \|Load project & user-level .Renviron
-& .Rprofile \| \|str_break_every \|Break word every x characters \|Break
-word every x characters \| \|str_inequality \|Convert inequality
-statements between character, mathematic, symbol and function
-representations \|Convert inequality statements between character,
-mathematic, symbol and function representations \| \|`%&#124;try&#124;%`
-\|Try an expression \|Calls the expression (LHS) & if it fails return
-RHS \| \|time_elapsed \|Return a logical on an interval \|Return a
-logical on an interval \| \|toggle \|Toggle an option \|Meant for
-interactive use only. \| \|unit_conversion \|Abbreviations of numeric
-magnitude for various units \|Abbreviations of numeric magnitude for
-various units \| \|unit_find \|Find the row corresponding to a value in
-unit_conversion \|Find the row corresponding to a value in
-unit_conversion \| \|unit_modify_vec \|Modify unit abbreviation,
-vectorized version \|Modify unit abbreviation, vectorized version \|
-\|unit_modify \|Modify unit abbreviations \|Modify unit abbreviations \|
-\|unit_string \|Extract the units from a string \|It is assumed that
-units are encased in parentheses at the end of the string \|
-\|unload_namespaces \|Unload namespaces prior to package install
-\|Unload namespaces prior to package install \| \|use_reimport \|Add a
-function to reimports \|Add a function to reimports \|
-\|use_UU_reimports \|Write R/aaa_reimports.R file \|Write
-R/aaa_reimports.R file \| \|vlookup_from_ref \|Vlookup replace using a
-lookup column and reference table \|Vlookup replace using a lookup
-column and reference table \| \|week_factor \|Get numeric day of the
-week \|Get numeric day of the week \| \|write_dir_fn \|Write dir helper
-function that are robust to dev vs deployed package states \|Write dir
-helper function that are robust to dev vs deployed package states \|
-\|write_opts \|Write all the option checking functions to a file \|Write
-all the option checking functions to a file \| \|write_to_rprofile
-\|Write expressions to the .Rprofile \|Write expressions to the
-.Rprofile \| \|xpath_sibling_between \|Generate xpath to find sibling
-nodes between two elements The function produces a compounding xpath
-with each subsequent argument provided. Thus the final argument
-specified will be the node that is selected by the resulting xpath with
-the exception of nested_tag_contains which helps to identify a nested
-tag by its contents \|Generate xpath to find sibling nodes between two
-elements The function produces a compounding xpath with each subsequent
-argument provided. Thus the final argument specified will be the node
-that is selected by the resulting xpath with the exception of
-nested_tag_contains which helps to identify a nested tag by its contents
-\| \|zchar_remove \|Remove zero length strings (or string with all
-spaces) \|Remove zero length strings (or string with all spaces) \|
-\|zchar \|Is zero-length character? \|Is zero-length character? \|
+  plyrround_any
+
+  rlang%|%, %||%
+</td>
+</tr>
+<tr>
+<td>regex_op</td>
+<td></td>
+<td>Create a compound regex grouped statement</td>
+<td>
+Create a compound regex grouped statement
+</td>
+</tr>
+<tr>
+<td>regex_or</td>
+<td></td>
+<td>Create a compound regex grouped OR statement</td>
+<td>
+Create a compound regex grouped OR statement
+</td>
+</tr>
+<tr>
+<td>rgb2hex</td>
+<td></td>
+<td>Convert r,g,b,a values as string or numeric to hex</td>
+<td>
+Convert r,g,b,a values as string or numeric to hex
+</td>
+</tr>
+<tr>
+<td>rle_df</td>
+<td></td>
+<td>rle_df - create a run-length-encoding data.frame</td>
+<td>
+Given an rle this function will return a data.frame of starts, ends, and indexes thereof of the run lengths.
+Credit: https://stackoverflow.com/questions/43875716/find-start-and-end-positions-indices-of-runs-consecutive-values
+</td>
+</tr>
+<tr>
+<td>rle_seq</td>
+<td></td>
+<td>Create a sequence from the start to the end for a given value from an rle_df for indexing</td>
+<td>
+Create a sequence from the start to the end for a given value from an rle_df for indexing
+</td>
+</tr>
+<tr>
+<td>round_to</td>
+<td></td>
+<td>Find the global minima/maxima of input vectors</td>
+<td>
+If accuracy is omitted, number will be rounded to the nearest order of magnitude IE 145, if fn = min, will round to 100
+</td>
+</tr>
+<tr>
+<td>shiny_error_recover</td>
+<td></td>
+<td>Toggle recover on error when obtuse shiny errors are encountered</td>
+<td>
+Toggle recover on error when obtuse shiny errors are encountered
+</td>
+</tr>
+<tr>
+<td>size</td>
+<td></td>
+<td>Digital storage size conversion
+See object.size</td>
+<td>
+Digital storage size conversion
+See object.size
+</td>
+</tr>
+<tr>
+<td>smode</td>
+<td></td>
+<td>Statistical mode</td>
+<td>
+Return the most frequenctly occuring item in a dataset
+</td>
+</tr>
+<tr>
+<td>startup</td>
+<td></td>
+<td>Load project &amp; user-level .Renviron &amp; .Rprofile</td>
+<td>
+Load project &amp; user-level .Renviron &amp; .Rprofile
+</td>
+</tr>
+<tr>
+<td>str_break_every</td>
+<td></td>
+<td>Break word every x characters</td>
+<td>
+Break word every x characters
+</td>
+</tr>
+<tr>
+<td>str_inequality</td>
+<td></td>
+<td>Convert inequality statements between character, mathematic, symbol and function representations</td>
+<td>
+Convert inequality statements between character, mathematic, symbol and function representations
+</td>
+</tr>
+<tr>
+<td>`%|try|%`</td>
+<td></td>
+<td>Try an expression</td>
+<td>
+Calls the expression (LHS) &amp; if it fails return RHS
+</td>
+</tr>
+<tr>
+<td>time_elapsed</td>
+<td></td>
+<td>Return a logical on an interval</td>
+<td>
+Return a logical on an interval
+</td>
+</tr>
+<tr>
+<td>toggle</td>
+<td></td>
+<td>Toggle an option</td>
+<td>
+Meant for interactive use only.
+</td>
+</tr>
+<tr>
+<td>unit_conversion</td>
+<td></td>
+<td>Abbreviations of numeric magnitude for various units</td>
+<td>
+Abbreviations of numeric magnitude for various units
+</td>
+</tr>
+<tr>
+<td>unit_find</td>
+<td></td>
+<td>Find the row corresponding to a value in unit_conversion</td>
+<td>
+Find the row corresponding to a value in unit_conversion
+</td>
+</tr>
+<tr>
+<td>unit_modify_vec</td>
+<td></td>
+<td>Modify unit abbreviation, vectorized version</td>
+<td>
+Modify unit abbreviation, vectorized version
+</td>
+</tr>
+<tr>
+<td>unit_modify</td>
+<td></td>
+<td>Modify unit abbreviations</td>
+<td>
+Modify unit abbreviations
+</td>
+</tr>
+<tr>
+<td>unit_string</td>
+<td></td>
+<td>Extract the units from a string</td>
+<td>
+It is assumed that units are encased in parentheses at the end of the string
+</td>
+</tr>
+<tr>
+<td>unload_namespaces</td>
+<td></td>
+<td>Unload namespaces prior to package install</td>
+<td>
+Unload namespaces prior to package install
+</td>
+</tr>
+<tr>
+<td>use_reimport</td>
+<td></td>
+<td>Add a function to reimports</td>
+<td>
+Add a function to reimports
+</td>
+</tr>
+<tr>
+<td>use_UU_reimports</td>
+<td></td>
+<td>Write R/aaa_reimports.R file</td>
+<td>
+Write R/aaa_reimports.R file
+</td>
+</tr>
+<tr>
+<td>vlookup_from_ref</td>
+<td></td>
+<td>Vlookup replace using a lookup column and reference table</td>
+<td>
+Vlookup replace using a lookup column and reference table
+</td>
+</tr>
+<tr>
+<td>week_factor</td>
+<td></td>
+<td>Get numeric day of the week</td>
+<td>
+Get numeric day of the week
+</td>
+</tr>
+<tr>
+<td>write_dir_fn</td>
+<td></td>
+<td>Write dir helper function that are robust to dev vs deployed package states</td>
+<td>
+Write dir helper function that are robust to dev vs deployed package states
+</td>
+</tr>
+<tr>
+<td>write_opts</td>
+<td></td>
+<td>Write all the option checking functions to a file</td>
+<td>
+Write all the option checking functions to a file
+</td>
+</tr>
+<tr>
+<td>write_to_rprofile</td>
+<td></td>
+<td>Write expressions to the .Rprofile</td>
+<td>
+Write expressions to the .Rprofile
+</td>
+</tr>
+<tr>
+<td>xpath_sibling_between</td>
+<td></td>
+<td>Generate xpath to find sibling nodes between two elements
+The function produces a compounding xpath with each subsequent argument provided. Thus the final argument specified will be the node that is selected by the resulting xpath with the exception of nested_tag_contains which helps to identify a nested tag by its contents</td>
+<td>
+Generate xpath to find sibling nodes between two elements
+The function produces a compounding xpath with each subsequent argument provided. Thus the final argument specified will be the node that is selected by the resulting xpath with the exception of nested_tag_contains which helps to identify a nested tag by its contents
+</td>
+</tr>
+<tr>
+<td>zchar_remove</td>
+<td></td>
+<td>Remove zero length strings (or string with all spaces)</td>
+<td>
+Remove zero length strings (or string with all spaces)
+</td>
+</tr>
+<tr>
+<td>zchar</td>
+<td></td>
+<td>Is zero-length character?</td>
+<td>
+Is zero-length character?
+</td>
+</tr>
+</tbody>
+</table>
