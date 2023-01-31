@@ -138,7 +138,7 @@ unit_conversion <- tibble::tribble(
 #'
 
 fun_docs_table <- function(package = pkgload::pkg_name()) {
-  rds <- purrr::map(list.files2("man", recursive = FALSE), \(.x) {
+  rds <- purrr::map(list.files2("man", recursive = FALSE, pattern = "Rd$"), \(.x) {
     doc <- tools::parse_Rd(.x)
     rlang::set_names(doc, vapply(
       doc,
@@ -148,14 +148,16 @@ fun_docs_table <- function(package = pkgload::pkg_name()) {
   })
   purrr::map_dfr(rds, \(.x) {
     doc <- .x
-    desc <- purrr::map_chr(rlang::set_names(c("name","family", "title", "description")), \(.x) {
+    desc <- purrr::map_chr(rlang::set_names(c("name","concept", "title", "description")), \(.x) {
+      browser(expr = .x == "family")
       glue::glue_collapse(as.character(unlist(doc[[.x]] %||% "")))
     })
     names(desc) <- stringr::str_to_title(names(desc))
     tibble::tibble_row(
       !!!desc
     )
-  })
+  }) |>
+    dplyr::arrange(Concept)
 }
 
 #' Compute the order of magnitude
