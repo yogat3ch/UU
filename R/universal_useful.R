@@ -138,7 +138,7 @@ unit_conversion <- tibble::tribble(
 #'
 
 fun_docs_table <- function(package = pkgload::pkg_name()) {
-  rds <- purrr::map(list.files2("man", include.dirs = FALSE), \(.x) {
+  rds <- purrr::map(list.files2("man", recursive = FALSE), \(.x) {
     doc <- tools::parse_Rd(.x)
     rlang::set_names(doc, vapply(
       doc,
