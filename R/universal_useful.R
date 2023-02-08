@@ -777,6 +777,25 @@ fn_name <- function(fn) {
 
 }
 
+#' Print function formals as a list
+#'
+#' @param f \code{fun}
+#'
+#' @return \code{msg}
+#' @export
+#'
+#' @examples
+#' fml_list(base::apply)
+fml_list <- function(f, paired = TRUE) {
+  fmls <- rlang::fn_fmls(f)
+  out <- if (paired)
+    rlang::syms(rlang::set_names(names(fmls)))
+  else
+    fmls
+
+  dput(out)
+}
+
 #' Create a compound regex grouped statement
 #'
 #' @param x \code{(character)} regex strings
