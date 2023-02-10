@@ -251,6 +251,30 @@ unit_find <- function(x) {
   }, .init = rlang::expr(!!rlang::sym(.cols[1]) == !!x)))
 }
 
+#' Which is larger
+#'
+#' @param x \code{num/obj}
+#' @param y \code{num/obj}
+#' @param compare_length \code{lgl} whether the lengths rather than the values should be compared
+#'
+#' @return \code{num} the index of the larger, or 0 if equal
+#' @export
+#'
+#' @examples
+#' larger(1,2)
+#' larger(1,2, compare_length = FALSE)
+#' larger(letters[1:3],letters[1:2])
+larger <- function(x, y, compare_length = TRUE) {
+  v <- list(x, y)
+  if (compare_length)
+    v <- purrr::map(v, length)
+  if (v[[1]] == v[[2]]) {
+    0
+  } else {
+    which.max(purrr::list_flatten(v))
+  }
+}
+
 #' Are most values TRUE
 #' @description IF more than half the values are TRUE, returns TRUE
 #' @param x \code{lgl}
