@@ -4,10 +4,12 @@
 \alias{regex_or}
 \title{Create a compound regex grouped OR statement}
 \usage{
-regex_or(x, prefix = "", suffix = "")
+regex_or(x, prefix = "", suffix = "", type = "|")
 }
 \arguments{
 \item{x}{\code{(character)} regex strings}
+
+\item{type}{\code{(character)} \code{|}, \code{&}, \code{before}, \code{not_before} supported.}
 }
 \value{
 \code{(character)} grouped regex OR statement

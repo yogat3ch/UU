@@ -825,12 +825,12 @@ fml_list <- function(f, paired = TRUE) {
 #' @param x \code{(character)} regex strings
 #' @param pre \code{(character)} regex tokens to precede each string group. IE `(?:[pre]x)` w/out the braces
 #' @param suf \code{(character)} regex tokens to follow each string group. IE `(?:x[suf])` w/out the braces
-#' @param type \code{(character)} `|`, `&` supported
+#' @param type \code{(character)} `|`, `&`, `before`, `not_before` supported.
 #' @return \code{(character)} grouped regex statement
 #' @export
 
 regex_op <- function(x, type = "|", prefix = "", suffix = "") {
-  paste0(paste0("(?",switch(type, `|` = ":", `&` = "=.*"),prefix, x,suffix,")"), collapse = switch(type, `|` = "|", `&` = ""))
+  paste0(paste0("(?",switch(type, `|` = ":", `&` = "=.*", before = "<=", not_before = "!="),prefix, x,suffix,")"), collapse = switch(type, `before` =, `not_before` =, `|` = "|", `&` = ""))
 }
 
 #' Create a compound regex grouped OR statement
@@ -839,7 +839,7 @@ regex_op <- function(x, type = "|", prefix = "", suffix = "") {
 #' @return \code{(character)} grouped regex OR statement
 #' @export
 
-regex_or <- function(x, prefix = "", suffix = "") regex_op(x, prefix = prefix, suffix = suffix)
+regex_or <- function(x, prefix = "", suffix = "", type = "|") regex_op(x, type = type, prefix = prefix, suffix = suffix)
 
 
 # ----------------------- Mon Apr 08 16:49:54 2019 ------------------------#
@@ -877,6 +877,73 @@ rle_seq <- function(rle_df, value) {
   r <- dplyr::filter(rle_df, values == value)
   seq(r$start, r$end)
 }
+
+#' Concatenate row values in a poorly scraped table
+#'
+#' @param .data \code{tbl} Of data with empty rows
+#' @param col_to_check \code{num} The column with rows populated into which subsequent rows will be collapsed.
+#'
+#' @return \coe{tbl}
+#' @export
+#'
+#' @examples
+#' test_tbl <- tibble::tribble(
+#'~Facility, ~State,           ~City,    ~Production,             ~Closure.Date.Facility.Owners,         ~Water.Use, ~Water.Rights.Amount..Type, ~Water.Rights.Owners,
+#'"Coronado Generating Station",   "AZ",    "St . Johns",       "762 MW", "Units 1 and 2: Salt River Project (SRP)",      "5,200 AF/YR",            "44,000 AF/YR,",                #'"SRP",
+#'NA,     NA,              NA,             NA,                             "2032 (100%)",                 NA,                  "GW only",                   NA,
+#'NA,     NA,              NA,             NA,                                        NA,                 NA,                         NA,                   NA,
+#'"Springerville Generating",   "AZ", "Springerville",     "1,625 MW",      "Unit 1: 2027 Tucson Electric (TEP)",     "10,400 AF/YR",            "77,000 AF/YR,",          "SRP, TEP#',",
+#'"Station",     NA,              NA,             NA,                   "(50%, PC: UNS Energy)",                 NA,                  "GW only",      "Tri-State G&T",
+#'NA,     NA,              NA,             NA,                                        NA,                 NA,                         NA,                   NA,
+#'NA,     NA,              NA,             NA,                            "Unit 2: 2032",                 NA,                         NA,                   NA,
+#'NA,     NA,              NA,             NA,                                        NA,                 NA,                         NA,                   NA,
+#'NA,     NA,              NA,             NA,                         "Tri-State (25%)",                 NA,                         NA,                   NA,
+#'NA,     NA,              NA,             NA,                                        NA,                 NA,                         NA,                   NA,
+#'NA,     NA,              NA,             NA,                          "Units 3 and 4:",                 NA,                         NA,                   NA,
+#'NA,     NA,              NA,             NA,                                        NA,                 NA,                         NA,                   NA,
+#'NA,     NA,              NA,             NA,                           "TBD SRP (25%)",                 NA,                         NA,                   NA,
+#'NA,     NA,              NA,             NA,                                        NA,                 NA,                         NA,                   NA,
+#'NA,     NA,              NA,             NA,                                        NA,                 NA,                         NA,                   NA,
+#'"Cholla Power Plant",   "AZ",   "Joseph City",       "767 MW",   "Units 1 and 2: Arizona Public Service",      "9,200 AF/YR",             "9,550 AF/YR,",                "APS",
+#'NA,     NA,              NA,             NA,                      "2025 Company (APS)",                 NA,                  "GW only",                   NA,
+#'NA,     NA,              NA,             NA,   "(100%, PC: Pinnacle West)Unit 3: 2020",                 NA,                         NA,                   NA,
+#'NA,     NA,              NA,             NA,                                        NA,                 NA,                         NA,                   NA,
+#'NA,     NA,              NA,             NA,                                        NA,                 NA,                         NA,                   NA,
+#'"Kayenta Mine",   "AZ",       "Kayenta", "6 .5 million",           "Unknown Peabody Energy (100%)",          "Unknown",            "11,200 AF/YR,",            "Peabody",
+#'NA,     NA,              NA,   "short tons",                                        NA, "(est . less than",                  "GW only",                   NA,
+#'NA,     NA,              NA,             NA,                                        NA,       "100 AF/YR)",                         NA,                   NA
+#')
+#'(out <- concat_rows(test_tbl, State))
+concat_rows <- function(.data, col_to_check = 1) {
+
+
+  col_to_check <- rlang::enexpr(col_to_check)
+  wrapped <- zchar(.data[[col_to_check]]) | is.na(.data[[col_to_check]])
+  new_tbl <- if (any(wrapped)) {
+    to_concat <- rle_df(wrapped) |>
+      dplyr::filter(values) |>
+      apply(1, \(.x) {.x["start"]:.x["end"]})
+
+    new_tbl <- .data[0, ]
+    out <- list()
+    for (i in seq_along(to_concat)) {
+      idx <- to_concat[[i]]
+
+      .rows <- trimws(purrr::imap_chr(.data[idx, ], \(.x, .y) {
+        paste0(.x %|% '', collapse = " ")
+      }))
+      out[[i]] <- purrr::imap_dfc(.rows, \(.x, .y) {
+        paste(.data[min(idx) - 1, .y], .x)
+      })
+    }
+    new_tbl <- dplyr::bind_rows(out)
+    new_tbl <- purrr::map_dfc(new_tbl, trimws)
+  } else
+    .data
+
+  return(new_tbl)
+}
+
 
 #' @title Detect possible duplicates of rows or columns after a join
 #'

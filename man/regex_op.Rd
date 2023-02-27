@@ -9,7 +9,7 @@ regex_op(x, type = "|", prefix = "", suffix = "")
 \arguments{
 \item{x}{\code{(character)} regex strings}
 
-\item{type}{\code{(character)} \code{|}, \code{&} supported}
+\item{type}{\code{(character)} \code{|}, \code{&}, \code{before}, \code{not_before} supported.}
 
 \item{pre}{\code{(character)} regex tokens to precede each string group. IE \verb{(?:[pre]x)} w/out the braces}
 
