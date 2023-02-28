@@ -878,6 +878,20 @@ rle_seq <- function(rle_df, value) {
   seq(r$start, r$end)
 }
 
+#' Create an RLE Grouping from a logical vector
+#'
+#' @param x \code{lgl} vector
+#'
+#' @return \code{list}
+#' @export
+#'
+#' @examples
+#' rle_groups(sample(c(TRUE, FALSE), 20, replace = TRUE))
+rle_groups <- function(x) {
+  rle_df(x) |>
+    dplyr::filter(values) |>
+    apply(1, \(.x) {.x["start"]:.x["end"]})
+}
 #' Concatenate row values in a poorly scraped table
 #'
 #' @param .data \code{tbl} Of data with empty rows
@@ -920,9 +934,7 @@ concat_rows <- function(.data, col_to_check = 1) {
   col_to_check <- rlang::enexpr(col_to_check)
   wrapped <- zchar(.data[[col_to_check]]) | is.na(.data[[col_to_check]])
   new_tbl <- if (any(wrapped)) {
-    to_concat <- rle_df(wrapped) |>
-      dplyr::filter(values) |>
-      apply(1, \(.x) {.x["start"]:.x["end"]})
+    to_concat <- rle_groups(wrapped)
 
     new_tbl <- .data[0, ]
     out <- list()
