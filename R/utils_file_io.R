@@ -130,6 +130,25 @@ file_fn <- function(x, write = FALSE) {
 
 }
 
+#' Write lines at a specific location in a file
+#'
+#' @param file \code{chr} path to file
+#' @param ... \code{chr} lines to write
+#' @param after \code{num/chr} either a line number of "end" to write it at the end
+#'
+#' @return the resulting file
+#' @export
+
+write_lines <- function(file, ..., after = "end") {
+  lines <- readLines(file)
+  to_add <- unlist(rlang::dots_list(...))
+  if (identical(after, "end"))
+    after <- length(lines)
+  lines <- append(lines, to_add, after = after)
+  write(lines, file = file)
+  cli::cat_line(lines)
+}
+
 #' Path functions for commonly used directories
 #' @param ... \code{(chr)} directory paths
 #' @param mkpath \code{lgl} Whether to return a path regardless of whether the file/dir exists or not
