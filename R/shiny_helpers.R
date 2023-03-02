@@ -62,3 +62,16 @@ shiny_error_recover <- function() {
 read_js <- function(filename) {
   as_js(glue::glue_collapse(readLines(filename), sep = "\n"))
 }
+
+#' Make a randomly formatted name into snakecase id
+#'
+#' @param x \code{chr}
+#'
+#' @return \code{chr} as a snakecase id
+#' @export
+#'
+#' @examples
+#' nm_to_id("This convoluted name")
+nm_to_id <- function(x) {
+  paste0(stringr::str_extract_all(tolower(x), "[[:alnum:]]+")[[1]], collapse = "_")
+}
