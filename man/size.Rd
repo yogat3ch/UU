@@ -2,14 +2,20 @@
 % Please edit documentation in R/universal_useful.R
 \name{size}
 \alias{size}
+\alias{size_}
 \title{Digital storage size conversion
 See \link[utils]{object.size}}
 \usage{
 size(
   x,
-  in_unit = c("b", "Kb", "Mb", "Gb", "Tb", "Pb", "Eb", "Zb", "Yb")[1],
-  out_unit = "b",
-  standard = c("IEC", "SI")[1]
+  in_unit = "b",
+  out_unit = c("b", "Kb", "Mb", "Gb", "Tb", "Pb", "Eb", "Zb", "Yb")[3]
+)
+
+size_(
+  x,
+  in_unit = "b",
+  out_unit = c("b", "Kb", "Mb", "Gb", "Tb", "Pb", "Eb", "Zb", "Yb")[3]
 )
 }
 \arguments{
@@ -17,7 +23,7 @@ size(
 
 \item{in_unit}{\code{(character)} units of x}
 
-\item{out_unit}{\code{(character)} units of output number}
+\item{out_unit}{\code{(character)} units of output number \strong{Default: Mb}. See \link[utils]{object.size} for the options.}
 
 \item{standard}{\code{(character)}}
 }
@@ -27,9 +33,14 @@ size(
 \description{
 Digital storage size conversion
 See \link[utils]{object.size}
+
+Vectorized version of size
 }
 \examples{
 size(50, "mb")
 size(50, "gb")
 size(50, "gb", "mb")
+}
+\seealso{
+size_
 }

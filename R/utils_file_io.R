@@ -21,6 +21,32 @@ ext <- function(path, strip = FALSE, new_ext) {
   out
 }
 
+#' Return the size of a package, or all packages in a folder
+#'
+#' @param packages \code{chr} of package names
+#' @param path \code{chr} with package folders in it such as \code{\link[base]{.libPaths}}
+#'
+#' @return \code{chr/tbl} depending on whether packages or path is provided
+#' @export
+#'
+#' @examples
+#' package_size()
+package_size <- function(packages, path = .libPaths()[1]) {
+  if (!missing(packages)) {
+    purrr::map_vec(.ptype = character(), rlang::set_names(packages), \(.x) {
+      system(paste("du -sh", system.file(package = .x), "| awk '{print $1}'"), intern =
+               TRUE)
+    })
+  } else {
+    tibble::tibble(dir_path = list.files2(path, full.names = TRUE),
+                          dir_size = purrr::map_vec(.ptype = numeric(), dir_path, \(.x) {sum(unlist(fs::dir_map(.x, all = TRUE, file.size)))}),
+                          dir_sizeMB = size_(dir_size, out_unit = "MB"),
+                          pkg_name = basename(dir_path)) |>
+      dplyr::arrange(dir_size) |>
+      dplyr::select(pkg_name, dir_sizeMB, dir_size, dir_path)
+  }
+}
+
 #' Read a dependency from file
 #'
 #' @param filename \code{(chr)} path to the file

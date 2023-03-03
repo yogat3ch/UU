@@ -532,37 +532,61 @@ load_obj <- function(file) {
   stringsAsFactors = FALSE,
   check.names = FALSE,
   IEC = c(1, 1024^(1:8)),
-  SI = c(1, 1000^(1:8)),
-  type = c("b", "Kb", "Mb", "Gb", "Tb", "Pb", "Eb", "Zb", "Yb")
+  type_legacy = c("b", "Kb", "Mb", "Gb", "Tb", "Pb", NA, NA, NA),
+  type_IEC = c("B", "KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB", "YiB"),
+  type_SI = c("B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"),
+  SI = c(1, 1000^(1:8))
 )
 #' Digital storage size conversion
 #' See \link[utils]{object.size}
 #' @param x \code{(numeric)}
 #' @param in_unit \code{(character)} units of x
-#' @param out_unit \code{(character)} units of output number
+#' @param out_unit \code{(character)} units of output number **Default: Mb**. See \link[utils]{object.size} for the options.
 #' @param standard \code{(character)}
 #' @return \code{(numeric)} value in `out_unit`s
 #' @export
-#'
+#' @seealso size_
 #' @examples
 #' size(50, "mb")
 #' size(50, "gb")
 #' size(50, "gb", "mb")
 
-size <- function(x, in_unit = c("b", "Kb", "Mb", "Gb", "Tb", "Pb", "Eb", "Zb", "Yb")[1], out_unit = "b", standard = c("IEC", "SI")[1]) {
-  if (!inherits(x, "object_size"))
+size <- function(x, in_unit = "b", out_unit = c("b", "Kb", "Mb", "Gb", "Tb", "Pb", "Eb", "Zb", "Yb")[3]) {
+  if (!is.numeric(x))
     x <- object.size(x)
 
-  .standard <- match_letters(standard, "IEC", "SI", ignore.case = TRUE)
-  .in_unit <- match_letters(in_unit, .size$type, ignore.case = TRUE)
-  .out_unit <- match_letters(out_unit, .size$type, ignore.case = TRUE)
-  out_bytes <- (.size[grepl(paste0("^",.in_unit), .size$type, ignore.case = TRUE), .standard, drop = TRUE] * x)
-  out <-  out_bytes / .size[grepl(paste0("^",.out_unit), .size$type, ignore.case = TRUE), .standard, drop = TRUE]
-  print(out_bytes, units = .out_unit)
-  return(as.numeric(out))
+  in_idx <- size_idx(in_unit)
+  .x <- if (in_unit %nin% c("b", "B")) {
+    # Get the multiplier
+    in_mlt <- .size[[size_type(in_idx)]][in_idx]
+    # Convert to bytes
+    x * in_mlt
+  } else
+    x
+  # Convert to out unit
+  # Get the index
+  out_idx <- size_idx(out_unit)
+  # Get the divisor
+  out_div <- .size[[size_type(out_idx)]][out_idx]
+  # Get the out units
+  out <- .x / out_div
+  return(out)
 }
-
-
+size_idx <- function(unit) {
+  col_out <- purrr::keep(dplyr::select(.size, tidyselect::starts_with("type")), \(.x) {any(.x %in% unit)})
+  rlang::set_names(which(unit == col_out[[1]]), names(col_out))
+}
+size_type <- function(idx) {
+  out <- stringr::str_extract(names(idx), UU::regex_or(c("IEC","SI", "legacy")))
+  if (out == "SI")
+    "SI"
+  else
+    "IEC"
+}
+#' Vectorized version of size
+#' @export
+#' @rdname size
+size_ <- Vectorize(size)
 
 
 #' An alternative to \link[base]{max} that preserves names
