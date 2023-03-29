@@ -18,7 +18,7 @@ assign_in_ns(
 \item{ns_env}{\code{env} of the namespace}
 }
 \value{
-\code{none}
+\code{x} the object
 }
 \description{
 Unlocks and relocks namespaces and bindings as needed

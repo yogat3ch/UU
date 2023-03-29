@@ -55,7 +55,7 @@ get_from_ns <- function(nm = c("active", "state")[1], .env = .GlobalEnv) {
 #' @param nm \code{chr} name for object in the namespace
 #' @param ns_env \code{env} of the namespace
 #'
-#' @return \code{none}
+#' @return \code{x} the object
 #' @export
 
 assign_in_ns <- function(x, nm = rlang::expr_deparse(rlang::enexpr(x)), ns_env = rlang::ns_env(pkg_name())) {
@@ -75,5 +75,6 @@ assign_in_ns <- function(x, nm = rlang::expr_deparse(rlang::enexpr(x)), ns_env =
     rlang::env_binding_lock(ns_env, nm)
   if (e_is_locked)
     rlang::env_lock(ns_env)
+  return(x)
 }
 
