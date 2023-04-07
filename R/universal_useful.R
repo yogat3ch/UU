@@ -437,6 +437,24 @@ vlookup_from_ref <- function(
   return(base)
 }
 
+#' Simple lookup of values
+#'
+#' @param x \code{any} Values to lookup
+#' @param lookup \code{named any} names will be used as replacement
+#'
+#' @return \code{any}
+#' @export
+#'
+#' @examples
+#' lookup <- rlang::set_names(1:5, letters[1:5])
+#' vlookup(sample(1:5, 5), lookup)
+vlookup <- function(x, lookup) {
+  nl <- names(lookup)
+  for (i in seq_along(x)) {
+    x[i] <- nl[which(lookup == x[i])]
+  }
+  x
+}
 
 #' Custom error message
 #' @description Throw \link[rlang]{abort} with \link[cli]{format_error}
