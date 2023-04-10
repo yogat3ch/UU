@@ -408,6 +408,18 @@ all_in <- function(x, y) {
   all.equal(sort(x), sort(y))
 }
 
+#' Switch the names and the values of a vector
+#'
+#' @param x \code{named object}
+#'
+#' @return \code{obj}
+#' @export
+#'
+#' @examples
+#' names_values_switch(c(a = 1, b = 2))
+names_values_switch <- function(x) {
+  rlang::set_names(names(x), x)
+}
 
 #' Vlookup replace using a lookup column and reference table
 #'
