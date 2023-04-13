@@ -87,7 +87,7 @@ color_rgb_table <- function(colors) {
 #' @examples
 #' color_luminance(css_col2vec('white'))
 color_luminance <- function(red, green, blue, alpha, ...) {
-  .rgb <- c(red = red, green = green, blue = blue)
+  .rgb <- rlang::set_names(c(red, green, blue), c("red", "green", "blue"))
   .rgb <- .rgb / 255
   lt <- .rgb <= .04045
   .rgb[lt] <- .rgb[lt] / 12.92
@@ -96,6 +96,26 @@ color_luminance <- function(red, green, blue, alpha, ...) {
   unname(0.2126*.rgb["red"] + 0.7152*.rgb["green"] + 0.0722*.rgb["blue"])
 }
 
+#' Set text color based on luminance
+#' @description
+#' Useful for applying one or another of text colors based on the luminance of a background
+#'
+#' @param colors \code{chr} of css colors
+#' @param text_light \code{chr} CSS color for light text
+#' @param text_dark \code{chr} CSS color for dark text
+#'
+#' @return \code{chr} CSS text colors
+#' @export
+#'
+#' @examples
+#' color_text_by_luminance(c("white", "magenta", "red", "brown", "yellow"))
+color_text_by_luminance <- function(colors, text_light = "white", text_dark = "black") {
+  l <- apply(css_col2vec_(colors),2, \(.x) {color_luminance(.x["red"], .x["green"], .x["blue"], .x["alpha"])} )
+  out <- vector("character", length = length(l))
+  out[l > .5] <- text_dark
+  out[l < .5] <- text_light
+  return(out)
+}
 
 #' Filter colors based on a luminance threshold
 #'
