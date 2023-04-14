@@ -3,6 +3,7 @@
 S3method(key_out,default)
 S3method(key_out,logical)
 S3method(key_out,numeric)
+export("%allin%")
 export("%nin%")
 export("%|%")
 export("%|0|%")

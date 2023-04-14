@@ -70,6 +70,16 @@
 #' 1 %nin% 1:10
 `%nin%` <- Negate(`%in%`)
 
+#' Are all lhs values in rhs?
+#' @name %allin%
+#' @export
+#' @examples
+#' 2:5 %allin% 1:10
+#' 5:11 %allin% 1:10
+`%allin%` <- function(lhs, rhs) {
+  isTRUE(all(lhs %in% rhs))
+}
+
 #' Is value non-null?
 #' @author Think.fr
 #' @seealso is_legit
