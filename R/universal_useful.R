@@ -395,7 +395,7 @@ smode <- function(x) {
 }
 
 
-#' Are all items in `x` in `y`?
+#' Does `x` = `y`?
 #'
 #' @param x \code{vector}
 #' @param y \code{vector}
@@ -404,8 +404,8 @@ smode <- function(x) {
 #' @export
 #'
 
-all_in <- function(x, y) {
-  all.equal(sort(x), sort(y))
+all_equal <- function(x, y) {
+  isTRUE(all.equal(sort(x), sort(y)))
 }
 
 #' Switch the names and the values of a vector
