@@ -2,7 +2,7 @@ folder_helpers <- function(.env = rlang::ns_env("UU")) {
   if (is.null(get0("folder", envir = .env, inherits = FALSE))) {
     dir_folders <- purrr::compact(purrr::map(dirs, ~{
       if (dir.exists(.x()))
-        rlang::new_function(rlang::pairlist2(path = .x()), body = rlang::expr(rstudioapi::filesPaneNavigate(path)))
+        rlang::new_function(rlang::pairlist2(path = .x()), body = rlang::expr(rstudioapi::filesPaneNavigate(fs::path_abs(path))))
     }))
     assign("folder", dir_folders, envir = .env)
   }

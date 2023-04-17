@@ -1,10 +1,10 @@
-#' Go to a specified folder in the Virga Labs golem project
+#' Go to a specified folder
 #' @param path \code{chr} to go to. Each method has a preset default based on the function name, but any method can be used to go to any folder specified.
 #' @include utils_file_io.R
 #' @export
 folder <- NULL
 
-#' Go to a specified file in the Virga Labs golem project
+#' Go to a specified file
 #' @description A List object with convenience functions that open the named file in RStudio. An `R` named sublist of all files in the _R_ folder if such a folder exists
 #' @param path \code{chr} file to go to. Each method has a preset default based on the function name, but any path can be used to go to any file specified.
 #' @export
