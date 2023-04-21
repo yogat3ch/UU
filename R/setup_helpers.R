@@ -176,17 +176,22 @@ write_to_rprofile <- function(..., scope = c("user", "project")[1]) {
 #' Write _R/aaa_reimports.R_ file with all current infix operators
 #' @description
 #' All infix operators available: `r cli::pluralize("{stringr::str_subset(ls(rlang::pkg_env('UU')), '^%')}")`
-#'
+#' @inheritParams base::file.copy
 #' @family project setup
 #' @param file \code{chr} path to file to write
 #' @export
 
-use_UU_reimports <- function(file = "R/aaa_reimports.R") {
-  file.copy(
-    system.file("extdata/reimports.R", package = "UU"),
-    file
-  )
-  cli::cli_alert_success("{.path {file}} written successfully. Document the package to use.")
+use_UU_reimports <- function(file = "R/aaa_reimports.R", overwrite = FALSE) {
+  if (!file.exists(file)) {
+    file.copy(
+      system.file("extdata/reimports.R", package = "UU"),
+      file,
+      overwrite = overwrite
+    )
+    cli::cli_alert_success("{.path {file}} written successfully. Document the package to use.")
+  } else {
+    cli::cli_alert_danger("{.path {file}} already exists. Set `overwrite = TRUE` to overwrite.")
+  }
 }
 
 #' Add a function to reimports

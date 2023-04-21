@@ -4,10 +4,12 @@
 \alias{use_UU_reimports}
 \title{Write \emph{R/aaa_reimports.R} file with all current infix operators}
 \usage{
-use_UU_reimports(file = "R/aaa_reimports.R")
+use_UU_reimports(file = "R/aaa_reimports.R", overwrite = FALSE)
 }
 \arguments{
 \item{file}{\code{chr} path to file to write}
+
+\item{overwrite}{logical; should existing destination files be overwritten?}
 }
 \description{
 All infix operators available: \%allin\%, \%nin\%, \%|\%, \%|0|\%, \%|legit|\%, \%|try|\%, \%|zchar|\%, and \%||\%

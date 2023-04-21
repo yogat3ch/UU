@@ -26,7 +26,7 @@
 }
 
 #' If legit lhs, else rhs
-#' @inheritParams `%|try|%`
+#' @inheritParams %|try|%
 #' @name %|legit|%
 #' @seealso is_legit
 #' @return If legit lhs else rhs
