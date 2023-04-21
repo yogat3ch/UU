@@ -17,3 +17,15 @@ write_to_rprofile(..., scope = c("user", "project")[1])
 \description{
 Write expressions to the \emph{.Rprofile}
 }
+\seealso{
+Other project setup: 
+\code{\link{creds_to_renviron}()},
+\code{\link{fun_docs_table}()},
+\code{\link{ignore_files}()},
+\code{\link{install_remote}()},
+\code{\link{key_pairs_duplicated}()},
+\code{\link{key_pairs_text}()},
+\code{\link{use_UU_reimports}()},
+\code{\link{use_reimport}()}
+}
+\concept{project setup}

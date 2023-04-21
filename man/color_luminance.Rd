@@ -24,3 +24,17 @@ Find the luminance of a particular color, scaled 0-1
 \examples{
 color_luminance(css_col2vec('white'))
 }
+\seealso{
+Other color: 
+\code{\link{color_cycle}()},
+\code{\link{color_distance}()},
+\code{\link{color_match}()},
+\code{\link{color_rgb_table}()},
+\code{\link{color_separate}()},
+\code{\link{color_text_by_luminance}()},
+\code{\link{colors2css}()},
+\code{\link{css_col2vec}()},
+\code{\link{luminance_filter}()},
+\code{\link{rgb2hex}()}
+}
+\concept{color}

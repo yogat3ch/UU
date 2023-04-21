@@ -26,3 +26,17 @@ Convert a list of colors to SCSS/Sass variables or classes
 \examples{
 colors2css(c(a = "white", b = "green"))
 }
+\seealso{
+Other color: 
+\code{\link{color_cycle}()},
+\code{\link{color_distance}()},
+\code{\link{color_luminance}()},
+\code{\link{color_match}()},
+\code{\link{color_rgb_table}()},
+\code{\link{color_separate}()},
+\code{\link{color_text_by_luminance}()},
+\code{\link{css_col2vec}()},
+\code{\link{luminance_filter}()},
+\code{\link{rgb2hex}()}
+}
+\concept{color}

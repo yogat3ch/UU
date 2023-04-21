@@ -31,3 +31,4 @@ xpath_sibling_between(
 Generate xpath to find sibling nodes between two elements
 The function produces a compounding xpath with each subsequent argument provided. Thus the final argument specified will be the node that is selected by the resulting xpath with the exception of \code{nested_tag_contains} which helps to identify a nested tag by its contents
 }
+\concept{webscraping}

@@ -29,3 +29,15 @@ success message if a value is written
 \description{
 Writes key pairs to \emph{.Renviron} / \emph{.Rprofile} and adds .Renviron to \emph{.gitignore} if not already there.
 }
+\seealso{
+Other project setup: 
+\code{\link{fun_docs_table}()},
+\code{\link{ignore_files}()},
+\code{\link{install_remote}()},
+\code{\link{key_pairs_duplicated}()},
+\code{\link{key_pairs_text}()},
+\code{\link{use_UU_reimports}()},
+\code{\link{use_reimport}()},
+\code{\link{write_to_rprofile}()}
+}
+\concept{project setup}

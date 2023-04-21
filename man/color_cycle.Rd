@@ -24,3 +24,17 @@ Makes a cyclic color palette of a specified length using the specified transform
 \examples{
 color_cycle(c("rgba(18,180,211,1)", "rgba(2,120,170,1)", "rgba(0,57,73,1)"), n = 9, amount = .2)
 }
+\seealso{
+Other color: 
+\code{\link{color_distance}()},
+\code{\link{color_luminance}()},
+\code{\link{color_match}()},
+\code{\link{color_rgb_table}()},
+\code{\link{color_separate}()},
+\code{\link{color_text_by_luminance}()},
+\code{\link{colors2css}()},
+\code{\link{css_col2vec}()},
+\code{\link{luminance_filter}()},
+\code{\link{rgb2hex}()}
+}
+\concept{color}

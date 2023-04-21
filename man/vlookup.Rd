@@ -21,3 +21,9 @@ Simple lookup of values
 lookup <- rlang::set_names(1:5, letters[1:5])
 vlookup(sample(1:5, 5), lookup)
 }
+\seealso{
+Other vectors: 
+\code{\link{names_values_switch}()},
+\code{\link{vlookup_from_ref}()}
+}
+\concept{vectors}

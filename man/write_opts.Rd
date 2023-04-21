@@ -15,3 +15,10 @@ write_opts(file = "R/utils_opts.R")
 \description{
 Write all the option checking functions to a file
 }
+\seealso{
+Other options: 
+\code{\link{if_debug}()},
+\code{\link{opts}},
+\code{\link{toggle}}
+}
+\concept{options}

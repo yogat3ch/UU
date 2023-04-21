@@ -12,3 +12,10 @@ if_debug(...)
 \description{
 Run expressions only when option \code{use_debug = TRUE}
 }
+\seealso{
+Other options: 
+\code{\link{opts}},
+\code{\link{toggle}},
+\code{\link{write_opts}()}
+}
+\concept{options}

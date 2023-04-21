@@ -42,3 +42,17 @@ x <- tibble::tribble(
 luminance_filter(x$Hex.Code, TRUE)
 luminance_filter(x$Hex.Code, FALSE)
 }
+\seealso{
+Other color: 
+\code{\link{color_cycle}()},
+\code{\link{color_distance}()},
+\code{\link{color_luminance}()},
+\code{\link{color_match}()},
+\code{\link{color_rgb_table}()},
+\code{\link{color_separate}()},
+\code{\link{color_text_by_luminance}()},
+\code{\link{colors2css}()},
+\code{\link{css_col2vec}()},
+\code{\link{rgb2hex}()}
+}
+\concept{color}

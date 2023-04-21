@@ -15,3 +15,11 @@ pkg_ns(pkg = basename(rprojroot::find_package_root_file()))
 \description{
 Return the current package namespace
 }
+\seealso{
+Other namespaces: 
+\code{\link{assign_in_ns}()},
+\code{\link{get_from_ns}()},
+\code{\link{get_global}()},
+\code{\link{unload_namespaces}()}
+}
+\concept{namespaces}

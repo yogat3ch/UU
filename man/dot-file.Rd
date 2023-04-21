@@ -13,4 +13,10 @@ An object of class \code{character} of length 12.
 \description{
 All the files that can be navigated to with \code{file} if they exist
 }
+\seealso{
+Other file navigation: 
+\code{\link{file}},
+\code{\link{folder}}
+}
+\concept{file navigation}
 \keyword{datasets}

@@ -15,7 +15,8 @@
 #' @param dir_profvis \code{(character)} The directory in which all `profvis` related files will be put. **Default: `"profvis"`**. Profile-ready script copies (if `new_scripts = TRUE`) and Rprof files/directories will be placed here. Set to `NULL` to use the working directory and overwrite existing files.
 #' @param remove \code{(logical/character)} to indicate whether to remove profiling code. **Default: FALSE**. Change to `TRUE` to remove profile code but leave flags. Change to `"f"/"flags"` to remove code and flags. Remove modifies `.file` in place.
 #' @param new_script \code{(logical)} to indicate whether to write new profile-ready script copies to `dir_profvis`. **Default: TRUE**, if `FALSE` the character vector output  of the profile-ready script lines from the function can be written to a file manually.
-
+#' @family profiling
+#' @export
 
 
 

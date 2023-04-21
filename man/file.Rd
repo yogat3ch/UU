@@ -3,7 +3,7 @@
 \docType{data}
 \name{file}
 \alias{file}
-\title{Go to a specified file in the Virga Labs golem project}
+\title{Go to a specified file}
 \format{
 An object of class \code{list} of length 5.
 }
@@ -16,4 +16,10 @@ file
 \description{
 A List object with convenience functions that open the named file in RStudio. An \code{R} named sublist of all files in the \emph{R} folder if such a folder exists
 }
+\seealso{
+Other file navigation: 
+\code{\link{.file}},
+\code{\link{folder}}
+}
+\concept{file navigation}
 \keyword{datasets}

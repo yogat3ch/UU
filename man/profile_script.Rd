@@ -40,3 +40,4 @@ This function will add profiling code to a script wherever the following flags a
 \item{\code{#>p}}{ Closing comment flag where \code{profile_close} will be inserted.}
 }
 }
+\concept{profiling}

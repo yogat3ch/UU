@@ -18,3 +18,8 @@ An alternative to \link[base]{max} that preserves names
 \examples{
 max2(c(a = 1, b = 2))
 }
+\seealso{
+Other statistics: 
+\code{\link{smode}()}
+}
+\concept{statistics}

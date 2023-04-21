@@ -24,3 +24,12 @@ larger(1,2)
 larger(1,2, compare_length = FALSE)
 larger(letters[1:3],letters[1:2])
 }
+\seealso{
+Other conditionals: 
+\code{\link{all_equal}()},
+\code{\link{is_error}()},
+\code{\link{is_legit}()},
+\code{\link{is_project}()},
+\code{\link{most}()}
+}
+\concept{conditionals}

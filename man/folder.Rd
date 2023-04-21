@@ -3,7 +3,7 @@
 \docType{data}
 \name{folder}
 \alias{folder}
-\title{Go to a specified folder in the Virga Labs golem project}
+\title{Go to a specified folder}
 \format{
 An object of class \code{list} of length 4.
 }
@@ -14,6 +14,12 @@ folder
 \item{path}{\code{chr} to go to. Each method has a preset default based on the function name, but any method can be used to go to any folder specified.}
 }
 \description{
-Go to a specified folder in the Virga Labs golem project
+Go to a specified folder
 }
+\seealso{
+Other file navigation: 
+\code{\link{.file}},
+\code{\link{file}}
+}
+\concept{file navigation}
 \keyword{datasets}

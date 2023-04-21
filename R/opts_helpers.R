@@ -3,6 +3,7 @@
 #' Code is dynamically generated when package is loaded. These will not auto generate properly in a deployed shiny app. See \link{write_opts} for a non-interactive alternative.
 #' @param default if the specified option is not set in the options list, this value is returned. This facilitates retrieving an option and checking whether it is set and setting it separately if not.
 #' @return \code{lgl}
+#' @family options
 #' @export
 opts <- NULL
 
@@ -62,6 +63,7 @@ opts_helpers <- function(.Rprofile = ".Rprofile", .env = rlang::ns_env("UU")) {
 #' @param file \code{chr} Default _R/opts.R_
 #'
 #' @return \code{msg}
+#' @family options
 #' @export
 #'
 write_opts <- function(file = "R/utils_opts.R") {
@@ -77,7 +79,7 @@ write_opts <- function(file = "R/utils_opts.R") {
 #' @description Meant for interactive use only.
 #' @param opt \code{chr} option name to toggle. See `.virga_opts` for standard Virga options
 #' @param set \code{obj} value to set the option to (takes precedence over toggle)
-#'
+#' @family options
 #' @return \code{msg} to inform user of what the option is set to
 #' @export
 toggle <- NULL
@@ -85,7 +87,7 @@ toggle <- NULL
 #' Run expressions only when option `use_debug = TRUE`
 #'
 #' @param ... \code{expr} to evaluate
-#'
+#' @family options
 #' @export
 
 if_debug <- function(...) {

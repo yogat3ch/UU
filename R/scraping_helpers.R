@@ -5,7 +5,7 @@
 #' @param preceding_sibling \code{chr} relative xpath for the type of elements in between the upper and lower bounding elements to retrieve
 #' @param nested_tag \code{chr} relative xpath of an element nested within the `preceding_sibling` elements
 #' @param nested_tag_contains \code{chr} of text that the nested_tag element contains (in order to identify it. The nested tag element itself will be selected).
-#'
+#' @family webscraping
 #' @return \code{chr} xpath statement
 #' @export
 

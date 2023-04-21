@@ -19,12 +19,6 @@ glue_js(
 \item{as_chr}{\code{lgl} Whether to use \code{\link[UU]{as_js}} on the output \code{FALSE} or \link[base]{as.character} \code{TRUE}. \strong{Default FALSE}}
 
 \item{e}{\code{env} calling environment}
-
-\item{.open}{[\code{character(1)}: \sQuote{\\{}]\cr The opening delimiter. Doubling the
-full delimiter escapes it.}
-
-\item{.close}{[\code{character(1)}: \sQuote{\\}}]\cr The closing delimiter. Doubling the
-full delimiter escapes it.}
 }
 \value{
 \code{chr}
@@ -36,3 +30,11 @@ glue \verb{.open = !@} & \verb{.close = @#}
 \examples{
 glue_js("$(document).ready(() => {let x = *{tolower(FALSE)}*)")
 }
+\seealso{
+Other shiny: 
+\code{\link{as_js}()},
+\code{\link{nm_to_id}()},
+\code{\link{read_js}()},
+\code{\link{shiny_error_recover}()}
+}
+\concept{shiny}

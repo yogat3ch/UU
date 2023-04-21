@@ -15,3 +15,8 @@ is_package_dev(pkg_nm = pkg_name())
 \description{
 Is package in development or installed
 }
+\seealso{
+Other package dev: 
+\code{\link{is_package}()}
+}
+\concept{package dev}

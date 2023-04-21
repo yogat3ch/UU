@@ -4,6 +4,7 @@
 #' @param strip \code{(logical)} Whether to strip the extension from the path to return the bare file name
 #' @param new_ext \code{chr} New extension for the filename
 #' @return \code{(character)} with the extensions
+#' @family file IO
 #' @export
 
 ext <- function(path, strip = FALSE, new_ext) {
@@ -28,7 +29,7 @@ ext <- function(path, strip = FALSE, new_ext) {
 #'
 #' @return \code{chr/tbl} depending on whether packages or path is provided
 #' @export
-#'
+#' @family file IO
 #' @examples
 #' package_size()
 package_size <- function(packages, path = .libPaths()[1]) {
@@ -47,11 +48,21 @@ package_size <- function(packages, path = .libPaths()[1]) {
   }
 }
 
+#' @title Make a file path name with underscores
+#' @param \code{(character)} file path
+#' @family file IO
+#' @export
+
+make_names <- function(x) {
+  fs::path_sanitize(x)
+}
+
 #' Read a dependency from file
 #'
 #' @param filename \code{(chr)} path to the file
 #' @param ... Passed on to read function. See \link[UU]{file_fn} for which function will be used based on the filename
 #' @return file contents
+#' @family file IO
 #' @export
 
 dep_read <- function(filename, ...) {
@@ -67,6 +78,7 @@ dep_read <- function(filename, ...) {
 #' @inheritParams dep_read
 #' @param ... Passed on to write function. See \link[UU]{file_fn} for which function will be used based on the filename
 #' @return \code{(message)} indicating success
+#' @family file IO
 #' @export
 
 dep_write <- function(x, filename, ...) {
@@ -87,7 +99,7 @@ dep_write <- function(x, filename, ...) {
 #'
 #' @return \code{(fun)} with pointing function using \link[fs]{path}
 #' @export
-#'
+#' @family file IO
 #' @examples
 #' dir_fn("data")("random_data", "file", ext = "txt")
 dir_fn <- function(base_dir) {
@@ -95,43 +107,13 @@ dir_fn <- function(base_dir) {
 }
 
 
-#' Return a logical on an interval
-#'
-#' @param file \code{chr} filename in which to store the interval time
-#' @param interval \code{period/duration} Default 1 week
-#'
-#' @return \code{lgl}
-#' @export
-#'
-#' @examples
-#' time_elapsed()
-time_elapsed <- function(file = ".interval_timer.rds", interval = lubridate::weeks(1)) {
-  if (file.exists(".gitignore"))
-    usethis::use_git_ignore(".interval_timer.rds")
-  if (file.exists(file)) {
-    prev_time <- readRDS(file)
-    first_run <- FALSE
-  } else {
-    prev_time <- Sys.time()
-    saveRDS(prev_time, file)
-    first_run <- TRUE
-  }
-
-
-  if (Sys.time() > prev_time + interval || first_run) {
-    saveRDS(Sys.time(), file)
-    TRUE
-  } else
-    FALSE
-}
-
 #' @title Return the appropriate function for reading the specified path/extension
 #'
 #' @param x \code{(character)} The extension name or the path to the file
 #' @param write \code{(logical)} Return the writing function? **Default** `FALSE` to return the reading function
 #' @return \code{(function)}
 #' @export
-#'
+#' @family file IO
 #' @examples
 #' file_fn("csv")
 #' file_fn("csv", write = TRUE)
@@ -161,7 +143,7 @@ file_fn <- function(x, write = FALSE) {
 #' @param file \code{chr} path to file
 #' @param ... \code{chr} lines to write
 #' @param after \code{num/chr} either a line number of "end" to write it at the end
-#'
+#' @family file IO
 #' @return the resulting file
 #' @export
 
@@ -180,7 +162,8 @@ write_lines <- function(file, ..., after = "end") {
 #' @param mkpath \code{lgl} Whether to return a path regardless of whether the file/dir exists or not
 #' @param ext \code{(chr)} file extension
 #' @param mustWork \code{lgl} If `TRUE`, an error is given if there are no matching files.
-#' @usage dirs$data()
+#' @usage dirs\$data()
+#' @family file IO
 #' @export
 #' @examples dirs$data("mydata", ext = "csv")
 dirs <- purrr::map(
@@ -207,6 +190,7 @@ dirs <- purrr::map(
 #' @param outfile \code{chr} path to file to write. Default _R/utils_dir_fns.R_
 #' @param overwrite \code{lgl} Whether to overwrite the existing file. Default `TRUE`
 #' @param for_golem \code{lgl} Whether to use the `app_sys` function if package is a golem package
+#' @family file IO
 #' @return \code{msg} and a new file
 #' @export
 
@@ -259,6 +243,7 @@ write_dir_fn <- function(outfile = "R/utils_dir_fns.R", overwrite = TRUE, for_go
 #' @param path \code{(character)} path
 #' @param mkfile \code{(logical)} whether to make the file if it doesn't exist. IF `TRUE` and the path has an extension, both the directory and the file will be created
 #' @param mkdir \code{(logical)} whether to make the directory if it doesn't exist. If `TRUE`, and the `path` does not have an extension, path will be created as a directory path.
+#' @family file IO
 #' @return \code{(informative messages)}
 #' @export
 
@@ -290,7 +275,7 @@ mkpath <- function(path, mkfile = FALSE, mkdir = TRUE) {
 #' @inheritParams base::list.files
 #' @return \code{(named character)}
 #' @export
-#'
+#' @family file IO
 #' @examples
 #' list.files2("~")
 list.files2 <- function(path = ".", full.names =  TRUE, ...) {
@@ -322,7 +307,7 @@ object_ext <- function(object) {
 #' }
 #' @return \code{(function)} See details for which function
 #' @export
-#'
+#' @family file IO
 #' @examples
 #' object_fn(1:15)
 
@@ -352,6 +337,7 @@ object_fn <- function(x, filepath) {
 #' @param ... arguments passed on to methods. See `?object_fn`
 #' @param verbose \code{(logical)} Whether to print saved messages. **Default** `TRUE`
 #' @return Success message if file is written
+#' @family file IO
 #' @export
 
 object_write <- function(x, filename, path, ..., verbose = TRUE) {
@@ -398,6 +384,7 @@ object_write <- function(x, filename, path, ..., verbose = TRUE) {
 #' @param path \code{(lgl)} whether x is a path and all files should be checked
 #' @inheritDotParams base::list.files
 #' @return \code{(POSIXct)} Last modified time
+#' @family file IO
 #' @export
 last_updated <- function(x, path = FALSE, ...) {
   if (!path) {
@@ -425,6 +412,7 @@ last_updated <- function(x, path = FALSE, ...) {
 #'   \item{\code{threshold}}{ The threshold time for comparison}
 #'   \item{\code{needs_update}}{ logical as to whether the file should be updated}
 #' }
+#' @family file IO
 #' @export
 
 needs_update <- function(x, path = FALSE, threshold = lubridate::floor_date(Sys.time(), "day")) {
@@ -440,7 +428,25 @@ needs_update <- function(x, path = FALSE, threshold = lubridate::floor_date(Sys.
 #' @description Given a path, is it a filepath?
 #' @param path \code{(character)} path
 #' @return \code{(logical)}
+#' @family file IO
 #' @export
 is_filepath <- function(path) {
   grepl("\\.\\w{1,}", basename(path))
+}
+
+#' Move all files to a folder
+#'
+#' @param files \code{chr} of files to move
+#' @param folder \code{chr} folder to move them to
+#'
+#' @family file IO
+#' @export
+move_files_to_folder <- function(files = UU::list.files2("inst/app/www", pattern = "\\.js$", include.dirs = FALSE), folder = dirs$js()) {
+  if (!UU::is_legit(files)) {
+    UU::gwarn("No files to move.")
+  } else {
+    purrr::walk(files, ~fs::file_move(.x, fs::path(folder, basename(.x))))
+    if (all(purrr::map_lgl(files, ~file.exists(fs::path(folder, basename(.x))))))
+      cli::cli_alert_success("Files moved to {.path {folder}}: {cli::col_br_blue(paste0(basename(files), collapse = ', '))}")
+  }
 }

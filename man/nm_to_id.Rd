@@ -18,3 +18,11 @@ Make a randomly formatted name into snakecase id
 \examples{
 nm_to_id("This convoluted name")
 }
+\seealso{
+Other shiny: 
+\code{\link{as_js}()},
+\code{\link{glue_js}()},
+\code{\link{read_js}()},
+\code{\link{shiny_error_recover}()}
+}
+\concept{shiny}

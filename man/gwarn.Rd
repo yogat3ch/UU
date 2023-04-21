@@ -27,3 +27,9 @@ time. If \code{"regularly"}, it is displayed once every 8 hours. If
 \description{
 Throw \link[cli]{cli_alert_warning} with \link[cli]{format_warning}
 }
+\seealso{
+Other condition signaling: 
+\code{\link{gbort}()},
+\code{\link{gmsg}()}
+}
+\concept{condition signaling}

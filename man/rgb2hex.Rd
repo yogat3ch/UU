@@ -23,5 +23,17 @@ rgb2hex("rgba(18,180,211,1)", alpha = FALSE)
 }
 \seealso{
 rgb2hex_
+
+Other color: 
+\code{\link{color_cycle}()},
+\code{\link{color_distance}()},
+\code{\link{color_luminance}()},
+\code{\link{color_match}()},
+\code{\link{color_rgb_table}()},
+\code{\link{color_separate}()},
+\code{\link{color_text_by_luminance}()},
+\code{\link{colors2css}()},
+\code{\link{css_col2vec}()},
+\code{\link{luminance_filter}()}
 }
 \concept{color}

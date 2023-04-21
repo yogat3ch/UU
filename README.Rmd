@@ -30,9 +30,11 @@ You can install the development version of UU from [GitHub](https://github.com/)
 # install.packages("devtools")
 devtools::install_github("yogat3ch/UU")
 ```
+Check out the [pkgdown site](https://yogat3ch.github.io/UU/) for more details!
 
 All the fun(s)!
 
 ```{r echo = FALSE, results='asis'}
 bs4Dash::bs4Table(fun_docs_table()) 
 ```
+

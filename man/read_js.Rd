@@ -15,3 +15,11 @@ read_js(filename)
 \description{
 Read Javascript file
 }
+\seealso{
+Other shiny: 
+\code{\link{as_js}()},
+\code{\link{glue_js}()},
+\code{\link{nm_to_id}()},
+\code{\link{shiny_error_recover}()}
+}
+\concept{shiny}

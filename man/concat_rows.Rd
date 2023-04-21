@@ -12,7 +12,7 @@ concat_rows(.data, col_to_check = 1)
 \item{col_to_check}{\code{num} The column with rows populated into which subsequent rows will be collapsed.}
 }
 \value{
-\coe{tbl}
+\code{tbl}
 }
 \description{
 Concatenate row values in a poorly scraped table

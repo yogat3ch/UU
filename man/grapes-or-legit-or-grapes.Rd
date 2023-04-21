@@ -6,11 +6,6 @@
 \usage{
 lhs \%|legit|\% rhs
 }
-\arguments{
-\item{lhs}{\code{(expression)} to try}
-
-\item{rhs}{\code{(expression)} to replace if expression fails}
-}
 \value{
 If legit lhs else rhs
 }

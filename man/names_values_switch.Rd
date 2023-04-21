@@ -18,3 +18,9 @@ Switch the names and the values of a vector
 \examples{
 names_values_switch(c(a = 1, b = 2))
 }
+\seealso{
+Other vectors: 
+\code{\link{vlookup_from_ref}()},
+\code{\link{vlookup}()}
+}
+\concept{vectors}

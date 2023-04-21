@@ -20,3 +20,4 @@ Get a function from a package, abort if package not installed.
 \examples{
 need_pkg("utils", "recover")
 }
+\concept{development}

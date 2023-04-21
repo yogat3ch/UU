@@ -43,4 +43,17 @@ size(50, "gb", "mb")
 }
 \seealso{
 size_
+
+Other rounding: 
+\code{\link{magnitude_order}()},
+\code{\link{magnitude_triplet}()},
+\code{\link{num2str_vec}()},
+\code{\link{num2str}()},
+\code{\link{num_chr_suffi}},
+\code{\link{round_to}()},
+\code{\link{unit_find}()},
+\code{\link{unit_modify_vec}()},
+\code{\link{unit_modify}()},
+\code{\link{unit_string}()}
 }
+\concept{rounding}

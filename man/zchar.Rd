@@ -4,7 +4,7 @@
 \alias{zchar}
 \title{Is zero-length character?}
 \usage{
-zchar(x)
+zchar(...)
 }
 \arguments{
 \item{x}{\code{chr}}
@@ -17,4 +17,10 @@ Is zero-length character?
 }
 \examples{
 zchar("")
+zchar(" ")
 }
+\seealso{
+Other character: 
+\code{\link{zchar_remove}()}
+}
+\concept{character}

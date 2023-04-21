@@ -9,3 +9,11 @@ shiny_error_recover()
 \description{
 Toggle \link[utils]{recover} on error when obtuse shiny errors are encountered
 }
+\seealso{
+Other shiny: 
+\code{\link{as_js}()},
+\code{\link{glue_js}()},
+\code{\link{nm_to_id}()},
+\code{\link{read_js}()}
+}
+\concept{shiny}

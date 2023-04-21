@@ -15,3 +15,8 @@ smode(x)
 \description{
 Return the most frequenctly occuring item in a dataset
 }
+\seealso{
+Other statistics: 
+\code{\link{max2}()}
+}
+\concept{statistics}

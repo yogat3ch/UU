@@ -38,7 +38,7 @@ rgb2hex_ <- Vectorize(rgb2hex)
 #' Convert a CSS representation of a color to an r,g,b numeric
 #'
 #' @param x \code{chr} CSS Vector in hexadecimal or rgb/rgba format
-#'
+#' @family color
 #' @return \code{num} with names r,g,b
 #' @export
 #' @seealso css_col2vec_
@@ -55,17 +55,18 @@ css_col2vec <- function(x) {
     out <- c(out, alpha = ifelse(all(out < 1), 1, 255))
   rlang::set_names(out, c("red","green","blue","alpha"))
 }
-
+#' Vectorized version of `css_col2vec`
+#' @rdname css_col2vec_
 #' @export
 css_col2vec_ <- Vectorize(css_col2vec)
 
 #' Convert vector of colors to named tbl
 #'
 #' @param colors \code{chr} vector of css color representations
-#'
+#' @family color
 #' @return \code{tbl} Columns `red`, `green`, `blue`, `alpha` and each color is a row
 #' @export
-#'
+#' @family color
 #' @examples
 #' color_rgb_table(c("red", "green", "#45fa32"))
 color_rgb_table <- function(colors) {
@@ -83,7 +84,7 @@ color_rgb_table <- function(colors) {
 
 #' @return \code{num}
 #' @export
-#'
+#' @family color
 #' @examples
 #' color_luminance(css_col2vec('white'))
 color_luminance <- function(red, green, blue, alpha, ...) {
@@ -106,7 +107,7 @@ color_luminance <- function(red, green, blue, alpha, ...) {
 #'
 #' @return \code{chr} CSS text colors
 #' @export
-#'
+#' @family color
 #' @examples
 #' color_text_by_luminance(c("white", "magenta", "red", "brown", "yellow"))
 color_text_by_luminance <- function(colors, text_light = "white", text_dark = "black") {
@@ -125,7 +126,7 @@ color_text_by_luminance <- function(colors, text_light = "white", text_dark = "b
 #'
 #' @return \code{chr} vector of colors
 #' @export
-#'
+#' @family color
 #' @examples
 #' x <- tibble::tribble(
 #' ~CSS.Name, ~Hex.Code, ~Decimal.Code,
@@ -170,7 +171,7 @@ luminance_filter <- function(colors, dark_mode, luminance_threshold = .5) {
 #'
 #' @return \code{num} A representation of the distance for comparison with other distances
 #' @export
-#'
+#' @family color
 #' @examples
 #' color_distance(c(a = "rgba(111,96,140,1)"), c("#12B4D3", "green"))
 
@@ -223,6 +224,7 @@ color_distance <- function(x, y) {
 #' @param y \code{chr} Named CSS representations of colors that will be selected from as matches
 #' @param with_replacement \code{lgl} Whether colors in x should have unique matches in y, or if y can be matched with replacement. Default TRUE to match with the closest color in y, regardless if it's already been matched with a previous color in x.
 #' @return \code{tbl} Of matches for all of `x` with the associated distance
+#' @family color
 #' @export
 #' @examples
 #' a <- list(
@@ -314,7 +316,7 @@ color_match <- function(x, y, with_replacement = TRUE) {
 #'
 #' @return \code{chr} The original vector, sorted for contrast
 #' @export
-#'
+#' @family color
 #' @examples
 #' color_separate(c("rgba(18,180,211,1)", "rgba(2,120,170,1)", "rgba(0,57,73,1)",
 #' "rgba(72,36,18,1)", "rgba(111,96,140,1)", "rgba(0,166,212,1)",
@@ -340,7 +342,7 @@ color_separate <- function(x) {
 #'
 #' @return \code{chr} vector of `n` length
 #' @export
-#'
+#' @family color
 #' @examples
 #' color_cycle(c("rgba(18,180,211,1)", "rgba(2,120,170,1)", "rgba(0,57,73,1)"), n = 9, amount = .2)
 color_cycle <- function(colors, n, transform_fn = colorspace::lighten, ...) {
@@ -372,7 +374,7 @@ color_cycle <- function(colors, n, transform_fn = colorspace::lighten, ...) {
 #' @inheritParams base::cat
 #' @return \code{msg} Sass/SCSS formatted variables or classes
 #' @export
-#'
+#' @family color
 #' @examples
 #' colors2css(c(a = "white", b = "green"))
 colors2css <- function(colors, file = "", sass_vars = TRUE) {

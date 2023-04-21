@@ -15,3 +15,11 @@ Get an object from the global environment
 \examples{
 get_global(".Last.value")
 }
+\seealso{
+Other namespaces: 
+\code{\link{assign_in_ns}()},
+\code{\link{get_from_ns}()},
+\code{\link{pkg_ns}()},
+\code{\link{unload_namespaces}()}
+}
+\concept{namespaces}

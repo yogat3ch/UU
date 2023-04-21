@@ -27,3 +27,9 @@ gbort(
 \description{
 Throw \link[rlang]{abort} with \link[cli]{format_error}
 }
+\seealso{
+Other condition signaling: 
+\code{\link{gmsg}()},
+\code{\link{gwarn}()}
+}
+\concept{condition signaling}

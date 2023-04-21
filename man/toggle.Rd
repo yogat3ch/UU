@@ -21,4 +21,11 @@ toggle
 \description{
 Meant for interactive use only.
 }
+\seealso{
+Other options: 
+\code{\link{if_debug}()},
+\code{\link{opts}},
+\code{\link{write_opts}()}
+}
+\concept{options}
 \keyword{datasets}

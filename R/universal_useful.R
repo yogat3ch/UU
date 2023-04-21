@@ -5,11 +5,24 @@
 #'
 #' @return \code{lgl}
 #' @export
-#'
+#' @family character
 #' @examples
 #' zchar("")
-zchar <- function(x) {
-  !nzchar(x)
+#' zchar(" ")
+zchar <- Negate(nzchar)
+
+#' Remove zero length strings (or string with all spaces)
+#'
+#' @param x \code{chr}
+#'
+#' @return \code{chr}
+#' @export
+#' @family character
+#' @examples
+#' zchar_remove(c("", "  ", "a"))
+zchar_remove <- function(x) {
+  .x <- trimws(x)
+  .x[nzchar(.x)]
 }
 
 #' The length of unique values in a vector
@@ -18,7 +31,6 @@ zchar <- function(x) {
 #'
 #' @return \code{dbl}
 #' @export
-#'
 #' @examples
 #' len_unique(c(1,2,1))
 len_unique <- function(x) {
@@ -95,6 +107,7 @@ expr_pipe <- function(exprs) {
 #' @description Is object non-null, non-empty, non-NA, and not a try-error?
 #' @param x \code{(object)}
 #' @return \code{(logical)}
+#' @family conditionals
 #' @export
 
 is_legit <- function(x) {
@@ -103,6 +116,7 @@ is_legit <- function(x) {
 
 
 #' @title Abbreviations of numeric magnitude
+#' @family rounding
 #' @export
 num_chr_suffi <- c("K" = "in thousands", "M" = "in millions", "B" = "in billions", "T" = "in trillions")
 
@@ -129,44 +143,13 @@ unit_conversion <- tibble::tribble(
 )
 
 
-#' Create a table of functions and their uses
-#'
-#' @param package \code{chr} package name
-#'
-#' @return \code{shiny.tag}
-#' @export
-#'
-
-fun_docs_table <- function(package = pkgload::pkg_name()) {
-  rds <- purrr::map(list.files2("man", recursive = FALSE, pattern = "Rd$"), \(.x) {
-    doc <- tools::parse_Rd(.x)
-    rlang::set_names(doc, vapply(
-      doc,
-      function(.x) { gsub("\\\\", "", attr(.x, 'Rd_tag')) },
-      character(1)
-    ))
-  })
-  purrr::map_dfr(rds, \(.x) {
-    doc <- .x
-    desc <- purrr::map_chr(rlang::set_names(c("name","concept", "title", "description")), \(.x) {
-      browser(expr = .x == "family")
-      glue::glue_collapse(as.character(unlist(doc[[.x]] %||% "")))
-    })
-    names(desc) <- stringr::str_to_title(names(desc))
-    tibble::tibble_row(
-      !!!desc
-    )
-  }) |>
-    dplyr::arrange(Concept)
-}
-
 #' Compute the order of magnitude
 #' @description Uses the \link[base]{floor} to round
 #' @param x \code{num}
 #'
 #' @return \code{num}
 #' @export
-#'
+#' @family rounding
 #' @examples
 #' magnitude_order(10^(1:10))
 magnitude_order <- function (x) {
@@ -182,7 +165,7 @@ magnitude_order <- function (x) {
 #' @description If accuracy is omitted, number will be rounded to the nearest order of magnitude IE 145, if `fn = min`, will round to 100
 #' @return \code{num}
 #' @export
-#'
+#' @family rounding
 #' @examples
 #' round_to(runif(10, 5:10), runif(2, 2:5))
 #' round_to(145)
@@ -212,7 +195,7 @@ round_to <- function(..., accuracy = NULL, fn = min, f = NULL) {
 #'
 #' @return \code{lgl}
 #' @export
-#'
+#' @family conditionals
 #' @examples
 #' is_error(try(stop()))
 is_error <- function(x) {
@@ -225,12 +208,13 @@ is_error <- function(x) {
 #'
 #' @return \code{num}
 #' @export
-#'
+#' @family rounding
 #' @examples
 #' magnitude_triplet(10^(1:10))
 magnitude_triplet <- function(x) {
   magnitude_order(x) %/% 3
 }
+
 
 unit_find_ <- Vectorize(function(x) {
   names(unit_conversion)[purrr::map_lgl(unit_conversion, ~x %in% .x)]
@@ -241,7 +225,7 @@ unit_find_ <- Vectorize(function(x) {
 #'
 #' @return \code{tbl}
 #' @export
-#'
+#' @family rounding
 #' @examples
 #' unit_find("B")
 unit_find <- function(x) {
@@ -259,7 +243,7 @@ unit_find <- function(x) {
 #'
 #' @return \code{num} the index of the larger, or 0 if equal
 #' @export
-#'
+#' @family conditionals
 #' @examples
 #' larger(1,2)
 #' larger(1,2, compare_length = FALSE)
@@ -281,7 +265,7 @@ larger <- function(x, y, compare_length = TRUE) {
 #'
 #' @return \code{lgl}
 #' @export
-#'
+#' @family conditionals
 #' @examples
 #' most(c(TRUE,TRUE,FALSE))
 #' most(c(TRUE,FALSE,FALSE))
@@ -295,7 +279,7 @@ most <- function(x) {
 #'
 #' @return \code{chr}
 #' @export
-#'
+#' @family rounding
 #' @examples
 #' unit_string("Elevation (F)")
 unit_string <- function(x) {
@@ -303,6 +287,7 @@ unit_string <- function(x) {
 }
 
 #' @rdname unit_string
+#' @family rounding
 #' @export
 `unit_string<-` <- function(x, value) {
   stringr::str_replace(x, "(?<=\\()[^\\)]+", value)
@@ -313,7 +298,7 @@ unit_string <- function(x) {
 #' @param unit \code{chr} Type of units, supported values are: \code{`r glue::glue("{unique(unit_conversion$unit)}")`}
 #' @param outtype \code{chr} The type of output to be added. Current possibilities are: \code{`r glue::glue("{names(unit_conversion)[-c(1:2)]}")`}
 #' @param magnitude \code{num} The order of magnitude for the unit. The highest triplet will be used. See `magnitude_triplet`
-#'
+#' @family rounding
 #' @return \code{chr} updated units
 #' @export
 #' @seealso unit_modify_vec
@@ -335,6 +320,7 @@ unit_modify <- function(x, unit, outtype, magnitude = magnitude_order(x)) {
 #' Modify unit abbreviation, vectorized version
 #' @inherit unit_modify  params return examples
 #' @seealso unit_modify
+#' @family rounding
 #' @export
 unit_modify_vec <- Vectorize(unit_modify)
 
@@ -353,6 +339,7 @@ unit_modify_vec <- Vectorize(unit_modify)
 #' @return \code{chr}
 #' @export
 #' @seealso num2str_vec
+#' @family rounding
 #' @examples
 #' num2str(10000)
 num2str <- function(x, sf = 2, outtype = c("abbreviated", "with_suffix", "rounded"), suffix_lb = "K") {
@@ -378,12 +365,14 @@ num2str <- function(x, sf = 2, outtype = c("abbreviated", "with_suffix", "rounde
 #' @title Convert number to string Vectorized version
 #' @inherit num2str params return examples
 #' @seealso num2str
+#' @family rounding
 #' @export
 num2str_vec <- Vectorize(num2str)
 
 
 #' @title Statistical mode
 #' @description Return the most frequenctly occuring item in a dataset
+#' @family statistics
 #' @param x \code{(vector)}
 #' @return \code{(vector)}
 #' @export
@@ -399,7 +388,7 @@ smode <- function(x) {
 #'
 #' @param x \code{vector}
 #' @param y \code{vector}
-#'
+#' @family conditionals
 #' @return \code{lgl/chr} See \link[base]{all.equal}
 #' @export
 #'
@@ -414,7 +403,7 @@ all_equal <- function(x, y) {
 #'
 #' @return \code{obj}
 #' @export
-#'
+#' @family vectors
 #' @examples
 #' names_values_switch(c(a = 1, b = 2))
 names_values_switch <- function(x) {
@@ -430,7 +419,7 @@ names_values_switch <- function(x) {
 #'
 #' @return \code{vector}
 #' @export
-#'
+#' @family vectors
 #' @examples
 #' ref <- tibble::tibble(lookup = letters[1:5], value = 1:5)
 #' original <- tibble::tibble(lookup = letters[1:20], base = runif(20, min = 6, max = 20))
@@ -456,7 +445,7 @@ vlookup_from_ref <- function(
 #'
 #' @return \code{any}
 #' @export
-#'
+#' @family vectors
 #' @examples
 #' lookup <- rlang::set_names(1:5, letters[1:5])
 #' vlookup(sample(1:5, 5), lookup)
@@ -475,6 +464,7 @@ vlookup <- function(x, lookup) {
 #' @param trace \code{(trace)} A `trace` object created by \link[rlang]{trace_back}
 #' @param parent \code{(cond)} Supply `parent` when you rethrow an error from a condition handler
 #' @param e \code{(environment)} calling environment. Passed to `glue` for making the message
+#' @family condition signaling
 #' @export
 
 gbort <- function (
@@ -492,6 +482,7 @@ gbort <- function (
 #' @description Throw \link[cli]{cli_alert_warning} with \link[cli]{format_warning}
 #' @inheritParams gbort
 #' @inheritParams rlang::warn
+#' @family condition signaling
 #' @export
 
 gwarn <- function (
@@ -507,6 +498,7 @@ gwarn <- function (
 #' Custom message
 #' Message using \link[cli]{format_message} & \link[cli]{cat_line}
 #' @inheritParams cli::format_message
+#' @family condition signaling
 #' @export
 
 gmsg <- function (
@@ -518,6 +510,13 @@ gmsg <- function (
 
 
 
+#' Is Session in a Project?
+#'
+#' @return \code{lgl}
+#' @export
+#' @family conditionals
+#' @examples
+#' is_project()
 is_project <- function() {
   desc <- utils::packageDescription("rstudioapi")
   if (is_legit(desc) && rstudioapi::isAvailable())
@@ -535,7 +534,7 @@ is_project <- function() {
 #'
 #' @return \code{fun}
 #' @export
-#'
+#' @family development
 #' @examples
 #' need_pkg("utils", "recover")
 need_pkg <- function(pkg, fn) {
@@ -575,6 +574,7 @@ load_obj <- function(file) {
 #' @param standard \code{(character)}
 #' @return \code{(numeric)} value in `out_unit`s
 #' @export
+#' @family rounding
 #' @seealso size_
 #' @examples
 #' size(50, "mb")
@@ -625,20 +625,13 @@ size_ <- Vectorize(size)
 #'
 #' @return \code{atomic} returns the largest element in the vector
 #' @export
-#'
+#' @family statistics
 #' @examples
 #' max2(c(a = 1, b = 2))
 max2 <- function(x) {
   x[which.max(x) %|0|% 1]
 }
 
-#' @title Make a file path name with underscores
-#' @param \code{(character)} file path
-#' @export
-
-make_names <- function(x) {
-  fs::path_sanitize(x)
-}
 
 #' @title Find an object by it's class
 #' @param \code{(environment)} The environment to search
@@ -951,7 +944,7 @@ rle_groups <- function(x) {
 #' @param .data \code{tbl} Of data with empty rows
 #' @param col_to_check \code{num} The column with rows populated into which subsequent rows will be collapsed.
 #'
-#' @return \coe{tbl}
+#' @return \code{tbl}
 #' @export
 #'
 #' @examples

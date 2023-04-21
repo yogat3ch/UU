@@ -20,19 +20,6 @@ need_write <-
     creds[needs_write]
   }
 
-#' Remove zero length strings (or string with all spaces)
-#'
-#' @param x \code{chr}
-#'
-#' @return \code{chr}
-#' @export
-#'
-#' @examples
-#' zchar_remove(c("", "  ", "a"))
-zchar_remove <- function(x) {
-  .x <- trimws(x)
-  .x[nzchar(.x)]
-}
 
 #' Write named keypairs to an _.Renviron_ / _.Rprofile_ file
 #' @description Writes key pairs to _.Renviron_ / _.Rprofile_ and adds .Renviron to _.gitignore_ if not already there.
@@ -42,6 +29,7 @@ zchar_remove <- function(x) {
 #' @param proj_dir \code{(chr)} project directory to write credentials to
 #' @param rprofile \code{(lgl)} whether to write the keypairs to a \link[base]{options} call in a _.Rprofile_ file instead.
 #' @return success message if a value is written
+#' @family project setup
 #' @export
 #'
 
@@ -93,7 +81,7 @@ creds_to_renviron <- function(..., scope = c("user", "project")[1], overwrite = 
 #'
 #' @return \code{chr}
 #' @export
-#'
+#' @family project setup
 #' @examples
 #' key_pairs_text(Sys.getenv())
 key_pairs_text <- function(x) {
@@ -106,7 +94,7 @@ key_pairs_text <- function(x) {
 #'
 #' @return \code{lgl}
 #' @export
-#'
+#' @family project setup
 #' @examples
 #' key_pairs_duplicated(Sys.getenv())
 key_pairs_duplicated <- function(x, fromLast = TRUE) {
@@ -124,6 +112,7 @@ key_pairs_duplicated <- function(x, fromLast = TRUE) {
 #' @param directory \code{(chr)} directory path to `ignore_file`
 #' @param ignore_file \code{chr} filename holding ignores to be modified. Default _.gitignore_
 #' @return \code{informative messages}
+#' @family project setup
 #' @export
 
 ignore_files <- function(lines, directory = ".", ignore_file = ".gitignore") {
@@ -136,7 +125,7 @@ ignore_files <- function(lines, directory = ".", ignore_file = ".gitignore") {
 #'
 #' @param ... \code{exprs}
 #' @param scope \code{chr} which _.Rprofile_ to write to
-#'
+#' @family project setup
 #' @return \code{msg}
 #' @export
 
@@ -184,7 +173,11 @@ write_to_rprofile <- function(..., scope = c("user", "project")[1]) {
 }
 
 
-#' Write _R/aaa_reimports.R_ file
+#' Write _R/aaa_reimports.R_ file with all current infix operators
+#' @description
+#' All infix operators available: `r cli::pluralize("{stringr::str_subset(ls(rlang::pkg_env('UU')), '^%')}")`
+#'
+#' @family project setup
 #' @param file \code{chr} path to file to write
 #' @export
 
@@ -200,7 +193,7 @@ use_UU_reimports <- function(file = "R/aaa_reimports.R") {
 #'
 #' @param pkg \code{chr} package name
 #' @param fun \code{chr} function name
-#'
+#' @family project setup
 #' @return \code{msg}
 #' @export
 use_reimport <- function(pkg, fun) {
@@ -221,7 +214,7 @@ use_reimport <- function(pkg, fun) {
 }
 
 #' Install a package
-#'
+#' @family project setup
 #' @param pkg \code{chr} package names **Required**
 #' @param remote \code{chr} github remote
 #' @param ... \code{args} passed on to \link[base]{install.packages} if no `remote` supplied or \link[remotes]{install_github} if `remote` supplied
@@ -248,4 +241,37 @@ install_remote <- function(pkg, remote, ..., to_desc = TRUE, snapshot = TRUE) {
   }
   if (file.exists("renv.lock") && snapshot)
     UU::need_pkg("renv","snapshot")(prompt = FALSE)
+}
+
+
+
+#' Create a table of functions and their uses
+#'
+#' @param package \code{chr} package name
+#'
+#' @return \code{shiny.tag}
+#' @export
+#' @family project setup
+
+fun_docs_table <- function(package = pkgload::pkg_name()) {
+  rds <- purrr::map(list.files2("man", recursive = FALSE, pattern = "Rd$"), \(.x) {
+    doc <- tools::parse_Rd(.x)
+    rlang::set_names(doc, vapply(
+      doc,
+      function(.x) { gsub("\\\\", "", attr(.x, 'Rd_tag')) },
+      character(1)
+    ))
+  })
+  purrr::map_dfr(rds, \(.x) {
+    doc <- .x
+    desc <- purrr::map_chr(rlang::set_names(c("name","concept", "title", "description")), \(.x) {
+      browser(expr = .x == "family")
+      glue::glue_collapse(as.character(unlist(doc[[.x]] %||% "")))
+    })
+    names(desc) <- stringr::str_to_title(names(desc))
+    tibble::tibble_row(
+      !!!desc
+    )
+  }) |>
+    dplyr::arrange(Concept)
 }

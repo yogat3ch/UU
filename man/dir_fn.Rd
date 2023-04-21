@@ -18,3 +18,24 @@ Create a directory path pointing function
 \examples{
 dir_fn("data")("random_data", "file", ext = "txt")
 }
+\seealso{
+Other file IO: 
+\code{\link{dep_read}()},
+\code{\link{dep_write}()},
+\code{\link{dirs}},
+\code{\link{ext}()},
+\code{\link{file_fn}()},
+\code{\link{is_filepath}()},
+\code{\link{last_updated}()},
+\code{\link{list.files2}()},
+\code{\link{make_names}()},
+\code{\link{mkpath}()},
+\code{\link{move_files_to_folder}()},
+\code{\link{needs_update}()},
+\code{\link{object_fn}()},
+\code{\link{object_write}()},
+\code{\link{package_size}()},
+\code{\link{write_dir_fn}()},
+\code{\link{write_lines}()}
+}
+\concept{file IO}

@@ -15,3 +15,12 @@ is_legit(x)
 \description{
 Is object non-null, non-empty, non-NA, and not a try-error?
 }
+\seealso{
+Other conditionals: 
+\code{\link{all_equal}()},
+\code{\link{is_error}()},
+\code{\link{is_project}()},
+\code{\link{larger}()},
+\code{\link{most}()}
+}
+\concept{conditionals}

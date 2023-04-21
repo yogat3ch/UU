@@ -22,3 +22,17 @@ Useful for applying one or another of text colors based on the luminance of a ba
 \examples{
 color_text_by_luminance(c("white", "magenta", "red", "brown", "yellow"))
 }
+\seealso{
+Other color: 
+\code{\link{color_cycle}()},
+\code{\link{color_distance}()},
+\code{\link{color_luminance}()},
+\code{\link{color_match}()},
+\code{\link{color_rgb_table}()},
+\code{\link{color_separate}()},
+\code{\link{colors2css}()},
+\code{\link{css_col2vec}()},
+\code{\link{luminance_filter}()},
+\code{\link{rgb2hex}()}
+}
+\concept{color}

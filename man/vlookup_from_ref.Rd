@@ -26,3 +26,9 @@ ref <- tibble::tibble(lookup = letters[1:5], value = 1:5)
 original <- tibble::tibble(lookup = letters[1:20], base = runif(20, min = 6, max = 20))
 dplyr::mutate(original, base = vlookup_from_ref(base, lookup, ref$lookup, ref$value))
 }
+\seealso{
+Other vectors: 
+\code{\link{names_values_switch}()},
+\code{\link{vlookup}()}
+}
+\concept{vectors}

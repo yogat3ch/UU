@@ -17,3 +17,15 @@ use_reimport(pkg, fun)
 \description{
 Add a function to reimports
 }
+\seealso{
+Other project setup: 
+\code{\link{creds_to_renviron}()},
+\code{\link{fun_docs_table}()},
+\code{\link{ignore_files}()},
+\code{\link{install_remote}()},
+\code{\link{key_pairs_duplicated}()},
+\code{\link{key_pairs_text}()},
+\code{\link{use_UU_reimports}()},
+\code{\link{write_to_rprofile}()}
+}
+\concept{project setup}

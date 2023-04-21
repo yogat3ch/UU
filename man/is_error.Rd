@@ -18,3 +18,12 @@ Is object an error
 \examples{
 is_error(try(stop()))
 }
+\seealso{
+Other conditionals: 
+\code{\link{all_equal}()},
+\code{\link{is_legit}()},
+\code{\link{is_project}()},
+\code{\link{larger}()},
+\code{\link{most}()}
+}
+\concept{conditionals}

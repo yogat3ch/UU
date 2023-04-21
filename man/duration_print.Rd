@@ -18,3 +18,10 @@ Translate a duration into the human-legible estimation as a character
 \examples{
 duration_print(lubridate::period(6223))
 }
+\seealso{
+Other time: 
+\code{\link{excel_date}()},
+\code{\link{time_elapsed}()},
+\code{\link{week_factor}()}
+}
+\concept{time}

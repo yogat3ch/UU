@@ -19,3 +19,12 @@ IF more than half the values are TRUE, returns TRUE
 most(c(TRUE,TRUE,FALSE))
 most(c(TRUE,FALSE,FALSE))
 }
+\seealso{
+Other conditionals: 
+\code{\link{all_equal}()},
+\code{\link{is_error}()},
+\code{\link{is_legit}()},
+\code{\link{is_project}()},
+\code{\link{larger}()}
+}
+\concept{conditionals}

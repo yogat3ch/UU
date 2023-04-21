@@ -22,5 +22,11 @@ Check option value. \strong{Use interactively only!}
 \seealso{
 write_opts
 Code is dynamically generated when package is loaded. These will not auto generate properly in a deployed shiny app. See \link{write_opts} for a non-interactive alternative.
+
+Other options: 
+\code{\link{if_debug}()},
+\code{\link{toggle}},
+\code{\link{write_opts}()}
 }
+\concept{options}
 \keyword{datasets}

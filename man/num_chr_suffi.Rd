@@ -13,4 +13,18 @@ num_chr_suffi
 \description{
 Abbreviations of numeric magnitude
 }
+\seealso{
+Other rounding: 
+\code{\link{magnitude_order}()},
+\code{\link{magnitude_triplet}()},
+\code{\link{num2str_vec}()},
+\code{\link{num2str}()},
+\code{\link{round_to}()},
+\code{\link{size}()},
+\code{\link{unit_find}()},
+\code{\link{unit_modify_vec}()},
+\code{\link{unit_modify}()},
+\code{\link{unit_string}()}
+}
+\concept{rounding}
 \keyword{datasets}

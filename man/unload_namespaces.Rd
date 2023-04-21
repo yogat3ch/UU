@@ -9,8 +9,16 @@ unload_namespaces(ns, verbose = FALSE)
 \arguments{
 \item{ns}{\code{(chr)} namespaces to unload}
 
-\item{verboe}{\code{lgl}}
+\item{verbose}{\code{lgl}}
 }
 \description{
 Unload namespaces prior to package install
 }
+\seealso{
+Other namespaces: 
+\code{\link{assign_in_ns}()},
+\code{\link{get_from_ns}()},
+\code{\link{get_global}()},
+\code{\link{pkg_ns}()}
+}
+\concept{namespaces}

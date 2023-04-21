@@ -2,7 +2,7 @@
 % Please edit documentation in R/setup_helpers.R
 \name{use_UU_reimports}
 \alias{use_UU_reimports}
-\title{Write \emph{R/aaa_reimports.R} file}
+\title{Write \emph{R/aaa_reimports.R} file with all current infix operators}
 \usage{
 use_UU_reimports(file = "R/aaa_reimports.R")
 }
@@ -10,5 +10,17 @@ use_UU_reimports(file = "R/aaa_reimports.R")
 \item{file}{\code{chr} path to file to write}
 }
 \description{
-Write \emph{R/aaa_reimports.R} file
+All infix operators available: \%allin\%, \%nin\%, \%|\%, \%|0|\%, \%|legit|\%, \%|try|\%, \%|zchar|\%, and \%||\%
 }
+\seealso{
+Other project setup: 
+\code{\link{creds_to_renviron}()},
+\code{\link{fun_docs_table}()},
+\code{\link{ignore_files}()},
+\code{\link{install_remote}()},
+\code{\link{key_pairs_duplicated}()},
+\code{\link{key_pairs_text}()},
+\code{\link{use_reimport}()},
+\code{\link{write_to_rprofile}()}
+}
+\concept{project setup}

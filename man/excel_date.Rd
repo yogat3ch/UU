@@ -18,3 +18,10 @@ Convert Excel character date representation to a Date
 \examples{
 excel_date(c("44567", "44568"))
 }
+\seealso{
+Other time: 
+\code{\link{duration_print}()},
+\code{\link{time_elapsed}()},
+\code{\link{week_factor}()}
+}
+\concept{time}

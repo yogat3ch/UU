@@ -77,3 +77,15 @@ Installs the package, add the version to the \emph{DESCRIPTION} file, and \link[
 \description{
 Install a package
 }
+\seealso{
+Other project setup: 
+\code{\link{creds_to_renviron}()},
+\code{\link{fun_docs_table}()},
+\code{\link{ignore_files}()},
+\code{\link{key_pairs_duplicated}()},
+\code{\link{key_pairs_text}()},
+\code{\link{use_UU_reimports}()},
+\code{\link{use_reimport}()},
+\code{\link{write_to_rprofile}()}
+}
+\concept{project setup}

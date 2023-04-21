@@ -19,3 +19,10 @@ Get numeric day of the week
 week_factor()
 week_factor('Tu')
 }
+\seealso{
+Other time: 
+\code{\link{duration_print}()},
+\code{\link{excel_date}()},
+\code{\link{time_elapsed}()}
+}
+\concept{time}

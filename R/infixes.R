@@ -2,7 +2,7 @@
 #' @description Calls the expression (LHS) & if it fails return RHS
 #' @param lhs \code{(expression)} to try
 #' @param rhs \code{(expression)} to replace if expression fails
-#' @name `%|try|%`
+#' @name %|try|%
 #' @return results from lhs on success results from rhs on fail
 #' @export
 

@@ -15,3 +15,8 @@ Is working directory a package?
 \examples{
 is_package()
 }
+\seealso{
+Other package dev: 
+\code{\link{is_package_dev}()}
+}
+\concept{package dev}
