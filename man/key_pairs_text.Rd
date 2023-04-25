@@ -4,7 +4,7 @@
 \alias{key_pairs_text}
 \title{Make key-pairs from a named character vector}
 \usage{
-key_pairs_text(x)
+key_pairs_text(Sys.getenv())
 }
 \arguments{
 \item{x}{\code{chr} named}
@@ -14,9 +14,6 @@ key_pairs_text(x)
 }
 \description{
 Make key-pairs from a named character vector
-}
-\examples{
-key_pairs_text(Sys.getenv())
 }
 \seealso{
 Other project setup: 

@@ -80,10 +80,12 @@ creds_to_renviron <- function(..., scope = c("user", "project")[1], overwrite = 
 #' @param x \code{chr} named
 #'
 #' @return \code{chr}
+#' @usage key_pairs_text(Sys.getenv())
 #' @export
 #' @family project setup
-#' @examples
-#' key_pairs_text(Sys.getenv())
+#'
+
+
 key_pairs_text <- function(x) {
   sprintf("%s = '%s'", names(x), x)
 }
@@ -91,12 +93,11 @@ key_pairs_text <- function(x) {
 #' Find duplicates in key pairs
 #'
 #' @param x \code{chr/Dlist} Either character strings of keypairs or a Dlist returned by \link[base]{Sys.getenv}
-#'
+#' @usage key_pairs_duplicated(Sys.getenv())
 #' @return \code{lgl}
 #' @export
 #' @family project setup
-#' @examples
-#' key_pairs_duplicated(Sys.getenv())
+#'
 key_pairs_duplicated <- function(x, fromLast = TRUE) {
   .x <- x[nzchar(x)]
   if (!inherits(x, "Dlist") && is.null(names(x)))

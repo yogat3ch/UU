@@ -4,7 +4,7 @@
 \alias{key_pairs_duplicated}
 \title{Find duplicates in key pairs}
 \usage{
-key_pairs_duplicated(x, fromLast = TRUE)
+key_pairs_duplicated(Sys.getenv())
 }
 \arguments{
 \item{x}{\code{chr/Dlist} Either character strings of keypairs or a Dlist returned by \link[base]{Sys.getenv}}
@@ -14,9 +14,6 @@ key_pairs_duplicated(x, fromLast = TRUE)
 }
 \description{
 Find duplicates in key pairs
-}
-\examples{
-key_pairs_duplicated(Sys.getenv())
 }
 \seealso{
 Other project setup: 
