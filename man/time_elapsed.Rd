@@ -17,9 +17,6 @@ time_elapsed(file = ".interval_timer.rds", interval = lubridate::weeks(1))
 \description{
 Return a logical on an interval
 }
-\examples{
-time_elapsed()
-}
 \seealso{
 Other time: 
 \code{\link{duration_print}()},

@@ -52,8 +52,7 @@ excel_date <- function(.x) {
 #' @return \code{lgl}
 #' @export
 #' @family time
-#' @examples
-#' time_elapsed()
+
 time_elapsed <- function(file = ".interval_timer.rds", interval = lubridate::weeks(1)) {
   if (file.exists(".gitignore"))
     usethis::use_git_ignore(".interval_timer.rds")
