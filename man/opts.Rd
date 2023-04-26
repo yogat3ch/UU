@@ -8,7 +8,7 @@
 An object of class \code{NULL} of length 0.
 }
 \usage{
-opts
+opts$your_option_name()
 }
 \arguments{
 \item{default}{if the specified option is not set in the options list, this value is returned. This facilitates retrieving an option and checking whether it is set and setting it separately if not.}
@@ -17,7 +17,7 @@ opts
 \code{lgl}
 }
 \description{
-This is a list that will populate dynamically with the options in \emph{.Rprofile} allowing them to be read by calling the method. This population of methods happens at the beginning of a session. It can be accessed with \code{UU::opts}. If you wish to check option values in non-interactive sessions, see the \link[UU]{write_opts} function which will write a file with an \code{opts} object based on the current state of \emph{.Rprofile} that can be used during non-interactive (deployed apps) sessions.
+This is a list that will populate dynamically with the options in the project local \emph{.Rprofile} allowing them to be read by calling the method. This population of methods happens at the beginning of a session. It can be accessed with \code{UU::opts}. If you wish to check option values in non-interactive sessions, see the \link[UU]{write_opts} function which will write a file with an \code{opts} object based on the current state of \emph{.Rprofile} that can be used during non-interactive (deployed apps) sessions.
 }
 \seealso{
 write_opts
