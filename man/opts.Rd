@@ -8,7 +8,7 @@
 An object of class \code{NULL} of length 0.
 }
 \usage{
-opts$your_option_name()
+opts\$your_option_name()
 }
 \arguments{
 \item{default}{if the specified option is not set in the options list, this value is returned. This facilitates retrieving an option and checking whether it is set and setting it separately if not.}

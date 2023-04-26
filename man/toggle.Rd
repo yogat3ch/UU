@@ -8,9 +8,9 @@
 An object of class \code{NULL} of length 0.
 }
 \usage{
-toggle$your_logical_option_name()
+toggle\$your_logical_option_name()
 
-toggle$your_non_logical_option_name(set = "value")
+toggle\$your_non_logical_option_name(set = "value")
 }
 \arguments{
 \item{opt}{\code{chr} option name to toggle. Dynamically populated}
