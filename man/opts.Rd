@@ -3,7 +3,7 @@
 \docType{data}
 \name{opts}
 \alias{opts}
-\title{Check option value. \strong{Use interactively only!}}
+\title{Check option value.}
 \format{
 An object of class \code{NULL} of length 0.
 }
@@ -17,7 +17,7 @@ opts
 \code{lgl}
 }
 \description{
-Check option value. \strong{Use interactively only!}
+This is a list that will populate dynamically with the options in \emph{.Rprofile} allowing them to be read by calling the method. This population of methods happens at the beginning of a session. It can be accessed with \code{UU::opts}. If you wish to check option values in non-interactive sessions, see the \link[UU]{write_opts} function which will write a file with an \code{opts} object based on the current state of \emph{.Rprofile} that can be used during non-interactive (deployed apps) sessions.
 }
 \seealso{
 write_opts

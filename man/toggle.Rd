@@ -3,7 +3,7 @@
 \docType{data}
 \name{toggle}
 \alias{toggle}
-\title{Toggle an option}
+\title{Toggle or change an option listed in \emph{.Rprofile} for the session}
 \format{
 An object of class \code{NULL} of length 0.
 }
@@ -11,7 +11,7 @@ An object of class \code{NULL} of length 0.
 toggle
 }
 \arguments{
-\item{opt}{\code{chr} option name to toggle. See \code{.virga_opts} for standard Virga options}
+\item{opt}{\code{chr} option name to toggle. Dynamically populated}
 
 \item{set}{\code{obj} value to set the option to (takes precedence over toggle)}
 }
@@ -19,7 +19,7 @@ toggle
 \code{msg} to inform user of what the option is set to
 }
 \description{
-Meant for interactive use only.
+Any options in the \emph{.Rprofile} will populate this object as named methods. These named methods, when called, will toggle the options on or off. Alternatively, if an option is not logical, it can be changed using the \code{set} argument. This loads at the start of an R session if \link[UU]{startup} has been called in the user-level \emph{.Rprofile}. These methods are meant for interactive use only.
 }
 \seealso{
 Other options: 

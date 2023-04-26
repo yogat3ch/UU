@@ -1,4 +1,7 @@
-#' Check option value. **Use interactively only!**
+#' Check option value.
+#' @description
+#' This is a list that will populate dynamically with the options in _.Rprofile_ allowing them to be read by calling the method. This population of methods happens at the beginning of a session. It can be accessed with `UU::opts`. If you wish to check option values in non-interactive sessions, see the \link[UU]{write_opts} function which will write a file with an `opts` object based on the current state of _.Rprofile_ that can be used during non-interactive (deployed apps) sessions.
+#'
 #' @seealso write_opts
 #' Code is dynamically generated when package is loaded. These will not auto generate properly in a deployed shiny app. See \link{write_opts} for a non-interactive alternative.
 #' @param default if the specified option is not set in the options list, this value is returned. This facilitates retrieving an option and checking whether it is set and setting it separately if not.
@@ -75,9 +78,9 @@ write_opts <- function(file = "R/utils_opts.R") {
 }
 
 
-#' Toggle an option
-#' @description Meant for interactive use only.
-#' @param opt \code{chr} option name to toggle. See `.virga_opts` for standard Virga options
+#' Toggle or change an option listed in _.Rprofile_ for the session
+#' @description Any options in the _.Rprofile_ will populate this object as named methods. These named methods, when called, will toggle the options on or off. Alternatively, if an option is not logical, it can be changed using the `set` argument. This loads at the start of an R session if \link[UU]{startup} has been called in the user-level _.Rprofile_. These methods are meant for interactive use only.
+#' @param opt \code{chr} option name to toggle. Dynamically populated
 #' @param set \code{obj} value to set the option to (takes precedence over toggle)
 #' @family options
 #' @return \code{msg} to inform user of what the option is set to
