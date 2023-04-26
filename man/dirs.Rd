@@ -23,7 +23,7 @@ dirs\$data()
 Path functions for commonly used directories
 }
 \examples{
-dirs$data("mydata", ext = "csv")
+dirs$data("mydata", ext = "csv", mkpath = TRUE)
 }
 \seealso{
 Other file IO: 

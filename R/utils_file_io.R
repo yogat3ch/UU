@@ -165,7 +165,7 @@ write_lines <- function(file, ..., after = "end") {
 #' @usage dirs\$data()
 #' @family file IO
 #' @export
-#' @examples dirs$data("mydata", ext = "csv")
+#' @examples dirs$data("mydata", ext = "csv", mkpath = TRUE)
 dirs <- purrr::map(
   list(
     css = "inst/app/www/css",
