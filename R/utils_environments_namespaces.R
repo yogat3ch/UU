@@ -69,7 +69,12 @@ get_from_ns <- function(nm = c("active", "state")[1], .env = .GlobalEnv) {
 #' @return \code{x} the object
 #' @export
 
-assign_in_ns <- function(x, nm = rlang::expr_deparse(rlang::enexpr(x)), ns_env = rlang::ns_env(pkg_name())) {
+assign_in_ns <- function(x, nm = NULL, ns_env = rlang::ns_env(pkg_name())) {
+  nm <- if (is.null(nm))
+    rlang::expr_deparse(rlang::enexpr(x))
+  else if (is.character(nm))
+    rlang::sym(nm)
+
   e_is_locked <- rlang::env_is_locked(ns_env)
   if (is.character(x)) {
     nm <- x
