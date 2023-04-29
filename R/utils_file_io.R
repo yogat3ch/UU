@@ -383,7 +383,7 @@ object_write <- function(x, filename, path = ".", ..., verbose = TRUE) {
     .fname <- basename(filename)
 
 
-  fp <- fs::path(.path, paste0(.fname, ifelse(is_filepath(filename), "", .ext)))
+  fp <- fs::path(path, paste0(.fname, ifelse(is_filepath(filename), "", .ext)))
 
   # order the arguments to the saving function
   .dots <- rlang::dots_list(..., .named = TRUE)
