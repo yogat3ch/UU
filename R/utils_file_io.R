@@ -72,6 +72,10 @@ dep_read <- function(filename, ...) {
     gbort("{.path {filename}} not found.")
 }
 
+#' @rdname dep_read
+#' @export
+object_read <- dep_read
+
 #' Write a dependency to file
 #'
 #' @param x \code{(object)} to be written
@@ -119,22 +123,34 @@ dir_fn <- function(base_dir) {
 #' file_fn("csv", write = TRUE)
 
 file_fn <- function(x, write = FALSE) {
-  purrr::when(
-    x,
-    grepl("csv$", ., ignore.case = TRUE) && write ~ need_pkg("readr", "write_csv"),
-    grepl("feather$", ., ignore.case = TRUE) && write ~ need_pkg("arrow", "write_feather"),
-    grepl("rds$", ., ignore.case = TRUE) && write ~ saveRDS,
-    grepl("(?:rda$)|(?:rdata$)", ., ignore.case = TRUE) && write ~ save,
-    grepl("csv$", ., ignore.case = TRUE) ~ need_pkg("readr", "read_csv"),
-    grepl("feather$", ., ignore.case = TRUE)  ~ need_pkg("arrow", "read_feather"),
-    grepl("rds$", ., ignore.case = TRUE) ~ readRDS,
-    grepl(regex_or(c("rda", "rdata"), suf = "$"), ., ignore.case = TRUE) ~ load_obj,
-    grepl("(?:png$)|(?:jpg$)|(?:jpeg$)", ., ignore.case = TRUE) && write ~ need_pkg("ggplot2", "ggsave"),
-    grepl("(?:png$)|(?:jpg$)|(?:jpeg$)", ., ignore.case = TRUE) ~ need_pkg("magick", "img_read"),
-    grepl(regex_or(c("xlsx", "xls", "xlsm"), suf = "$"), ., ignore.case = TRUE) && write ~ need_pkg("writexl", "write_xlsx"),
-    grepl(regex_or(c("xlsx", "xls", "xlsm"), suf = "$"), ., ignore.case = TRUE) ~ need_pkg("readxl", "read_excel"),
-    ~ readLines
-  )
+  .ext <- ext(x)
+  if (write) {
+    switch(tolower(.ext),
+           csv = need_pkg("readr", "write_csv"),
+           feather = need_pkg("arrow", "write_feather"),
+           rds = saveRDS,
+           png =,
+           jpg =,
+           jpeg = need_pkg("ggplot2", "ggsave"),
+           xlsx =,
+           xls = ,
+           xlsm = need_pkg("writexl", "write_xlsx")
+           )
+  } else {
+    switch(tolower(.ext),
+           csv = need_pkg("readr", "read_csv"),
+           feather = need_pkg("arrow", "read_feather"),
+           rds = saveRDS,
+           png =,
+           jpg =,
+           jpeg = need_pkg("magick", "img_read"),
+           xlsx =,
+           xls = ,
+           xlsm = need_pkg("readxl", "read_excel"),
+           readLines
+           )
+
+  }
 
 }
 
@@ -313,11 +329,24 @@ object_ext <- function(object) {
 
 
 object_fn <- function(x, filepath) {
+  pkgs <- rlang::set_names(c("arrow", "readr", "base"))
+  i <- purrr::map_lgl(pkgs, \(.x) {
+    require(.x, character.only = TRUE, quietly = TRUE)
+  }) |>
+    which()
+    min()
+  csv_write <- switch(names(pkgs)[i],
+         arrow = need_pkg("arrow", "write_feather"),
+         readr = need_pkg("readr", "write_csv"),
+         base = utils::write.csv)
+
+
+
   out <- purrr::when(
     x,
-    inherits(., "data.frame") ~ need_pkg("arrow", "write_feather"),
+    inherits(., "data.frame") ~ csv_write,
     inherits(., "matrix") ~ function(x, path) {
-      need_pkg("arrow", "write_feather")(tibble::as_tibble(x, .name_repair = "minimal"), path = path)
+      csv_write(tibble::as_tibble(x, .name_repair = "minimal"), path = path)
     },
     inherits(., "ggplot") ~ need_pkg("ggplot2", "ggsave"),
     !inherits(., "data.frame") ~ saveRDS
@@ -340,14 +369,10 @@ object_fn <- function(x, filepath) {
 #' @family file IO
 #' @export
 
-object_write <- function(x, filename, path, ..., verbose = TRUE) {
-  if (missing(path))
-    .path <- dirname(filename)
-  else
-    .path <- path
+object_write <- function(x, filename, path = ".", ..., verbose = TRUE) {
 
-  if (!dir.exists(.path))
-    mkpath(.path)
+  if (!dir.exists(path))
+    mkpath(path)
 
   # Create the full filename
   .ext <- object_ext(x)
@@ -358,7 +383,7 @@ object_write <- function(x, filename, path, ..., verbose = TRUE) {
     .fname <- basename(filename)
 
 
-  fp <- file.path(.path, paste0(.fname, ifelse(is_filepath(filename), "", .ext)))
+  fp <- fs::path(.path, paste0(.fname, ifelse(is_filepath(filename), "", .ext)))
 
   # order the arguments to the saving function
   .dots <- rlang::dots_list(..., .named = TRUE)
@@ -369,7 +394,9 @@ object_write <- function(x, filename, path, ..., verbose = TRUE) {
 
   # write the file based on it's type
 
-  fn <- object_fn(x, fp)
+  fn <- switch(.ext,
+         R = dump,
+         object_fn(x, fp))
   rlang::exec(fn, !!!.dots)
 
   if (file.exists(fp) && verbose)
