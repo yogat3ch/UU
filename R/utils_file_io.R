@@ -374,16 +374,14 @@ object_write <- function(x, filename, path = ".", ..., verbose = TRUE) {
   if (!dir.exists(path))
     mkpath(path)
 
-  # Create the full filename
   .ext <- object_ext(x)
   img <- stringr::str_detect(.ext, "png$")
-  if (missing(filename))
-    .fname <- rlang::expr_deparse(rlang::enexpr(x))
-  else
-    .fname <- basename(filename)
-
-
-  fp <- fs::path(path, paste0(.fname, ifelse(is_filepath(filename), "", .ext)))
+  if (missing(filename)) {
+    # Create the full filename
+    nm <- rlang::expr_deparse(rlang::enexpr(x))
+    filename <- fs::path(nm, ext = .ext)
+  }
+  fp <- fs::path(path, filename)
 
   # order the arguments to the saving function
   .dots <- rlang::dots_list(..., .named = TRUE)
