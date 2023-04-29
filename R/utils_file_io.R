@@ -334,8 +334,8 @@ object_fn <- function(x, filepath) {
     require(.x, character.only = TRUE, quietly = TRUE)
   }) |>
     which()
-    min()
-  csv_write <- switch(names(pkgs)[i],
+
+  csv_write <- switch(names(pkgs)[min(i)],
          arrow = need_pkg("arrow", "write_feather"),
          readr = need_pkg("readr", "write_csv"),
          base = utils::write.csv)
