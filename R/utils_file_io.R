@@ -456,7 +456,7 @@ needs_update <- function(x, path = FALSE, threshold = lubridate::floor_date(Sys.
 #' @family file IO
 #' @export
 is_filepath <- function(path) {
-  grepl("\\.\\w{1,}", basename(path))
+  grepl("\\.[a-zA-Z0-9]{1,}$", basename(path))
 }
 
 #' Move all files to a folder
