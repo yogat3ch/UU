@@ -15,19 +15,21 @@ file <- NULL
 #' All the files that can be navigated to with `file` if they exist
 #' @family file navigation
 #' @export
-.file <- c(
-  custom_scss = "inst/app/www/css/custom.scss",
-  theme = "R/mod_theme.R",
-  ui = "R/app_ui.R",
-  server = "R/app_server.R",
-  Rprofile = ".Rprofile",
-  Renviron = ".Renviron",
-  renv_settings = "renv/settings.dcf",
-  desc = "DESCRIPTION",
-  news = "NEWS.md",
-  Readme.Rmd = "README.Rmd",
-  Readme.md = "README.md",
-  gitignore = ".gitignore"
-)
+.file <-
+  c(
+    app_server = "R/app_server.R",
+    app_ui = "R/app_ui.R",
+    custom_scss = "inst/app/www/css/custom.scss",
+    DESC = "DESCRIPTION",
+    gitignore = ".gitignore",
+    mod_sidebar = "R/mod_sidebar.R",
+    mod_theme = "R/mod_theme.R",
+    news = "NEWS.md",
+    Readme.md = "README.md",
+    Readme.Rmd = "README.Rmd",
+    renv_settings = "renv/settings.dcf",
+    Renviron = ".Renviron",
+    Rprofile = ".Rprofile"
+  )
 
 
