@@ -21,5 +21,5 @@ startup <- function() {
 
       })
   }
-  on.exit(unload_namespaces(c("UU", "purrr", "rlang")))
+  on.exit(unloadNamespace("UU"))
 }
