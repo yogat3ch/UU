@@ -60,6 +60,22 @@ css_col2vec <- function(x) {
 #' @export
 css_col2vec_ <- Vectorize(css_col2vec)
 
+#' Interpolate between two colors
+#'
+#' @param colors \code{chr} of hex colors
+#' @param n \code{int} of the number of colors expected
+#' @inheritDotParams grDevices::colorRamp
+#'
+#' @return \code{chr} of hex values
+#' @export
+#'
+#' @examples
+#' color_interpolate(n = 3)
+color_interpolate <- function(colors = c("#9A3324", "#016f90"), n, ...) {
+  .n <- n - 1
+  apply(grDevices::colorRamp(colors, ...)(c(0, 1 / .n * 1:.n)), 1, \(.x) do.call(rgb2hex, as.list(.x)))
+}
+
 #' Convert vector of colors to named tbl
 #'
 #' @param colors \code{chr} vector of css color representations

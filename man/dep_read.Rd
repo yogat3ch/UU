@@ -2,9 +2,12 @@
 % Please edit documentation in R/utils_file_io.R
 \name{dep_read}
 \alias{dep_read}
+\alias{object_read}
 \title{Read a dependency from file}
 \usage{
 dep_read(filename, ...)
+
+object_read(filename, ...)
 }
 \arguments{
 \item{filename}{\code{(chr)} path to the file}

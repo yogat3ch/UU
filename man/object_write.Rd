@@ -4,7 +4,7 @@
 \alias{object_write}
 \title{Provide the appropriate file read/write function}
 \usage{
-object_write(x, filename, path, ..., verbose = TRUE)
+object_write(x, filename, path = ".", ..., verbose = TRUE)
 }
 \arguments{
 \item{x}{\code{(object)} to write to disk}
