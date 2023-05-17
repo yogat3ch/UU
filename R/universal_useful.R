@@ -114,6 +114,26 @@ is_legit <- function(x) {
   !(all(is.null(x)) || rlang::is_empty(x) || all(suppressWarnings(is.na(x))) || inherits(x, c("try-error", "error")))
 }
 
+#' Are the values in each object the same?
+#' @description
+#' The primary difference from \code{\link[base]{identical}} & \code{\link[base]{all.equal}} is that objects are sorted by name so order doesn't matter.
+#'
+#' @param x \code{obj}
+#' @param y \code{obj}
+#'
+#' @return \code{lgl}
+#' @export
+#'
+#' @examples
+#' same(list(x = 1, y = 2), list(y = 2, x = 1))
+same <- function(x, y) {
+  if (!is.null(names(x)) && !is.null(names(y))) {
+    x <- x[order(names(x))]
+    y <- y[order(names(y))]
+  }
+  isTRUE(all.equal(x, y))
+}
+
 
 #' @title Abbreviations of numeric magnitude
 #' @family rounding
