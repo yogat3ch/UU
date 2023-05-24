@@ -4,7 +4,7 @@
 \alias{vlookup}
 \title{Simple lookup of values}
 \usage{
-vlookup(x, lookup)
+vlookup(x, lookup, switch_names_values = FALSE)
 }
 \arguments{
 \item{x}{\code{any} Values to lookup}
@@ -22,6 +22,8 @@ lookup <- rlang::set_names(1:5, letters[1:5])
 vlookup(sample(1:5, 5), lookup)
 }
 \seealso{
+\code{\link[=names_values_switch]{names_values_switch()}}
+
 Other vectors: 
 \code{\link{names_values_switch}()},
 \code{\link{vlookup_from_ref}()}

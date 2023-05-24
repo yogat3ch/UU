@@ -466,15 +466,19 @@ vlookup_from_ref <- function(
 #' @return \code{any}
 #' @export
 #' @family vectors
+#' @seealso [names_values_switch()]
 #' @examples
 #' lookup <- rlang::set_names(1:5, letters[1:5])
 #' vlookup(sample(1:5, 5), lookup)
-vlookup <- function(x, lookup) {
+vlookup <- function(x, lookup, switch_names_values = FALSE) {
+  if (switch_names_values)
+    lookup <- UU::names_values_switch(lookup)
   nl <- names(lookup)
+  .x <- x
   for (i in seq_along(x)) {
-    x[i] <- nl[which(lookup == x[i])]
+    .x[i] <- lookup[which(nl == x[i])]
   }
-  x
+  .x
 }
 
 #' Custom error message
