@@ -344,7 +344,21 @@ unit_modify <- function(x, unit, outtype, magnitude = magnitude_order(x)) {
 #' @export
 unit_modify_vec <- Vectorize(unit_modify)
 
-
+#' Simple interpolate between two numbers
+#'
+#' @param start \code{num} first number
+#' @param end \code{num} last number
+#' @param n \code{int} total numbers in output vector
+#'
+#' @return \code{num} vector with length equivalent to n
+#' @export
+#'
+#' @examples
+#' interpolate(0, 6, 6)
+interpolate = function(start, end, n) {
+  out <- approx(x = c(start, end), n = n)$y
+  return(out)
+}
 
 #' Convert numeric value to a string abbreviation with K, M, B for Thousand, Million & Billion
 #'
