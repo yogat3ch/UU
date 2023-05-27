@@ -1,20 +1,118 @@
-#' Get numeric day of the week
+#' Day of the week as factor/numeric
 #'
-#' @param x \code{chr} Days of the week. Abbreviations are fine, case insensitive
+#' @param x \code{chr/Date/POSIXt} Days of the week as case insensitive character vector, if using abbreviations, they must be of consistent length. Otherwise, a `Date` or `POSIXt`
 #'
-#' @return \code{factor} If `x` is provided, the day of the week as a factor. If `x` is not provided, an ordered factor with Monday as 1.
+#' @return \code{numeric/factor} Depending on the value for `label`. If `x` is provided, the day of the week as a factor. If `x` is not provided, an ordered factor with Monday as 1.
 #' @export
 #' @family time
 #' @examples
 #' week_factor()
-#' week_factor('Tu')
-week_factor <- function(x) {
-  days <- c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
+#' week_factor(c('Tu', 'We'))
+#' week_factor(c('Tu', 'We'), label = TRUE)
+#' week_factor(seq(lubridate::floor_date(Sys.time(), "year"), Sys.time(), by = "day"), label = TRUE, abbr = FALSE)
+week_factor <- function(x, label = FALSE, abbr = TRUE, week_start = getOption("lubridate.week.start", 7)) {
+  d_nms <- days <- rlang::set_names(c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"))[
+    if (week_start == 7)
+      c(7, 1:6)
+    else if (week_start == 1)
+      1:7
+  ]
+
+  if (abbr)
+    days <- substr(days, 0, 3)
+
   if (missing(x))
-    out <- days
-  else
-    out <- purrr::map_chr(x, ~stringr::str_subset(days, stringr::regex(paste0("^", .x), ignore_case = TRUE)))
-  return(factor(out, days))
+    return(factor(days, days, ordered = TRUE))
+
+  if (is.character(x)) {
+    out <- x
+    x_n <- nchar(x)
+    x_u <- unique(x_n)
+    if (any(x_n < 2))
+      gbort("All abbreviations must be 2 characters or more to disambiguate")
+    stopifnot(len_unique(x_n) == 1 && all(x %nin% days))
+    # If using an abbreviation
+    if (len_unique(x_n) == 1)
+      days <- substr(days, 0, x_u)
+
+    for (d in days) {
+      lgl <- grep(d, x, ignore.case = TRUE)
+      if (!rlang::is_empty(lgl))
+        out[lgl] <- d_nms[days == d]
+    }
+
+    out <- factor(out, levels = d_nms, ordered = TRUE)
+    if (!label)
+      out <- as.integer(out)
+  } else if (lubridate::is.Date(x) || lubridate::is.POSIXt(x)) {
+    out <- lubridate::wday(x, label = label, abbr = abbr, week_start = week_start)
+  }
+
+  return(out)
+}
+
+#' Season as factor/numeric
+#'
+#' @param x \code{chr/Date/POSIXt} Names of seasons as case insensitive character vector, if using abbreviations, they must be of consistent length. Otherwise, a `Date` or `POSIXt`.
+#'
+#' @return \code{factor} If `x` is provided, the season as a factor. If `x` is not provided, an ordered factor of the seasons.
+#' @export
+#' @family time
+#' @examples
+#' season_factor()
+#' season_factor(c('Sp', 'Su'))
+#' season_factor(c('Sp', 'Su'), label = TRUE)
+#' season_factor(seq(lubridate::floor_date(Sys.time(), "year"), Sys.time(), by = "day"), label = TRUE, abbr = FALSE)
+season_factor <- function(x, label = FALSE, abbr = TRUE) {
+  seasons <- c("Spring" = 3, "Summer" = 6, "Fall" = 9, "Winter" = 12)
+  s_chr <- names(seasons)
+  if (abbr)
+    s_chr <- substr(s_chr, 0, 3)
+  if (missing(x))
+    return(factor(s_chr, s_chr))
+
+  if (is.character(x)) {
+    out <- x
+    x_n <- nchar(x)
+    x_u <- unique(x_n)
+    if (any(x_n < 2))
+      gbort("All abbreviations must be 2 characters or more to disambiguate")
+    stopifnot(len_unique(x_n) == 1 && all(x %nin% days))
+    # If using an abbreviation
+    if (len_unique(x_n) == 1) {
+      seasons <- substr(s_chr, 0, x_u)
+    }
+
+
+    val <- if (label)
+      s_chr
+    else {
+      out <- vector(mode = "integer", length = length(out))
+      as.integer(c(3,6,9,12))
+    }
+
+    for (se in seasons) {
+      lgl <- grep(se, x, ignore.case = TRUE)
+      if (!rlang::is_empty(lgl))
+        out[lgl] <- val[seasons == se]
+    }
+
+    if (label)
+      out <- factor(out, levels = s_chr, ordered = TRUE)
+
+  } else if (lubridate::is.Date(x) || lubridate::is.POSIXt(x)) {
+    out <- lubridate::month(lubridate::floor_date(x, "season"))
+    if (label) {
+      for (m in unique(out)) {
+        lgl <- out == m
+        if (!rlang::is_empty(lgl))
+          out[lgl] <- s_chr[seasons == m]
+      }
+      out <- factor(out, levels = if (label) s_chr else seasons)
+    }
+  }
+
+  return(out)
 }
 
 #' Translate a duration into the human-legible estimation as a character

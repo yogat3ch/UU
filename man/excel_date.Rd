@@ -21,6 +21,7 @@ excel_date(c("44567", "44568"))
 \seealso{
 Other time: 
 \code{\link{duration_print}()},
+\code{\link{season_factor}()},
 \code{\link{time_elapsed}()},
 \code{\link{week_factor}()}
 }

@@ -2,27 +2,35 @@
 % Please edit documentation in R/date_time_helpers.R
 \name{week_factor}
 \alias{week_factor}
-\title{Get numeric day of the week}
+\title{Day of the week as factor/numeric}
 \usage{
-week_factor(x)
+week_factor(
+  x,
+  label = FALSE,
+  abbr = TRUE,
+  week_start = getOption("lubridate.week.start", 7)
+)
 }
 \arguments{
-\item{x}{\code{chr} Days of the week. Abbreviations are fine, case insensitive}
+\item{x}{\code{chr/Date/POSIXt} Days of the week as case insensitive character vector, if using abbreviations, they must be of consistent length. Otherwise, a \code{Date} or \code{POSIXt}}
 }
 \value{
-\code{factor} If \code{x} is provided, the day of the week as a factor. If \code{x} is not provided, an ordered factor with Monday as 1.
+\code{numeric/factor} Depending on the value for \code{label}. If \code{x} is provided, the day of the week as a factor. If \code{x} is not provided, an ordered factor with Monday as 1.
 }
 \description{
-Get numeric day of the week
+Day of the week as factor/numeric
 }
 \examples{
 week_factor()
-week_factor('Tu')
+week_factor(c('Tu', 'We'))
+week_factor(c('Tu', 'We'), label = TRUE)
+week_factor(seq(lubridate::floor_date(Sys.time(), "year"), Sys.time(), by = "day"), label = TRUE, abbr = FALSE)
 }
 \seealso{
 Other time: 
 \code{\link{duration_print}()},
 \code{\link{excel_date}()},
+\code{\link{season_factor}()},
 \code{\link{time_elapsed}()}
 }
 \concept{time}
