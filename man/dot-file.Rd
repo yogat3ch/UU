@@ -5,7 +5,7 @@
 \alias{.file}
 \title{All the files that can be navigated to with \code{file} if they exist}
 \format{
-An object of class \code{character} of length 13.
+An object of class \code{character} of length 14.
 }
 \usage{
 .file

@@ -22,6 +22,10 @@ Other time:
 \code{\link{duration_print}()},
 \code{\link{excel_date}()},
 \code{\link{season_factor}()},
+\code{\link{time_aggregates}},
+\code{\link{time_difftimes}},
+\code{\link{time_factor}()},
+\code{\link{timespan}()},
 \code{\link{week_factor}()}
 }
 \concept{time}

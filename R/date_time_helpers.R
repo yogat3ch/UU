@@ -143,6 +143,8 @@ excel_date <- function(.x) {
 
 
 #' @title Timespans as character
+#' @family time
+#' @export
 time_aggregates <-
   list(
     Year = "year",
@@ -155,6 +157,8 @@ time_aggregates <-
   )
 
 #' @title Timespans as durations
+#' @family time
+#' @export
 time_difftimes <- purrr::map(time_aggregates, \(.x) {
   x <- switch(.x,
               season = ,
@@ -174,7 +178,7 @@ time_difftimes <- purrr::map(time_aggregates, \(.x) {
 #' Turn timespans into an ordered factor
 #'
 #' @param x \code{chr} of timespans
-#'
+#' @family time
 #' @return \code{factor}
 #' @export
 #'
@@ -188,7 +192,7 @@ time_factor <- function(x) {
 
 }
 #' Create a timespan duration
-#'
+#' @family time
 #' @param x \code{chr/POSIXt/Date}
 #' \itemize{
 #'   \item{\code{chr}}{ One of `r paste0(time_aggregates, collapse = ', ')`}

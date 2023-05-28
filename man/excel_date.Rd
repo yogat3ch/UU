@@ -22,7 +22,11 @@ excel_date(c("44567", "44568"))
 Other time: 
 \code{\link{duration_print}()},
 \code{\link{season_factor}()},
+\code{\link{time_aggregates}},
+\code{\link{time_difftimes}},
 \code{\link{time_elapsed}()},
+\code{\link{time_factor}()},
+\code{\link{timespan}()},
 \code{\link{week_factor}()}
 }
 \concept{time}

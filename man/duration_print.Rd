@@ -22,7 +22,11 @@ duration_print(lubridate::period(6223))
 Other time: 
 \code{\link{excel_date}()},
 \code{\link{season_factor}()},
+\code{\link{time_aggregates}},
+\code{\link{time_difftimes}},
 \code{\link{time_elapsed}()},
+\code{\link{time_factor}()},
+\code{\link{timespan}()},
 \code{\link{week_factor}()}
 }
 \concept{time}
