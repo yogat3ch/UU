@@ -209,10 +209,14 @@ timespan <- function(x) {
   UseMethod("timespan")
 }
 #' @export
-timespan.POSIXct <- timespan.POSIXlt <- timespan.Date <- function(x) {
+timespan.POSIXct <- function(x) {
   r <- range(x)
   lubridate::as.duration(difftime(r[1], r[2]))
 }
+#' @export
+timespan.POSIXlt <- timespan.POSIXct
+#' @export
+timespan.Date <- timespan.POSIXct
 #' @export
 timespan.character <- function(x) {
   stopifnot(x %in% names(time_difftimes))
