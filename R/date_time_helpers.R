@@ -181,7 +181,11 @@ time_difftimes <- purrr::map(time_aggregates, \(.x) {
 #' @examples
 #' time_factor(c("year", "week"))
 time_factor <- function(x) {
-  factor(x, levels = levels(.time_factor), ordered = TRUE)
+  if (missing(x))
+    .time_factor
+  else
+    factor(x, levels = levels(.time_factor), ordered = TRUE)
+
 }
 #' Create a timespan duration
 #'
