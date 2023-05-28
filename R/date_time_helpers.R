@@ -211,7 +211,7 @@ timespan <- function(x) {
 #' @export
 timespan.POSIXct <- function(x) {
   r <- range(x)
-  lubridate::as.duration(difftime(r[1], r[2]))
+  lubridate::as.duration(difftime(r[2], r[1]))
 }
 #' @export
 timespan.POSIXlt <- timespan.POSIXct
