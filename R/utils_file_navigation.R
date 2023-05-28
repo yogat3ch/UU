@@ -28,6 +28,7 @@ file <- NULL
     Readme.md = "README.md",
     Readme.Rmd = "README.Rmd",
     renv_settings = "renv/settings.dcf",
+    renv_settings = "renv/settings.json",
     Renviron = ".Renviron",
     Rprofile = ".Rprofile"
   )

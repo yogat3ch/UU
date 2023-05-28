@@ -211,7 +211,6 @@ timespan.character <- function(x) {
   time_difftimes[[grep(x, unlist(time_aggregates), ignore.case = TRUE)]]
 }
 
-
 #' Return a logical on an interval
 #'
 #' @param file \code{chr} filename in which to store the interval time
