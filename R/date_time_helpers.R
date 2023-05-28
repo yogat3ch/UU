@@ -142,6 +142,76 @@ excel_date <- function(.x) {
 }
 
 
+#' @title Timespans as character
+time_aggregates <-
+  list(
+    Year = "year",
+    Season = "season",
+    Quarter = "quarter",
+    Month = "month",
+    Week = "week",
+    Day = "day",
+    Hour = "hour"
+  )
+
+#' @title Timespans as durations
+time_difftimes <- purrr::map(time_aggregates, \(.x) {
+  x <- switch(.x,
+              season = ,
+              quarter = 3,
+              1)
+  unit <- switch(.x,
+                 season = ,
+                 quarter = "months",
+                 paste0(.x,"s"))
+  lubridate::duration(x, units = unit)
+}) |> rlang::set_names(time_aggregates)
+
+#' @title Timespans as factor
+.time_factor <- unlist(time_aggregates) |>
+  {\(.x) {factor(.x, levels = rev(.x), ordered = TRUE)}}()
+
+#' Turn timespans into an ordered factor
+#'
+#' @param x \code{chr} of timespans
+#'
+#' @return \code{factor}
+#' @export
+#'
+#' @examples
+#' time_factor(c("year", "week"))
+time_factor <- function(x) {
+  factor(x, levels = levels(.time_factor), ordered = TRUE)
+}
+#' Create a timespan duration
+#'
+#' @param x \code{chr/POSIXt/Date}
+#' \itemize{
+#'   \item{\code{chr}}{ One of `r paste0(time_aggregates, collapse = ', ')`}
+#'   \item{\code{POSIXt/Date/Datetime}}{ A Date or Datetime vector}
+#' }
+#'
+#' @return \code{Duration} See \code{\link[lubridate]{duration}}
+#' @export
+#'
+#' @examples
+#' timespan(seq(Sys.time() - lubridate::dyears(), Sys.time(), by = 1))
+#' timespan("season")
+timespan <- function(x) {
+  UseMethod("timespan")
+}
+#' @export
+timespan.POSIXct <- timespan.POSIXlt <- timespan.Date <- function(x) {
+  r <- range(x)
+  lubridate::as.duration(difftime(r[1], r[2]))
+}
+#' @export
+timespan.character <- function(x) {
+  stopifnot(x %in% names(time_difftimes))
+  time_difftimes[[grep(x, unlist(time_aggregates), ignore.case = TRUE)]]
+}
+
+
 #' Return a logical on an interval
 #'
 #' @param file \code{chr} filename in which to store the interval time
