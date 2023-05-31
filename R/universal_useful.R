@@ -255,6 +255,21 @@ unit_find <- function(x) {
   }, .init = rlang::expr(!!rlang::sym(.cols[1]) == !!x)))
 }
 
+#' Get even numbers
+#' @param x \code{int}
+#' @export
+#' @examples
+#' evens(1:10)
+#'
+evens <- function(x) subset(x, x %% 2 == 0)
+#' Get odd numbers
+#' @param x \code{int}
+#' @export
+#' @examples
+#' odds(1:10)
+#'
+odds <- function(x) subset(x, x %% 2 == 1)
+
 #' Which is larger
 #'
 #' @param x \code{num/obj}
