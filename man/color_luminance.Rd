@@ -22,7 +22,7 @@ color_luminance(red, green, blue, alpha, ...)
 Find the luminance of a particular color, scaled 0-1
 }
 \examples{
-color_luminance(css_col2vec('white'))
+rlang::exec(color_luminance, !!!css_col2vec('white'))
 }
 \seealso{
 Other color: 

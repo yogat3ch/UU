@@ -51,6 +51,7 @@ match_df <- function(x, y, out = NULL, on = NULL, verbose = FALSE) {
   keys <- plyr::join.keys(x, y, on)
   key_out(x, keys, out)
 }
+
 #' Handle different output type requests for `match_df`
 #' @export
 key_out <- function(x, keys, out) {
@@ -76,7 +77,7 @@ key_out.logical <- function(x, keys, out) {
 #' @export
 #'
 #' @examples
-#' ex <- tibble::tibble(cat = rep(letters, length.out = 6, each = 2), val = #' runif(6, 0, 10))
+#' ex <- tibble::tibble(cat = rep(letters, length.out = 6, each = 2), val = runif(6, 0, 10))
 #' exps <- rlang::exprs(
 #'   data,
 #'   dplyr::mutate(data, val = val  + 3)
@@ -498,7 +499,7 @@ vlookup_from_ref <- function(
 #' @seealso [names_values_switch()]
 #' @examples
 #' lookup <- rlang::set_names(1:5, letters[1:5])
-#' vlookup(sample(1:5, 5), lookup)
+#' vlookup(sample(1:5, 5), lookup, switch_names_values = TRUE)
 vlookup <- function(x, lookup, switch_names_values = FALSE) {
   if (switch_names_values)
     lookup <- UU::names_values_switch(lookup)
@@ -630,9 +631,9 @@ load_obj <- function(file) {
 #' @family rounding
 #' @seealso size_
 #' @examples
-#' size(50, "mb")
-#' size(50, "gb")
-#' size(50, "gb", "mb")
+#' size(50, "Mb")
+#' size(50, "Gb")
+#' size(50, "Gb", "Mb")
 
 size <- function(x, in_unit = "b", out_unit = c("b", "Kb", "Mb", "Gb", "Tb", "Pb", "Eb", "Zb", "Yb")[3]) {
   if (!is.numeric(x))
@@ -928,34 +929,7 @@ rle_groups <- function(x) {
 #' @return \code{tbl}
 #' @export
 #'
-#' @examples
-#' test_tbl <- tibble::tribble(
-#'~Facility, ~State,           ~City,    ~Production,             ~Closure.Date.Facility.Owners,         ~Water.Use, ~Water.Rights.Amount..Type, ~Water.Rights.Owners,
-#'"Coronado Generating Station",   "AZ",    "St . Johns",       "762 MW", "Units 1 and 2: Salt River Project (SRP)",      "5,200 AF/YR",            "44,000 AF/YR,",                #'"SRP",
-#'NA,     NA,              NA,             NA,                             "2032 (100%)",                 NA,                  "GW only",                   NA,
-#'NA,     NA,              NA,             NA,                                        NA,                 NA,                         NA,                   NA,
-#'"Springerville Generating",   "AZ", "Springerville",     "1,625 MW",      "Unit 1: 2027 Tucson Electric (TEP)",     "10,400 AF/YR",            "77,000 AF/YR,",          "SRP, TEP#',",
-#'"Station",     NA,              NA,             NA,                   "(50%, PC: UNS Energy)",                 NA,                  "GW only",      "Tri-State G&T",
-#'NA,     NA,              NA,             NA,                                        NA,                 NA,                         NA,                   NA,
-#'NA,     NA,              NA,             NA,                            "Unit 2: 2032",                 NA,                         NA,                   NA,
-#'NA,     NA,              NA,             NA,                                        NA,                 NA,                         NA,                   NA,
-#'NA,     NA,              NA,             NA,                         "Tri-State (25%)",                 NA,                         NA,                   NA,
-#'NA,     NA,              NA,             NA,                                        NA,                 NA,                         NA,                   NA,
-#'NA,     NA,              NA,             NA,                          "Units 3 and 4:",                 NA,                         NA,                   NA,
-#'NA,     NA,              NA,             NA,                                        NA,                 NA,                         NA,                   NA,
-#'NA,     NA,              NA,             NA,                           "TBD SRP (25%)",                 NA,                         NA,                   NA,
-#'NA,     NA,              NA,             NA,                                        NA,                 NA,                         NA,                   NA,
-#'NA,     NA,              NA,             NA,                                        NA,                 NA,                         NA,                   NA,
-#'"Cholla Power Plant",   "AZ",   "Joseph City",       "767 MW",   "Units 1 and 2: Arizona Public Service",      "9,200 AF/YR",             "9,550 AF/YR,",                "APS",
-#'NA,     NA,              NA,             NA,                      "2025 Company (APS)",                 NA,                  "GW only",                   NA,
-#'NA,     NA,              NA,             NA,   "(100%, PC: Pinnacle West)Unit 3: 2020",                 NA,                         NA,                   NA,
-#'NA,     NA,              NA,             NA,                                        NA,                 NA,                         NA,                   NA,
-#'NA,     NA,              NA,             NA,                                        NA,                 NA,                         NA,                   NA,
-#'"Kayenta Mine",   "AZ",       "Kayenta", "6 .5 million",           "Unknown Peabody Energy (100%)",          "Unknown",            "11,200 AF/YR,",            "Peabody",
-#'NA,     NA,              NA,   "short tons",                                        NA, "(est . less than",                  "GW only",                   NA,
-#'NA,     NA,              NA,             NA,                                        NA,       "100 AF/YR)",                         NA,                   NA
-#')
-#'(out <- concat_rows(test_tbl, State))
+
 concat_rows <- function(.data, col_to_check = 1) {
 
 

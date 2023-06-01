@@ -75,11 +75,12 @@ season_factor <- function(x, label = FALSE, abbr = TRUE) {
     out <- x
     x_n <- nchar(x)
     x_u <- unique(x_n)
-    if (any(x_n < 2))
+    l_x <- len_unique(x_n) == 1
+    if (any(x_n < 2) || !l_x)
       gbort("All abbreviations must be 2 characters or more to disambiguate")
-    stopifnot(len_unique(x_n) == 1 && all(x %nin% days))
+
     # If using an abbreviation
-    if (len_unique(x_n) == 1) {
+    if (l_x) {
       seasons <- substr(s_chr, 0, x_u)
     }
 

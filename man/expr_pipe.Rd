@@ -16,7 +16,7 @@ expr_pipe(exprs)
 Return a list of expressions all piped together as a single expression
 }
 \examples{
-ex <- tibble::tibble(cat = rep(letters, length.out = 6, each = 2), val = #' runif(6, 0, 10))
+ex <- tibble::tibble(cat = rep(letters, length.out = 6, each = 2), val = runif(6, 0, 10))
 exps <- rlang::exprs(
   data,
   dplyr::mutate(data, val = val  + 3)

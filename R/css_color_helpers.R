@@ -102,7 +102,7 @@ color_rgb_table <- function(colors) {
 #' @export
 #' @family color
 #' @examples
-#' color_luminance(css_col2vec('white'))
+#' rlang::exec(color_luminance, !!!css_col2vec('white'))
 color_luminance <- function(red, green, blue, alpha, ...) {
   .rgb <- rlang::set_names(c(red, green, blue), c("red", "green", "blue"))
   .rgb <- .rgb / 255

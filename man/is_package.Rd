@@ -17,6 +17,7 @@ is_package()
 }
 \seealso{
 Other package dev: 
+\code{\link{get_package_fns}()},
 \code{\link{is_package_dev}()}
 }
 \concept{package dev}

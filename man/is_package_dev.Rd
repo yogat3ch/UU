@@ -17,6 +17,7 @@ Is package in development or installed
 }
 \seealso{
 Other package dev: 
+\code{\link{get_package_fns}()},
 \code{\link{is_package}()}
 }
 \concept{package dev}

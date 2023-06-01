@@ -37,9 +37,9 @@ See \link[utils]{object.size}
 Vectorized version of size
 }
 \examples{
-size(50, "mb")
-size(50, "gb")
-size(50, "gb", "mb")
+size(50, "Mb")
+size(50, "Gb")
+size(50, "Gb", "Mb")
 }
 \seealso{
 size_

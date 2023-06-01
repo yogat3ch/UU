@@ -19,7 +19,7 @@ Simple lookup of values
 }
 \examples{
 lookup <- rlang::set_names(1:5, letters[1:5])
-vlookup(sample(1:5, 5), lookup)
+vlookup(sample(1:5, 5), lookup, switch_names_values = TRUE)
 }
 \seealso{
 \code{\link[=names_values_switch]{names_values_switch()}}
