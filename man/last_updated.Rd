@@ -39,6 +39,7 @@ Check the last modified time files or paths
 }
 \seealso{
 Other file IO: 
+\code{\link{col_types}()},
 \code{\link{dep_read}()},
 \code{\link{dep_write}()},
 \code{\link{dir_fn}()},

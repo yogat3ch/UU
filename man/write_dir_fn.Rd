@@ -25,6 +25,7 @@ Write \code{dir} helper function that are robust to dev vs deployed package stat
 }
 \seealso{
 Other file IO: 
+\code{\link{col_types}()},
 \code{\link{dep_read}()},
 \code{\link{dep_write}()},
 \code{\link{dir_fn}()},

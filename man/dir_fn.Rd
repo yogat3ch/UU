@@ -20,6 +20,7 @@ dir_fn("data")("random_data", "file", ext = "txt")
 }
 \seealso{
 Other file IO: 
+\code{\link{col_types}()},
 \code{\link{dep_read}()},
 \code{\link{dep_write}()},
 \code{\link{dirs}},

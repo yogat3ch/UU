@@ -748,62 +748,6 @@ match_letters <- function(x, ..., n = 1, multiple = FALSE, ignore.case = FALSE, 
   out
 }
 
-hash <- tibble::tribble(~ typ, ~ hud, ~ fun, ~ chr, ~col,
-                       "integer", "I", readr::parse_integer, "i", rlang::expr(readr::col_integer()),
-                       "numeric", "I", readr::parse_number, "n", rlang::expr(readr::col_number()),
-                       "character", "S", readr::parse_character, "c", rlang::expr(readr::col_character()),
-                       "logical", "S", readr::parse_logical, "l", rlang::expr(readr::col_logical()),
-                       "factor", "I", readr::parse_factor, "f", rlang::expr(readr::col_factor()),
-                       "Date", "D", readr::parse_date, "D", rlang::expr(readr::col_date()),
-                       "POSIXct", "T", readr::parse_datetime, "T", rlang::expr(readr::col_datetime()),
-                       "POSIXt", "T", readr::parse_datetime, "T", rlang::expr(readr::col_datetime()),
-                       "POSIXlt", "T", readr::parse_datetime, "T", rlang::expr(readr::col_datetime()),
-                       "list", "", readr::guess_parser, "?", rlang::expr(readr::col_guess())
-)
-
-#' @title Converts input to a specified type output
-#' @description Given various inputs, provide a col_type specification in the format indicated by `outtype`
-#' @param x \code{(vector/function)} One of:
-#' \itemize{
-#'   \item{column}{ \code{(any)}}
-#'   \item{a type specification from HUD}{ \code{(character)}}
-#'   \item{a readr `parse_*` function (See \link[readr]{parse_logical})}{ \code{(function)}}
-#'   \item{a readr type specification (See \link[readr]{cols})}{ \code{(character)}}
-#' }
-#' @param outtype \code{(character)} One of:
-#' \itemize{
-#'   \item{\code{"chr"}}{ Returns the class as a readr abbreviation (See \link[readr]{cols})}
-#'   \item{\code{"hud"}}{ \code{(character)} a type specification from HUD}
-#'   \item{\code{"fun"}}{a readr `parse_*` function (See \link[readr]{parse_logical})}{ \code{(function)}}
-#'   \item{\code{"typ"}}{ \code{(character)} The R data class}
-#'   \item{\code{"col"}}{ \code{(character)} The \code{\link[readr]{collector}}}
-#' }
-#' @return See outtype
-#' @export
-
-col_types <- function(x, outtype = c("chr", "hud", "fun", "typ", "col")[1]) {
-
-  intype <- purrr::when(x,
-                        all(. %in% hash$typ) ~ "typ",
-                        all(. %in% hash$hud) ~ "hud",
-                        is.function(.) ~ "fun",
-                        all(. %in% hash$chr) ~ "chr",
-                        ~ "col")
-
-
-  type <- switch(intype,
-                 col = hash$typ[hash$typ %in% class(x)[1]],
-                 typ = hash$typ[hash$typ %in% x[1]],
-                 hud = hash$typ[stringr::str_which(hash$hud, x)[1]],
-                 fun = hash$typ[purrr::map_lgl(hash$fun, identical, y = x)],
-                 chr = hash$typ[hash$chr %in% x])
-
-  out <- unique(hash[[outtype]][hash$typ %in% type])
-  if (outtype %in% c("fun", "col"))
-    out <- out[[1]]
-  out
-}
-
 class_coercion_fn <- function(.class) {
   switch(.class,
          numeric = ,
@@ -870,22 +814,6 @@ missing_args <-
       )))
     out
   }
-#' @title Get the names of all exported functions in a package
-#'
-#' @param x \code{(character)} Package name
-#' @param all.names \code{(logical)} Include names that begin with characters `.` `_` etc
-#'
-#' @return \code{(character)}
-#' @export
-#'
-#' @examples
-#' get_package_fns("dplyr")
-get_package_fns <- function(x, all.names = FALSE, pattern, negate = FALSE) {
-  nms <- ls(getNamespace(x), all.names=all.names)
-  if (!missing(pattern))
-    nms<- stringr::str_subset(nms, pattern, negate)
-  nms
-}
 
 
 

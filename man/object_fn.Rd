@@ -27,6 +27,7 @@ object_fn(1:15)
 }
 \seealso{
 Other file IO: 
+\code{\link{col_types}()},
 \code{\link{dep_read}()},
 \code{\link{dep_write}()},
 \code{\link{dir_fn}()},

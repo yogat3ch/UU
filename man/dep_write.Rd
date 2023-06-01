@@ -21,6 +21,7 @@ Write a dependency to file
 }
 \seealso{
 Other file IO: 
+\code{\link{col_types}()},
 \code{\link{dep_read}()},
 \code{\link{dir_fn}()},
 \code{\link{dirs}},

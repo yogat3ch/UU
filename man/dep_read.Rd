@@ -22,6 +22,7 @@ Read a dependency from file
 }
 \seealso{
 Other file IO: 
+\code{\link{col_types}()},
 \code{\link{dep_write}()},
 \code{\link{dir_fn}()},
 \code{\link{dirs}},

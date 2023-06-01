@@ -22,6 +22,64 @@ ext <- function(path, strip = FALSE, new_ext) {
   out
 }
 
+
+hash <- tibble::tribble(~ typ, ~ hud, ~ fun, ~ chr, ~col,
+                        "integer", "I", need_pkg("readr", "parse_integer"), "i", rlang::expr(need_pkg("readr", "col_integer")()),
+                        "numeric", "I", need_pkg("readr", "parse_number"), "n", rlang::expr(need_pkg("readr", "col_number")()),
+                        "character", "S", need_pkg("readr", "parse_character"), "c", rlang::expr(need_pkg("readr", "col_character")()),
+                        "logical", "S", need_pkg("readr", "parse_logical"), "l", rlang::expr(need_pkg("readr", "col_logical")()),
+                        "factor", "I", need_pkg("readr", "parse_factor"), "f", rlang::expr(need_pkg("readr", "col_factor")()),
+                        "Date", "D", need_pkg("readr", "parse_date"), "D", rlang::expr(need_pkg("readr", "col_date")()),
+                        "POSIXct", "T", need_pkg("readr", "parse_datetime"), "T", rlang::expr(need_pkg("readr", "col_datetime")()),
+                        "POSIXt", "T", need_pkg("readr", "parse_datetime"), "T", rlang::expr(need_pkg("readr", "col_datetime")()),
+                        "POSIXlt", "T", need_pkg("readr", "parse_datetime"), "T", rlang::expr(need_pkg("readr", "col_datetime")()),
+                        "list", "", need_pkg("readr", "guess_parser"), "?", rlang::expr(need_pkg("readr", "col_guess")())
+)
+
+#' @title Converts input to a specified type output
+#' @description Given various inputs, provide a col_type specification in the format indicated by `outtype`
+#' @param x \code{(vector/function)} One of:
+#' \itemize{
+#'   \item{column}{ \code{(any)}}
+#'   \item{a type specification from HUD}{ \code{(character)}}
+#'   \item{a readr `parse_*` function (See \link[readr]{parse_logical})}{ \code{(function)}}
+#'   \item{a readr type specification (See \link[readr]{cols})}{ \code{(character)}}
+#' }
+#' @param outtype \code{(character)} One of:
+#' \itemize{
+#'   \item{\code{"chr"}}{ Returns the class as a readr abbreviation (See \link[readr]{cols})}
+#'   \item{\code{"hud"}}{ \code{(character)} a type specification from HUD}
+#'   \item{\code{"fun"}}{a readr `parse_*` function (See \link[readr]{parse_logical})}{ \code{(function)}}
+#'   \item{\code{"typ"}}{ \code{(character)} The R data class}
+#'   \item{\code{"col"}}{ \code{(character)} The \code{\link[readr]{collector}}}
+#' }
+#' @return See outtype
+#' @family file IO
+#' @export
+
+col_types <- function(x, outtype = c("chr", "hud", "fun", "typ", "col")[1]) {
+
+  intype <- purrr::when(x,
+                        all(. %in% hash$typ) ~ "typ",
+                        all(. %in% hash$hud) ~ "hud",
+                        is.function(.) ~ "fun",
+                        all(. %in% hash$chr) ~ "chr",
+                        ~ "col")
+
+
+  type <- switch(intype,
+                 col = hash$typ[hash$typ %in% class(x)[1]],
+                 typ = hash$typ[hash$typ %in% x[1]],
+                 hud = hash$typ[stringr::str_which(hash$hud, x)[1]],
+                 fun = hash$typ[purrr::map_lgl(hash$fun, identical, y = x)],
+                 chr = hash$typ[hash$chr %in% x])
+
+  out <- unique(hash[[outtype]][hash$typ %in% type])
+  if (outtype %in% c("fun", "col"))
+    out <- out[[1]]
+  out
+}
+
 #' Return the size of a package, or all packages in a folder
 #'
 #' @param packages \code{chr} of package names
