@@ -49,16 +49,16 @@ ext <- function(path, strip = FALSE, new_ext) {
 col_types <- function(x, outtype = c("chr", "hud", "fun", "typ", "col")[1]) {
 
   hash <- tibble::tribble(~ typ, ~ hud, ~ fun, ~ chr, ~col,
-                          "integer", "I", need_pkg("readr", "parse_integer"), "i", rlang::expr(need_pkg("readr", "col_integer")()),
-                          "numeric", "I", need_pkg("readr", "parse_number"), "n", rlang::expr(need_pkg("readr", "col_number")()),
-                          "character", "S", need_pkg("readr", "parse_character"), "c", rlang::expr(need_pkg("readr", "col_character")()),
-                          "logical", "S", need_pkg("readr", "parse_logical"), "l", rlang::expr(need_pkg("readr", "col_logical")()),
-                          "factor", "I", need_pkg("readr", "parse_factor"), "f", rlang::expr(need_pkg("readr", "col_factor")()),
-                          "Date", "D", need_pkg("readr", "parse_date"), "D", rlang::expr(need_pkg("readr", "col_date")()),
-                          "POSIXct", "T", need_pkg("readr", "parse_datetime"), "T", rlang::expr(need_pkg("readr", "col_datetime")()),
-                          "POSIXt", "T", need_pkg("readr", "parse_datetime"), "T", rlang::expr(need_pkg("readr", "col_datetime")()),
-                          "POSIXlt", "T", need_pkg("readr", "parse_datetime"), "T", rlang::expr(need_pkg("readr", "col_datetime")()),
-                          "list", "", need_pkg("readr", "guess_parser"), "?", rlang::expr(need_pkg("readr", "col_guess")())
+                          "integer", "I", UU::need_pkg("readr", "parse_integer"), "i", rlang::expr(UU::need_pkg("readr", "col_integer")()),
+                          "numeric", "I", UU::need_pkg("readr", "parse_number"), "n", rlang::expr(UU::need_pkg("readr", "col_number")()),
+                          "character", "S", UU::need_pkg("readr", "parse_character"), "c", rlang::expr(UU::need_pkg("readr", "col_character")()),
+                          "logical", "S", UU::need_pkg("readr", "parse_logical"), "l", rlang::expr(UU::need_pkg("readr", "col_logical")()),
+                          "factor", "I", UU::need_pkg("readr", "parse_factor"), "f", rlang::expr(UU::need_pkg("readr", "col_factor")()),
+                          "Date", "D", UU::need_pkg("readr", "parse_date"), "D", rlang::expr(UU::need_pkg("readr", "col_date")()),
+                          "POSIXct", "T", UU::need_pkg("readr", "parse_datetime"), "T", rlang::expr(UU::need_pkg("readr", "col_datetime")()),
+                          "POSIXt", "T", UU::need_pkg("readr", "parse_datetime"), "T", rlang::expr(UU::need_pkg("readr", "col_datetime")()),
+                          "POSIXlt", "T", UU::need_pkg("readr", "parse_datetime"), "T", rlang::expr(UU::need_pkg("readr", "col_datetime")()),
+                          "list", "", UU::need_pkg("readr", "guess_parser"), "?", rlang::expr(UU::need_pkg("readr", "col_guess")())
   )
   intype <- purrr::when(x,
                         all(. %in% hash$typ) ~ "typ",
