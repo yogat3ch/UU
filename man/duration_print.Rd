@@ -21,6 +21,7 @@ duration_print(lubridate::period(6223))
 \seealso{
 Other time: 
 \code{\link{excel_date}()},
+\code{\link{month_factor}()},
 \code{\link{season_factor}()},
 \code{\link{time_aggregates}},
 \code{\link{time_difftimes}},

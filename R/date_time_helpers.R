@@ -109,13 +109,92 @@ season_factor <- function(x, label = FALSE, abbr = TRUE) {
         if (!rlang::is_empty(lgl))
           out[lgl] <- s_chr[seasons == m]
       }
-      out <- factor(out, levels = if (label) s_chr else seasons)
+      out <- factor(out, levels = if (label) s_chr else seasons, ordered = TRUE)
     }
   }
 
   return(out)
 }
 
+#' Month as factor/numeric
+#'
+#' @param x \code{chr/Date/POSIXt} Names of months as case insensitive character vector, if using abbreviations, they must be of consistent length. Otherwise, a `Date` or `POSIXt`.
+#'
+#' @return \code{factor} If `x` is provided, the month as a factor. If `x` is not provided, an ordered factor of the months
+#' @export
+#' @family time
+#' @examples
+#' month_factor()
+#' month_factor(c('Se', 'No'))
+#' month_factor(c('Se', 'No'), label = TRUE)
+#' month_factor(seq(lubridate::floor_date(Sys.time(), "year"), Sys.time(), by = "day"), label = TRUE, abbr = FALSE)
+month_factor <- function(x, label = FALSE, abbr = TRUE) {
+  months <- if (abbr) {
+    month.abb
+  } else {
+    month.name
+  }
+
+  m_num <- 1:12
+
+  if (missing(x))
+    return(factor(months, months))
+
+  if (is.character(x)) {
+    out <- x
+    x_n <- nchar(x)
+    x_u <- unique(x_n)
+    l_x <- len_unique(x_n) == 1
+    if (any(x_n < 2) || !l_x)
+      gbort("All abbreviations must be 2 characters or more to disambiguate")
+
+    # If using an abbreviation
+    m_chr <- if (l_x) {
+      substr(months, 0, x_u)
+    } else {
+      months
+    }
+
+
+
+    val <- if (label)
+      months
+    else {
+      out <- vector(mode = "integer", length = length(out))
+      as.integer(1:12)
+    }
+
+    for (m in m_chr) {
+      lgl <- grep(m, x, ignore.case = TRUE)
+      if (!rlang::is_empty(lgl))
+        out[lgl] <- val[m_chr == m]
+    }
+
+    if (label)
+      out <- factor(out, levels = months, ordered = TRUE)
+
+  } else if (lubridate::is.Date(x) || lubridate::is.POSIXt(x)) {
+    out <- lubridate::month(x)
+    if (label) {
+      for (m in unique(out)) {
+        lgl <- out == m
+        if (!rlang::is_empty(lgl))
+          out[lgl] <- months[m_num == m]
+      }
+    }
+    out <- factor(out, levels = months, ordered = TRUE)
+  } else if (is.numeric(x)) {
+    out <- x
+    if (label) {
+      for (i in unique(out)) {
+        lgl <- out == i
+        out[lgl] <- months[i]
+      }
+    }
+    out <- factor(out, levels = months, ordered = TRUE)
+  }
+  return(out)
+}
 #' Translate a duration into the human-legible estimation as a character
 #'
 #' @param duration \code{Duration}

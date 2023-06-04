@@ -25,6 +25,7 @@ season_factor(seq(lubridate::floor_date(Sys.time(), "year"), Sys.time(), by = "d
 Other time: 
 \code{\link{duration_print}()},
 \code{\link{excel_date}()},
+\code{\link{month_factor}()},
 \code{\link{time_aggregates}},
 \code{\link{time_difftimes}},
 \code{\link{time_elapsed}()},

@@ -22,6 +22,7 @@ time_factor(c("year", "week"))
 Other time: 
 \code{\link{duration_print}()},
 \code{\link{excel_date}()},
+\code{\link{month_factor}()},
 \code{\link{season_factor}()},
 \code{\link{time_aggregates}},
 \code{\link{time_difftimes}},
