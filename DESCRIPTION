@@ -1,6 +1,6 @@
 Package: UU
 Title: Universally Useful
-Version: 1.30.0
+Version: 1.31.0
 Authors@R: person(given = "Stephen", family = "Holsenbeck",
        role = c("aut", "cre"), email =
        "sholsen@alumni.emory.edu")
@@ -34,6 +34,7 @@ Collate:
     'file_helpers.R'
     'infixes.R'
     'load_helpers.R'
+    'modeling.R'
     'onload.R'
     'opts_helpers.R'
     'pkg_helpers.R'
