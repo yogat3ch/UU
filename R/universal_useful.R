@@ -1013,9 +1013,9 @@ str_break_every <- function(x, every) {
   purrr::map_chr(x, ~paste0(strwrap(.x, every), collapse = "\n"))
 }
 
-#' Inequality conversion key
+#' Math comparison comparator to plain english key
 #' @export
-inequality_key <- c(
+comparison_key <- c(
   "less than" = "<",
   "greater than" = ">",
   "more than" = ">",
@@ -1038,22 +1038,22 @@ inequality_key <- c(
 #'
 #' @return \code{chr/name/fun} depending on the requested `outtype`
 #' @export
-#' @seealso inequality_key
+#' @seealso comparison_key
 #' @examples
-#' str_inequality(">")
-#' str_inequality("less than or equal to", "fun")
-#' str_inequality("greater than or equal to", "sym")
-str_inequality <- function(x, outtype = "chr") {
+#' str_comparison(">")
+#' str_comparison("less than or equal to", "fun")
+#' str_comparison("greater than or equal to", "sym")
+str_comparison <- function(x, outtype = "chr") {
 
   out <- purrr::map_chr(x, ~{
-    .switches <- if (.x %in% names(inequality_key))
-      inequality_key
+    .switches <- if (.x %in% names(comparison_key))
+      comparison_key
     else
-      rlang::set_names(names(inequality_key), inequality_key)
+      rlang::set_names(names(comparison_key), comparison_key)
       rlang::exec(switch, trimws(x),
              !!!.switches)
   })
-  if (all(out %in% inequality_key) && !outtype %in% c("chr","str"))
+  if (all(out %in% comparison_key) && !outtype %in% c("chr","str"))
     out <- switch(outtype,
                   name = ,
                   sym = rlang::syms(out),
