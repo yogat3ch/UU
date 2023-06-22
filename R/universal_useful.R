@@ -1024,6 +1024,10 @@ comparison_key <- c(
   "greater than or equal to" = ">=",
   "equal to" = "="
 )
+#' Math comparison comparator inverse key
+#' @export
+comparison_inverse_key <- tibble::tibble(key = comparison_key[c(1:2,4,5)], inverse = c(">=", "<=", ">", "<"))
+
 #' Convert inequality statements between character, mathematic, symbol and function representations
 #'
 #' @param x \code{chr} vector or inequality statements
@@ -1062,6 +1066,28 @@ str_comparison <- function(x, outtype = "chr") {
   return(out)
 }
 
+
+#' Convert a math comparator to it's inverse
+#'
+#' @param x \code{chr/fun} Math comparator, one of `r paste0(comparison_inverse_key$key, collapse = ', ')`
+#'
+#' @return \code{chr/fun} the inverse comparator as the same class as `x`
+#' @export
+#'
+#' @examples
+#' comparison_inverse(">=")
+comparison_inverse <- function(x) {
+  as_fun <- is.function(x)
+  s <- if (as_fun)
+    stringr::str_extract(rlang::expr_deparse(x), "[><=]+")
+  else
+    x
+
+  inverse <- comparison_inverse_key[which(comparison_inverse_key$key == s),]$inverse
+  if (as_fun)
+    inverse <- getFromNamespace(inverse, "base")
+  return(inverse)
+}
 
 #' Change or apply filters to output type
 #'
