@@ -18,8 +18,4 @@ Remove zero length strings (or string with all spaces)
 \examples{
 zchar_remove(c("", "  ", "a"))
 }
-\seealso{
-Other character: 
-\code{\link{zchar}()}
-}
 \concept{character}

@@ -1,16 +1,3 @@
-
-#' Is zero-length character?
-#'
-#' @param x \code{chr}
-#'
-#' @return \code{lgl}
-#' @export
-#' @family character
-#' @examples
-#' zchar("")
-#' zchar(" ")
-zchar <- Negate(nzchar)
-
 #' Remove zero length strings (or string with all spaces)
 #'
 #' @param x \code{chr}
@@ -104,38 +91,6 @@ expr_pipe <- function(exprs) {
 }
 
 
-#' @title Is object legit?
-#' @description Is object non-null, non-empty, non-NA, and not a try-error?
-#' @param x \code{(object)}
-#' @return \code{(logical)}
-#' @family conditionals
-#' @export
-
-is_legit <- function(x) {
-  !(all(is.null(x)) || rlang::is_empty(x) || all(suppressWarnings(is.na(x))) || inherits(x, c("try-error", "error")))
-}
-
-#' Are the values in each object the same?
-#' @description
-#' The primary difference from \code{\link[base]{identical}} & \code{\link[base]{all.equal}} is that objects are sorted by name so order doesn't matter.
-#'
-#' @param x \code{obj}
-#' @param y \code{obj}
-#'
-#' @return \code{lgl}
-#' @export
-#'
-#' @examples
-#' same(list(x = 1, y = 2), list(y = 2, x = 1))
-same <- function(x, y) {
-  if (!is.null(names(x)) && !is.null(names(y))) {
-    x <- x[order(names(x))]
-    y <- y[order(names(y))]
-  }
-  isTRUE(all.equal(x, y))
-}
-
-
 #' @title Abbreviations of numeric magnitude
 #' @family rounding
 #' @export
@@ -210,19 +165,6 @@ round_to <- function(..., accuracy = NULL, fn = min, f = NULL) {
   )
 }
 
-#' Is object an error
-#'
-#' @param x \code{obj}
-#'
-#' @return \code{lgl}
-#' @export
-#' @family conditionals
-#' @examples
-#' is_error(try(stop()))
-is_error <- function(x) {
-  inherits(x, c("error", "try-error"))
-}
-
 #' Compute the order of magnitude triplet ie thousand, million, trillion
 #'
 #' @param x \code{num}
@@ -270,44 +212,6 @@ evens <- function(x) subset(x, x %% 2 == 0)
 #' odds(1:10)
 #'
 odds <- function(x) subset(x, x %% 2 == 1)
-
-#' Which is larger
-#'
-#' @param x \code{num/obj}
-#' @param y \code{num/obj}
-#' @param compare_length \code{lgl} whether the lengths rather than the values should be compared
-#'
-#' @return \code{num} the index of the larger, or 0 if equal
-#' @export
-#' @family conditionals
-#' @examples
-#' larger(1,2)
-#' larger(1,2, compare_length = FALSE)
-#' larger(letters[1:3],letters[1:2])
-larger <- function(x, y, compare_length = TRUE) {
-  v <- list(x, y)
-  if (compare_length)
-    v <- purrr::map(v, length)
-  if (v[[1]] == v[[2]]) {
-    0
-  } else {
-    which.max(purrr::list_flatten(v))
-  }
-}
-
-#' Are most values TRUE
-#' @description IF more than half the values are TRUE, returns TRUE
-#' @param x \code{lgl}
-#'
-#' @return \code{lgl}
-#' @export
-#' @family conditionals
-#' @examples
-#' most(c(TRUE,TRUE,FALSE))
-#' most(c(TRUE,FALSE,FALSE))
-most <- function(x) {
-  (sum(x, na.rm = TRUE) / length(na.omit(x))) > .5
-}
 
 #' Extract the units from a string
 #' @description It is assumed that units are encased in parentheses at the end of the string
@@ -434,19 +338,6 @@ smode <- function(x) {
 }
 
 
-#' Does `x` = `y`?
-#'
-#' @param x \code{vector}
-#' @param y \code{vector}
-#' @family conditionals
-#' @return \code{lgl/chr} See \link[base]{all.equal}
-#' @export
-#'
-
-all_equal <- function(x, y) {
-  isTRUE(all.equal(sort(x), sort(y)))
-}
-
 #' Switch the names and the values of a vector
 #'
 #' @param x \code{named object}
@@ -561,24 +452,6 @@ gmsg <- function (
 ) {
   cli::cat_line(cli::format_message(msg, .envir = e))
 }
-
-
-
-#' Is Session in a Project?
-#'
-#' @return \code{lgl}
-#' @export
-#' @family conditionals
-#' @examples
-#' is_project()
-is_project <- function() {
-  desc <- utils::packageDescription("rstudioapi")
-  if (is_legit(desc) && rstudioapi::isAvailable())
-    is_legit(rstudioapi::getActiveProject())
-  else
-    FALSE
-}
-
 
 
 #' Get a function from a package, abort if package not installed.

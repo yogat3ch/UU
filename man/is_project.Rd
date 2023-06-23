@@ -17,10 +17,11 @@ is_project()
 }
 \seealso{
 Other conditionals: 
-\code{\link{all_equal}()},
 \code{\link{is_error}()},
 \code{\link{is_legit}()},
 \code{\link{larger}()},
-\code{\link{most}()}
+\code{\link{most}()},
+\code{\link{same}()},
+\code{\link{zchar}()}
 }
 \concept{conditionals}
