@@ -362,14 +362,6 @@ Create a sequence from the start to the end for a given value from an rle_df for
 </td>
 </tr>
 <tr>
-<td>same</td>
-<td></td>
-<td>Are the values in each object the same?</td>
-<td>
-The primary difference from identical &amp; all.equal is that objects are sorted by name so order doesn't matter.
-</td>
-</tr>
-<tr>
 <td>startup</td>
 <td></td>
 <td>Load project &amp; user-level .Renviron &amp; .Rprofile</td>
@@ -407,14 +399,6 @@ Abbreviations of numeric magnitude for various units
 <td>Remove zero length strings (or string with all spaces)</td>
 <td>
 Remove zero length strings (or string with all spaces)
-</td>
-</tr>
-<tr>
-<td>zchar</td>
-<td>character</td>
-<td>Is zero-length character?</td>
-<td>
-Is zero-length character?
 </td>
 </tr>
 <tr>
@@ -532,14 +516,6 @@ Throw cli_alert_warning with format_warning
 </td>
 </tr>
 <tr>
-<td>all_equal</td>
-<td>conditionals</td>
-<td>Does x = y?</td>
-<td>
-Does x = y?
-</td>
-</tr>
-<tr>
 <td>is_error</td>
 <td>conditionals</td>
 <td>Is object an error</td>
@@ -577,6 +553,22 @@ Which is larger
 <td>Are most values TRUE</td>
 <td>
 IF more than half the values are TRUE, returns TRUE
+</td>
+</tr>
+<tr>
+<td>same</td>
+<td>conditionals</td>
+<td>Are the values in each object the same?</td>
+<td>
+The primary difference from identical &amp; all.equal is that objects are sorted by name so order doesn't matter. Set sort_by_names = FALSE to sort by values.
+</td>
+</tr>
+<tr>
+<td>zchar</td>
+<td>conditionals</td>
+<td>Is zero-length character?</td>
+<td>
+Is zero-length character?
 </td>
 </tr>
 <tr>
