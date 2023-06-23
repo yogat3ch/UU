@@ -707,6 +707,31 @@ find_by_class <- function(class, e = rlang::caller_env()) {
   out
 }
 
+#' Rename a list
+#' @description
+#' From [krassowski](https://stackoverflow.com/users/6646912/krassowski) on SO [link](https://stackoverflow.com/a/73621060/2675597)
+#'
+#' @param .data \code{list} To be renamed
+#' @param ... \code{named arguments} in the form new_name = old_name (unquoted)
+#'
+#' @return \code{list}
+#' @export
+#'
+#' @examples
+#' my_list = list(a=1, b=2, c=3)
+#' list_rename(my_list, x=a, y=b)
+list_rename <- function(.data, ...) {
+  mapping = sapply(
+    rlang::enquos(...),
+    rlang::as_name
+  )
+  new_names = setNames(nm=names(.data))
+  # `new_name = old_name` for consistency with `dplyr::rename`
+  new_names[mapping] = names(mapping)
+  # for `old_name = new_name` use: `new_names[names(mapping)] = mapping`
+  setNames(.data, new_names)
+}
+
 #' @title Find the names in common
 #' @description Given named objects, find the names in common
 #' @param ... \code{(objects)}
