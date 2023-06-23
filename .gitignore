@@ -38,3 +38,5 @@ vignettes/*.pdf
 
 todo.R
 .interval_timer.rds
+
+.Renviron

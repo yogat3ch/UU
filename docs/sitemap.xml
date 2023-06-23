@@ -31,6 +31,9 @@
     <loc>https://yogat3ch.github.io/UU/reference/color_distance.html</loc>
   </url>
   <url>
+    <loc>https://yogat3ch.github.io/UU/reference/color_interpolate.html</loc>
+  </url>
+  <url>
     <loc>https://yogat3ch.github.io/UU/reference/color_luminance.html</loc>
   </url>
   <url>
@@ -50,6 +53,15 @@
   </url>
   <url>
     <loc>https://yogat3ch.github.io/UU/reference/common_names.html</loc>
+  </url>
+  <url>
+    <loc>https://yogat3ch.github.io/UU/reference/comparison_inverse.html</loc>
+  </url>
+  <url>
+    <loc>https://yogat3ch.github.io/UU/reference/comparison_inverse_key.html</loc>
+  </url>
+  <url>
+    <loc>https://yogat3ch.github.io/UU/reference/comparison_key.html</loc>
   </url>
   <url>
     <loc>https://yogat3ch.github.io/UU/reference/concat_rows.html</loc>
@@ -79,7 +91,13 @@
     <loc>https://yogat3ch.github.io/UU/reference/dot-file.html</loc>
   </url>
   <url>
+    <loc>https://yogat3ch.github.io/UU/reference/dot-time_factor.html</loc>
+  </url>
+  <url>
     <loc>https://yogat3ch.github.io/UU/reference/duration_print.html</loc>
+  </url>
+  <url>
+    <loc>https://yogat3ch.github.io/UU/reference/evens.html</loc>
   </url>
   <url>
     <loc>https://yogat3ch.github.io/UU/reference/excel_date.html</loc>
@@ -110,6 +128,9 @@
   </url>
   <url>
     <loc>https://yogat3ch.github.io/UU/reference/folder.html</loc>
+  </url>
+  <url>
+    <loc>https://yogat3ch.github.io/UU/reference/formula_make.html</loc>
   </url>
   <url>
     <loc>https://yogat3ch.github.io/UU/reference/fun_docs_table.html</loc>
@@ -163,10 +184,10 @@
     <loc>https://yogat3ch.github.io/UU/reference/index.html</loc>
   </url>
   <url>
-    <loc>https://yogat3ch.github.io/UU/reference/inequality_key.html</loc>
+    <loc>https://yogat3ch.github.io/UU/reference/install_remote.html</loc>
   </url>
   <url>
-    <loc>https://yogat3ch.github.io/UU/reference/install_remote.html</loc>
+    <loc>https://yogat3ch.github.io/UU/reference/interpolate.html</loc>
   </url>
   <url>
     <loc>https://yogat3ch.github.io/UU/reference/is_error.html</loc>
@@ -211,6 +232,9 @@
     <loc>https://yogat3ch.github.io/UU/reference/list.files2.html</loc>
   </url>
   <url>
+    <loc>https://yogat3ch.github.io/UU/reference/list_rename.html</loc>
+  </url>
+  <url>
     <loc>https://yogat3ch.github.io/UU/reference/luminance_filter.html</loc>
   </url>
   <url>
@@ -239,6 +263,9 @@
   </url>
   <url>
     <loc>https://yogat3ch.github.io/UU/reference/mkpath.html</loc>
+  </url>
+  <url>
+    <loc>https://yogat3ch.github.io/UU/reference/month_factor.html</loc>
   </url>
   <url>
     <loc>https://yogat3ch.github.io/UU/reference/most.html</loc>
@@ -283,6 +310,9 @@
     <loc>https://yogat3ch.github.io/UU/reference/object_write.html</loc>
   </url>
   <url>
+    <loc>https://yogat3ch.github.io/UU/reference/odds.html</loc>
+  </url>
+  <url>
     <loc>https://yogat3ch.github.io/UU/reference/opts.html</loc>
   </url>
   <url>
@@ -322,6 +352,12 @@
     <loc>https://yogat3ch.github.io/UU/reference/round_to.html</loc>
   </url>
   <url>
+    <loc>https://yogat3ch.github.io/UU/reference/same.html</loc>
+  </url>
+  <url>
+    <loc>https://yogat3ch.github.io/UU/reference/season_factor.html</loc>
+  </url>
+  <url>
     <loc>https://yogat3ch.github.io/UU/reference/shiny_error_recover.html</loc>
   </url>
   <url>
@@ -337,10 +373,22 @@
     <loc>https://yogat3ch.github.io/UU/reference/str_break_every.html</loc>
   </url>
   <url>
-    <loc>https://yogat3ch.github.io/UU/reference/str_inequality.html</loc>
+    <loc>https://yogat3ch.github.io/UU/reference/str_comparison.html</loc>
+  </url>
+  <url>
+    <loc>https://yogat3ch.github.io/UU/reference/time_aggregates.html</loc>
+  </url>
+  <url>
+    <loc>https://yogat3ch.github.io/UU/reference/time_difftimes.html</loc>
   </url>
   <url>
     <loc>https://yogat3ch.github.io/UU/reference/time_elapsed.html</loc>
+  </url>
+  <url>
+    <loc>https://yogat3ch.github.io/UU/reference/time_factor.html</loc>
+  </url>
+  <url>
+    <loc>https://yogat3ch.github.io/UU/reference/timespan.html</loc>
   </url>
   <url>
     <loc>https://yogat3ch.github.io/UU/reference/toggle.html</loc>
