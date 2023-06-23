@@ -34,11 +34,11 @@ All the fun(s)!
 </thead>
 <tbody>
 <tr>
-<td>col_types</td>
+<td>color_interpolate</td>
 <td></td>
-<td>Converts input to a specified type output</td>
+<td>Interpolate between two colors</td>
 <td>
-Given various inputs, provide a col_type specification in the format indicated by outtype
+Interpolate between two colors
 </td>
 </tr>
 <tr>
@@ -47,6 +47,30 @@ Given various inputs, provide a col_type specification in the format indicated b
 <td>Find the names in common</td>
 <td>
 Given named objects, find the names in common
+</td>
+</tr>
+<tr>
+<td>comparison_inverse_key</td>
+<td></td>
+<td>Math comparison comparator inverse key</td>
+<td>
+Math comparison comparator inverse key
+</td>
+</tr>
+<tr>
+<td>comparison_inverse</td>
+<td></td>
+<td>Convert a math comparator to it's inverse</td>
+<td>
+Convert a math comparator to it's inverse
+</td>
+</tr>
+<tr>
+<td>comparison_key</td>
+<td></td>
+<td>Math comparison comparator to plain english key</td>
+<td>
+Math comparison comparator to plain english key
 </td>
 </tr>
 <tr>
@@ -63,6 +87,22 @@ Concatenate row values in a poorly scraped table
 <td>Vectorized version of css_col2vec</td>
 <td>
 Vectorized version of css_col2vec
+</td>
+</tr>
+<tr>
+<td>.time_factor</td>
+<td></td>
+<td>Timespans as factor</td>
+<td>
+Timespans as factor
+</td>
+</tr>
+<tr>
+<td>evens</td>
+<td></td>
+<td>Get even numbers</td>
+<td>
+Get even numbers
 </td>
 </tr>
 <tr>
@@ -106,11 +146,11 @@ Sometimes a function is passed down the call stack and it's name is unknown. Thi
 </td>
 </tr>
 <tr>
-<td>get_package_fns</td>
+<td>formula_make</td>
 <td></td>
-<td>Get the names of all exported functions in a package</td>
+<td>Create a formula given predictors and a label (response variable)</td>
 <td>
-Get the names of all exported functions in a package
+Create a formula given predictors and a label (response variable)
 </td>
 </tr>
 <tr>
@@ -162,11 +202,11 @@ Replace zero-length character strings with right hand side
 </td>
 </tr>
 <tr>
-<td>inequality_key</td>
+<td>interpolate</td>
 <td></td>
-<td>Inequality conversion key</td>
+<td>Simple interpolate between two numbers</td>
 <td>
-Inequality conversion key
+Simple interpolate between two numbers
 </td>
 </tr>
 <tr>
@@ -191,6 +231,14 @@ Handle different output type requests for match_df
 <td>The length of unique values in a vector</td>
 <td>
 The length of unique values in a vector
+</td>
+</tr>
+<tr>
+<td>list_rename</td>
+<td></td>
+<td>Rename a list</td>
+<td>
+From https://stackoverflow.com/users/6646912/krassowskikrassowski on SO https://stackoverflow.com/a/73621060/2675597link
 </td>
 </tr>
 <tr>
@@ -253,17 +301,23 @@ Provide the appropriate file extension for a given object
 </td>
 </tr>
 <tr>
+<td>odds</td>
+<td></td>
+<td>Get odd numbers</td>
+<td>
+Get odd numbers
+</td>
+</tr>
+<tr>
 <td>reexports</td>
 <td></td>
 <td>Objects exported from other packages</td>
 <td>
 These objects are imported from other packages. Follow the links
 below to see their documentation.
-
-
+&#10;
   plyrround_any
-
-  rlang%|%, %||%
+&#10;  rlang%|%, %||%
 </td>
 </tr>
 <tr>
@@ -308,6 +362,14 @@ Create a sequence from the start to the end for a given value from an rle_df for
 </td>
 </tr>
 <tr>
+<td>same</td>
+<td></td>
+<td>Are the values in each object the same?</td>
+<td>
+The primary difference from identical &amp; all.equal is that objects are sorted by name so order doesn't matter.
+</td>
+</tr>
+<tr>
 <td>startup</td>
 <td></td>
 <td>Load project &amp; user-level .Renviron &amp; .Rprofile</td>
@@ -324,7 +386,7 @@ Break word every x characters
 </td>
 </tr>
 <tr>
-<td>str_inequality</td>
+<td>str_comparison</td>
 <td></td>
 <td>Convert inequality statements between character, mathematic, symbol and function representations</td>
 <td>
@@ -523,6 +585,14 @@ IF more than half the values are TRUE, returns TRUE
 <td>Get a function from a package, abort if package not installed.</td>
 <td>
 Get a function from a package, abort if package not installed.
+</td>
+</tr>
+<tr>
+<td>col_types</td>
+<td>file IO</td>
+<td>Converts input to a specified type output</td>
+<td>
+Given various inputs, provide a col_type specification in the format indicated by outtype
 </td>
 </tr>
 <tr>
@@ -744,17 +814,17 @@ Run expressions only when option use_debug = TRUE
 <tr>
 <td>opts</td>
 <td>options</td>
-<td>Check option value. Use interactively only!</td>
+<td>Check option value.</td>
 <td>
-Check option value. Use interactively only!
+This is a list that will populate dynamically with the options in the project local .Rprofile allowing them to be read by calling the method. This population of methods happens at the beginning of a session. It can be accessed with UU::opts. If you wish to check option values in non-interactive sessions, see the write_opts function which will write a file with an opts object based on the current state of .Rprofile that can be used during non-interactive (deployed apps) sessions.
 </td>
 </tr>
 <tr>
 <td>toggle</td>
 <td>options</td>
-<td>Toggle an option</td>
+<td>Toggle or change an option listed in a local .Rprofile for the session</td>
 <td>
-Meant for interactive use only.
+Any options in the project local .Rprofile will populate this object as named methods. These named methods, when called, will toggle the options on or off. Alternatively, if an option is not logical, it can be changed using the set argument. This loads at the start of an R session if startup has been called in the user-level .Rprofile. These methods are meant for interactive use only.
 </td>
 </tr>
 <tr>
@@ -763,6 +833,14 @@ Meant for interactive use only.
 <td>Write all the option checking functions to a file</td>
 <td>
 Write all the option checking functions to a file
+</td>
+</tr>
+<tr>
+<td>get_package_fns</td>
+<td>package dev</td>
+<td>Get the names of all exported functions in a package</td>
+<td>
+Get the names of all exported functions in a package
 </td>
 </tr>
 <tr>
@@ -787,11 +865,9 @@ Is working directory a package?
 <td>profile_script</td>
 <td>
 This function will add profiling code to a script wherever the following flags are found in the first non-spacing characters on the line:
-
-#&lt;p Opening comment flag where profile_open will be inserted.
+&#10;#&lt;p Opening comment flag where profile_open will be inserted.
 #&gt;p Closing comment flag where profile_close will be inserted.
-
-</td>
+&#10;</td>
 </tr>
 <tr>
 <td>creds_to_renviron</td>
@@ -921,8 +997,7 @@ See object.size</td>
 <td>
 Digital storage size conversion
 See object.size
-
-Vectorized version of size
+&#10;Vectorized version of size
 </td>
 </tr>
 <tr>
@@ -1032,6 +1107,38 @@ Convert Excel character date representation to a Date
 </td>
 </tr>
 <tr>
+<td>month_factor</td>
+<td>time</td>
+<td>Month as factor/numeric</td>
+<td>
+Month as factor/numeric
+</td>
+</tr>
+<tr>
+<td>season_factor</td>
+<td>time</td>
+<td>Season as factor/numeric</td>
+<td>
+Season as factor/numeric
+</td>
+</tr>
+<tr>
+<td>time_aggregates</td>
+<td>time</td>
+<td>Timespans as character</td>
+<td>
+Timespans as character
+</td>
+</tr>
+<tr>
+<td>time_difftimes</td>
+<td>time</td>
+<td>Timespans as durations</td>
+<td>
+Timespans as durations
+</td>
+</tr>
+<tr>
 <td>time_elapsed</td>
 <td>time</td>
 <td>Return a logical on an interval</td>
@@ -1040,11 +1147,27 @@ Return a logical on an interval
 </td>
 </tr>
 <tr>
+<td>time_factor</td>
+<td>time</td>
+<td>Turn timespans into an ordered factor</td>
+<td>
+Turn timespans into an ordered factor
+</td>
+</tr>
+<tr>
+<td>timespan</td>
+<td>time</td>
+<td>Create a timespan duration</td>
+<td>
+Create a timespan duration
+</td>
+</tr>
+<tr>
 <td>week_factor</td>
 <td>time</td>
-<td>Get numeric day of the week</td>
+<td>Day of the week as factor/numeric</td>
 <td>
-Get numeric day of the week
+Day of the week as factor/numeric
 </td>
 </tr>
 <tr>
