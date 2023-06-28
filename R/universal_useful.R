@@ -424,7 +424,24 @@ gwarn <- function (
   .frequency = c("always", "regularly", "once"),
   e = rlang::caller_env()
 ) {
-  rlang::warn(cli::format_warning(message, .envir = e) , use_cli_format = TRUE)
+  rlang::warn(cli::format_warning(message, .envir = e) , use_cli_format = TRUE, .frequency = .frequency, .frequency_id = "UU", body = body, footer = footer)
+}
+
+#' Custom info message
+#' @description Provide info with \link[rlang]{inform}
+#' @inheritParams gbort
+#' @inheritParams rlang::inform
+#' @family condition signaling
+#' @export
+
+ginfo <- function (
+  message = NULL,
+  body = NULL,
+  footer = NULL,
+  .frequency = c("always", "regularly", "once"),
+  e = rlang::caller_env()
+) {
+  rlang::inform(cli::format_message(message, .envir = e) , use_cli_format = TRUE, .frequency = .frequency, .frequency_id = "UU", body = body, footer = footer)
 }
 
 #' Custom message
