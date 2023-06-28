@@ -1,16 +1,3 @@
-#' Remove zero length strings (or string with all spaces)
-#'
-#' @param x \code{chr}
-#'
-#' @return \code{chr}
-#' @export
-#' @family character
-#' @examples
-#' zchar_remove(c("", "  ", "a"))
-zchar_remove <- function(x) {
-  .x <- trimws(x)
-  .x[nzchar(.x)]
-}
 
 #' The length of unique values in a vector
 #'

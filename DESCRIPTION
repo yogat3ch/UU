@@ -43,6 +43,7 @@ Collate:
     'setup_helpers.R'
     'shiny_helpers.R'
     'universal_useful.R'
+    'utils_character.R'
     'utils_conditionals.R'
     'utils_environments_namespaces.R'
     'utils_file_io.R'
