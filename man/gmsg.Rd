@@ -14,6 +14,7 @@ Message using \link[cli]{format_message} & \link[cli]{cat_line}
 \seealso{
 Other condition signaling: 
 \code{\link{gbort}()},
+\code{\link{ginfo}()},
 \code{\link{gwarn}()}
 }
 \concept{condition signaling}

@@ -30,6 +30,7 @@ Throw \link[cli]{cli_alert_warning} with \link[cli]{format_warning}
 \seealso{
 Other condition signaling: 
 \code{\link{gbort}()},
+\code{\link{ginfo}()},
 \code{\link{gmsg}()}
 }
 \concept{condition signaling}
