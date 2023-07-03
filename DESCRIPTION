@@ -1,6 +1,6 @@
 Package: UU
 Title: Universally Useful
-Version: 1.33.2
+Version: 1.33.3
 Authors@R: person(given = "Stephen", family = "Holsenbeck",
        role = c("aut", "cre"), email =
        "sholsen@alumni.emory.edu")
@@ -49,3 +49,5 @@ Collate:
     'utils_file_io.R'
     'utils_file_navigation.R'
 URL: https://yogat3ch.github.io/UU/
+Remotes: 
+    yogat3ch/UU
