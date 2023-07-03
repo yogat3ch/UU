@@ -42,13 +42,13 @@ zchar <- Negate(nzchar)
 #'
 #' @param x \code{obj}
 #' @param y \code{obj}
-#'
+#' @inheritDotParams all.equal
 #' @return \code{lgl}
 #' @export
 #' @family conditionals
 #' @examples
 #' same(list(x = 1, y = 2), list(y = 2, x = 1))
-same <- function(x, y, sort_by_names = TRUE) {
+same <- function(x, y, sort_by_names = TRUE, ...) {
   if (sort_by_names) {
     stopifnot(`x must be named` = !is.null(names(x)))
     stopifnot(`y must be named` = !is.null(names(y)))
@@ -58,7 +58,7 @@ same <- function(x, y, sort_by_names = TRUE) {
     x <- sort(x)
     y <- sort(y)
   }
-  isTRUE(all.equal(x, y))
+  isTRUE(all.equal(x, y, ...))
 }
 
 #' Which is larger
