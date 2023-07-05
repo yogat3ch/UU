@@ -49,9 +49,11 @@ zchar <- Negate(nzchar)
 #' @examples
 #' same(list(x = 1, y = 2), list(y = 2, x = 1))
 same <- function(x, y, sort_by_names = TRUE, ...) {
-  if (sort_by_names) {
-    stopifnot(`x must be named` = !is.null(names(x)))
-    stopifnot(`y must be named` = !is.null(names(y)))
+  nms = list(x = !is.null(names(x)),
+             y = !is.null(names(y)))
+  if (sort_by_names && all(nms$x, nms$y)) {
+    stopifnot(`x must be named` = nms$x)
+    stopifnot(`y must be named` = nms$y)
     x <- x[order(names(x))]
     y <- y[order(names(y))]
   } else {
