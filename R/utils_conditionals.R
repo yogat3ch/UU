@@ -51,14 +51,17 @@ zchar <- Negate(nzchar)
 same <- function(x, y, sort_by_names = TRUE, ...) {
   nms = list(x = !is.null(names(x)),
              y = !is.null(names(y)))
+
   if (sort_by_names && all(nms$x, nms$y)) {
     stopifnot(`x must be named` = nms$x)
     stopifnot(`y must be named` = nms$y)
     x <- x[order(names(x))]
     y <- y[order(names(y))]
   } else {
-    x <- sort(x)
-    y <- sort(y)
+    if (rlang::is_atomic(x))
+      x <- sort(x)
+    if (rlang::is_atomic(y))
+      y <- sort(y)
   }
   isTRUE(all.equal(x, y, ...))
 }
