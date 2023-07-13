@@ -735,7 +735,7 @@ fn_name <- function(fn) {
 #' Print function formals as a list
 #'
 #' @param f \code{fun}
-#'
+#' @param to_console \code{lgl} whether to print \code{\link[base]{dput}} output to console. ** Default: FALSE **
 #' @return \code{msg}
 #' @export
 #'
