@@ -741,14 +741,17 @@ fn_name <- function(fn) {
 #'
 #' @examples
 #' fml_list(base::apply)
-fml_list <- function(f, paired = TRUE) {
+fml_list <- function(f, paired = TRUE, to_console = FALSE) {
   fmls <- rlang::fn_fmls(f)
   out <- if (paired)
     rlang::syms(rlang::set_names(names(fmls)))
   else
     fmls
-
-  dput(out)
+  if (to_console)
+    dput(out)
+  else
+    capture.output((out <- dput(out)))
+  out
 }
 
 #' Create a compound regex grouped statement
