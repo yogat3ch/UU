@@ -58,7 +58,7 @@
     lhs
   else
     rhs
-}, vectorize.args = "lhs", SIMPLIFY = TRUE)
+}, vectorize.args = "lhs", SIMPLIFY = TRUE, USE.NAMES = FALSE)
 
 
 #' Are lhs values absent from set on rhs?
