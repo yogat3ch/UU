@@ -42,7 +42,7 @@ zchar <- Negate(nzchar)
 #'
 #' @param x \code{obj}
 #' @param y \code{obj}
-#' @inheritDotParams all.equal
+#' @inheritDotParams base::all.equal
 #' @return \code{lgl}
 #' @export
 #' @family conditionals

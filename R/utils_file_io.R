@@ -22,7 +22,7 @@ ext <- function(path, strip = FALSE, new_ext) {
   out
 }
 
-#' Writes a trace back as a CSV for error logging
+#' Writes a trace back as a json for error logging
 #'
 #' @param e \code{error} Error condition object, optional
 #' @param file \code{chr} path to file to be written.

@@ -4,10 +4,14 @@
 \alias{fml_list}
 \title{Print function formals as a list}
 \usage{
-fml_list(f, paired = TRUE)
+fml_list(f, paired = TRUE, to_console = FALSE)
 }
 \arguments{
 \item{f}{\code{fun}}
+
+\item{paired}{\code{lgl} Whether to output as paired arguments to be passed to another function.}
+
+\item{to_console}{\code{lgl} whether to print \code{\link[base]{dput}} output to console. ** Default: FALSE **}
 }
 \value{
 \code{msg}

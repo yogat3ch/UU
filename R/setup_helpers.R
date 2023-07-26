@@ -63,9 +63,11 @@ creds_to_renviron <- function(..., scope = c("user", "project")[1], overwrite = 
 
     write(c2w, fp, append = TRUE)
     # Read the newly added vars/options
-    purrr::when(rprofile,
-                isTRUE(.) ~ source,
-                ~ readRenviron)(fp)
+    fn <- if (isTRUE(rprofile))
+      base::source
+    else
+      base::readRenviron
+    fn(fp)
 
     cli::cli_alert_success("{cli::col_green(paste0(names(creds_to_write), collapse = \", \"))} successfully written to {.path {fp}}")
   }

@@ -4,12 +4,19 @@
 \alias{same}
 \title{Are the values in each object the same?}
 \usage{
-same(x, y, sort_by_names = TRUE)
+same(x, y, sort_by_names = TRUE, ...)
 }
 \arguments{
 \item{x}{\code{obj}}
 
 \item{y}{\code{obj}}
+
+\item{...}{
+  Arguments passed on to \code{\link[base:all.equal]{base::all.equal}}
+  \describe{
+    \item{\code{target}}{\R object.}
+    \item{\code{current}}{other \R object, to be compared with \code{target}.}
+  }}
 }
 \value{
 \code{lgl}
