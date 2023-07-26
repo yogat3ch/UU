@@ -22,7 +22,25 @@ ext <- function(path, strip = FALSE, new_ext) {
   out
 }
 
-
+#' Writes a trace back as a CSV for error logging
+#'
+#' @param e \code{error} Error condition object, optional
+#' @param file \code{chr} path to file to be written.
+#' @param tb \code{rlang_trace} Trace back
+#'
+#' @return \code{None} called for side effect of writing to file
+#' @export
+#'
+#' @examples
+#' trace_back_json()
+trace_back_json <- function(e = NULL, file = glue::glue("{lubridate::format_ISO8601(Sys.time())}.json"), tb = rlang::trace_back(bottom = 1)) {
+  out <- list(
+    trace_back = dplyr::mutate(tibble::as_tibble(tb), call = Vectorize(\(.x)glue::glue_collapse(sep = "\n", rlang::expr_deparse(.x)))(call))
+  )
+  if (!is.null(e))
+    out$error = e
+  jsonlite::write_json(out, file)
+}
 
 
 #' @title Converts input to a specified type output
