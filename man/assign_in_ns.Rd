@@ -28,6 +28,7 @@ Unlocks and relocks namespaces and bindings as needed
 }
 \seealso{
 Other namespaces: 
+\code{\link{assign_global}()},
 \code{\link{get_from_ns}()},
 \code{\link{get_global}()},
 \code{\link{pkg_ns}()},

@@ -35,9 +35,31 @@ unload_namespaces <- function(ns, verbose = FALSE) {
 #' get_global(".Last.value")
 get_global <- function(global = "active") {
   get0(global, envir = .GlobalEnv)
-
 }
 
+
+
+#' Assign an object to the global environment
+#'
+#' @param x \code{obj} to assign
+#' @param nm \code{chr} vector of the object and subsets to assign
+#'
+#' @return \code{x}
+#' @family namespaces
+#' @export
+#'
+#' @examples
+#' assign_global(FALSE, "test")
+assign_global <- function(x, nm = rlang::expr_deparse(rlang::enexpr(x))) {
+  if (length(nm) > 1) {
+    ex <- paste0("`<-`(.GlobalEnv", glue::glue_collapse(glue::glue("[['{nm}']]")), ",x)")
+    ex <- rlang::parse_expr(ex)
+    eval(ex)
+  } else {
+    .GlobalEnv[[nm]] <- x
+  }
+  x
+}
 
 #' Get an object from a namespace
 #'

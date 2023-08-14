@@ -17,6 +17,7 @@ get_global(".Last.value")
 }
 \seealso{
 Other namespaces: 
+\code{\link{assign_global}()},
 \code{\link{assign_in_ns}()},
 \code{\link{get_from_ns}()},
 \code{\link{pkg_ns}()},

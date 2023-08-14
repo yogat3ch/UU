@@ -47,6 +47,7 @@ rgb2hex_ <- Vectorize(rgb2hex)
 #' css_col2vec("rgba(111,96,140,1)")
 #' css_col2vec("green")
 css_col2vec <- function(x) {
+  stopifnot(`x must be character` = inherits(x, "character"))
   if (stringr::str_detect(x, "^rgb")) {
     out <- as.numeric(stringr::str_extract_all(x, "[\\d\\.]+")[[1]])
   } else

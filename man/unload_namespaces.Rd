@@ -16,6 +16,7 @@ Unload namespaces prior to package install
 }
 \seealso{
 Other namespaces: 
+\code{\link{assign_global}()},
 \code{\link{assign_in_ns}()},
 \code{\link{get_from_ns}()},
 \code{\link{get_global}()},

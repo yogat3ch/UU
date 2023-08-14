@@ -17,6 +17,7 @@ Return the current package namespace
 }
 \seealso{
 Other namespaces: 
+\code{\link{assign_global}()},
 \code{\link{assign_in_ns}()},
 \code{\link{get_from_ns}()},
 \code{\link{get_global}()},
