@@ -31,7 +31,11 @@ See outtype
 Given various inputs, provide a col_type specification in the format indicated by \code{outtype}
 }
 \examples{
-purrr::map(mtcars, col_types)
+glue::glue_collapse(purrr::map_chr(iris, col_types))
+\dontrun{
+ # only run if readr is installed, otherwise will throw error
+ purrr::map(iris, col_types, outtype = "col") |> purrr::map(eval)
+}
 
 }
 \seealso{

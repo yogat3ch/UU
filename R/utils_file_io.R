@@ -45,16 +45,16 @@ trace_back_json <- function(e = NULL, file = glue::glue("{lubridate::format_ISO8
 #' Index of column type conversions
 #' @include universal_useful.R
 col_type_hash <- tibble::tribble(~ typ, ~ hud, ~ fun, ~ chr, ~col,
-                        "integer", "I", need_pkg("readr", "parse_integer"), "i", rlang::expr(need_pkg("readr", "col_integer")()),
-                        "numeric", "I", need_pkg("readr", "parse_number"), "n", rlang::expr(need_pkg("readr", "col_number")()),
-                        "character", "S", need_pkg("readr", "parse_character"), "c", rlang::expr(need_pkg("readr", "col_character")()),
-                        "logical", "S", need_pkg("readr", "parse_logical"), "l", rlang::expr(need_pkg("readr", "col_logical")()),
-                        "factor", "I", need_pkg("readr", "parse_factor"), "f", rlang::expr(need_pkg("readr", "col_factor")()),
-                        "Date", "D", need_pkg("readr", "parse_date"), "D", rlang::expr(need_pkg("readr", "col_date")()),
-                        "POSIXct", "T", need_pkg("readr", "parse_datetime"), "T", rlang::expr(need_pkg("readr", "col_datetime")()),
-                        "POSIXt", "T", need_pkg("readr", "parse_datetime"), "T", rlang::expr(need_pkg("readr", "col_datetime")()),
-                        "POSIXlt", "T", need_pkg("readr", "parse_datetime"), "T", rlang::expr(need_pkg("readr", "col_datetime")()),
-                        "list", "", need_pkg("readr", "guess_parser"), "?", rlang::expr(need_pkg("readr", "col_guess")())
+                        "integer", "I", rlang::expr(UU::need_pkg("readr", "parse_integer")), "i", rlang::expr(UU::need_pkg("readr", "col_integer")()),
+                        "numeric", "I", rlang::expr(UU::need_pkg("readr", "parse_number")), "n", rlang::expr(UU::need_pkg("readr", "col_number")()),
+                        "character", "S", rlang::expr(UU::need_pkg("readr", "parse_character")), "c", rlang::expr(UU::need_pkg("readr", "col_character")()),
+                        "logical", "S", rlang::expr(UU::need_pkg("readr", "parse_logical")), "l", rlang::expr(UU::need_pkg("readr", "col_logical")()),
+                        "factor", "I", rlang::expr(UU::need_pkg("readr", "parse_factor")), "f", rlang::expr(UU::need_pkg("readr", "col_factor")()),
+                        "Date", "D", rlang::expr(UU::need_pkg("readr", "parse_date")), "D", rlang::expr(UU::need_pkg("readr", "col_date")()),
+                        "POSIXct", "T", rlang::expr(UU::need_pkg("readr", "parse_datetime")), "T", rlang::expr(UU::need_pkg("readr", "col_datetime")()),
+                        "POSIXt", "T", rlang::expr(UU::need_pkg("readr", "parse_datetime")), "T", rlang::expr(UU::need_pkg("readr", "col_datetime")()),
+                        "POSIXlt", "T", rlang::expr(UU::need_pkg("readr", "parse_datetime")), "T", rlang::expr(UU::need_pkg("readr", "col_datetime")()),
+                        "list", "", rlang::expr(UU::need_pkg("readr", "guess_parser")), "?", rlang::expr(UU::need_pkg("readr", "col_guess")())
 )
 
 #' @title Converts input to a specified type output
@@ -77,7 +77,11 @@ col_type_hash <- tibble::tribble(~ typ, ~ hud, ~ fun, ~ chr, ~col,
 #' @return See outtype
 #' @family file IO
 #' @examples
-#' purrr::map(mtcars, col_types)
+#' glue::glue_collapse(purrr::map_chr(iris, col_types))
+#' \dontrun{
+#'  # only run if readr is installed, otherwise will throw error
+#'  purrr::map(iris, col_types, outtype = "col") |> purrr::map(eval)
+#' }
 #'
 #' @export
 
