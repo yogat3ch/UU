@@ -30,6 +30,10 @@ See outtype
 \description{
 Given various inputs, provide a col_type specification in the format indicated by \code{outtype}
 }
+\examples{
+purrr::map(mtcars, col_types)
+
+}
 \seealso{
 Other file IO: 
 \code{\link{dep_read}()},

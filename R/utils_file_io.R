@@ -42,6 +42,20 @@ trace_back_json <- function(e = NULL, file = glue::glue("{lubridate::format_ISO8
   jsonlite::write_json(out, file)
 }
 
+#' Index of column type conversions
+#' @include universal_useful.R
+col_type_hash <- tibble::tribble(~ typ, ~ hud, ~ fun, ~ chr, ~col,
+                        "integer", "I", need_pkg("readr", "parse_integer"), "i", rlang::expr(need_pkg("readr", "col_integer")()),
+                        "numeric", "I", need_pkg("readr", "parse_number"), "n", rlang::expr(need_pkg("readr", "col_number")()),
+                        "character", "S", need_pkg("readr", "parse_character"), "c", rlang::expr(need_pkg("readr", "col_character")()),
+                        "logical", "S", need_pkg("readr", "parse_logical"), "l", rlang::expr(need_pkg("readr", "col_logical")()),
+                        "factor", "I", need_pkg("readr", "parse_factor"), "f", rlang::expr(need_pkg("readr", "col_factor")()),
+                        "Date", "D", need_pkg("readr", "parse_date"), "D", rlang::expr(need_pkg("readr", "col_date")()),
+                        "POSIXct", "T", need_pkg("readr", "parse_datetime"), "T", rlang::expr(need_pkg("readr", "col_datetime")()),
+                        "POSIXt", "T", need_pkg("readr", "parse_datetime"), "T", rlang::expr(need_pkg("readr", "col_datetime")()),
+                        "POSIXlt", "T", need_pkg("readr", "parse_datetime"), "T", rlang::expr(need_pkg("readr", "col_datetime")()),
+                        "list", "", need_pkg("readr", "guess_parser"), "?", rlang::expr(need_pkg("readr", "col_guess")())
+)
 
 #' @title Converts input to a specified type output
 #' @description Given various inputs, provide a col_type specification in the format indicated by `outtype`
@@ -62,38 +76,37 @@ trace_back_json <- function(e = NULL, file = glue::glue("{lubridate::format_ISO8
 #' }
 #' @return See outtype
 #' @family file IO
+#' @examples
+#' purrr::map(mtcars, col_types)
+#'
 #' @export
 
 col_types <- function(x, outtype = c("chr", "hud", "fun", "typ", "col")[1]) {
-
-  hash <- tibble::tribble(~ typ, ~ hud, ~ fun, ~ chr, ~col,
-                          "integer", "I", UU::need_pkg("readr", "parse_integer"), "i", rlang::expr(UU::need_pkg("readr", "col_integer")()),
-                          "numeric", "I", UU::need_pkg("readr", "parse_number"), "n", rlang::expr(UU::need_pkg("readr", "col_number")()),
-                          "character", "S", UU::need_pkg("readr", "parse_character"), "c", rlang::expr(UU::need_pkg("readr", "col_character")()),
-                          "logical", "S", UU::need_pkg("readr", "parse_logical"), "l", rlang::expr(UU::need_pkg("readr", "col_logical")()),
-                          "factor", "I", UU::need_pkg("readr", "parse_factor"), "f", rlang::expr(UU::need_pkg("readr", "col_factor")()),
-                          "Date", "D", UU::need_pkg("readr", "parse_date"), "D", rlang::expr(UU::need_pkg("readr", "col_date")()),
-                          "POSIXct", "T", UU::need_pkg("readr", "parse_datetime"), "T", rlang::expr(UU::need_pkg("readr", "col_datetime")()),
-                          "POSIXt", "T", UU::need_pkg("readr", "parse_datetime"), "T", rlang::expr(UU::need_pkg("readr", "col_datetime")()),
-                          "POSIXlt", "T", UU::need_pkg("readr", "parse_datetime"), "T", rlang::expr(UU::need_pkg("readr", "col_datetime")()),
-                          "list", "", UU::need_pkg("readr", "guess_parser"), "?", rlang::expr(UU::need_pkg("readr", "col_guess")())
-  )
-  intype <- purrr::when(x,
-                        all(. %in% hash$typ) ~ "typ",
-                        all(. %in% hash$hud) ~ "hud",
-                        is.function(.) ~ "fun",
-                        all(. %in% hash$chr) ~ "chr",
-                        ~ "col")
-
+  if (rlang::is_empty(x)) {
+    x <- class(x)[1]
+    intype <- "typ"
+  } else {
+    intype <- if (rlang::is_function(x)) {
+      "fun"
+    } else if (!is.character(x)) {
+      "col"
+    } else {
+      # Match the one that contains all the cols
+      purrr::compact(purrr::imap(hash[c("typ", "hud", "chr")], \(.x, .y) {
+        if (all(x %in% .x))
+          .y
+      }))
+    }
+  }
 
   type <- switch(intype,
-                 col = hash$typ[hash$typ %in% class(x)[1]],
-                 typ = hash$typ[hash$typ %in% x[1]],
-                 hud = hash$typ[stringr::str_which(hash$hud, x)[1]],
-                 fun = hash$typ[purrr::map_lgl(hash$fun, identical, y = x)],
-                 chr = hash$typ[hash$chr %in% x])
+                 col = col_type_hash$typ[col_type_hash$typ %in% class(x)[1]],
+                 typ = col_type_hash$typ[col_type_hash$typ %in% x[1]],
+                 hud = col_type_hash$typ[stringr::str_which(col_type_hash$hud, x)[1]],
+                 fun = col_type_hash$typ[purrr::map_lgl(col_type_hash$fun, identical, y = x)],
+                 chr = col_type_hash$typ[col_type_hash$chr %in% x])
 
-  out <- unique(hash[[outtype]][hash$typ %in% type])
+  out <- unique(col_type_hash[[outtype]][col_type_hash$typ %in% type])
   if (outtype %in% c("fun", "col"))
     out <- out[[1]]
   out
