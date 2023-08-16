@@ -80,7 +80,7 @@ col_type_hash <- tibble::tribble(~ typ, ~ hud, ~ fun, ~ chr, ~col,
 #' glue::glue_collapse(purrr::map_chr(iris, col_types))
 #' \dontrun{
 #'  # only run if readr is installed, otherwise will throw error
-#'  purrr::map(iris, col_types, outtype = "col") |> purrr::map(eval)
+#'  purrr::map(iris, col_types, outtype = "col")
 #' }
 #'
 #' @export
@@ -112,7 +112,7 @@ col_types <- function(x, outtype = c("chr", "hud", "fun", "typ", "col")[1]) {
 
   out <- unique(col_type_hash[[outtype]][col_type_hash$typ %in% type])
   if (outtype %in% c("fun", "col"))
-    out <- out[[1]]
+    out <- eval(out[[1]])
   out
 }
 
