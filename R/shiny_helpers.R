@@ -44,10 +44,16 @@ glue_js <- function(js, as_chr = FALSE, e = rlang::caller_env(), .open = "*{", .
 #' @family shiny
 
 shiny_error_recover <- function() {
-  if (!identical(getOption("shiny.error"), utils::recover))
+  if (!identical(getOption("shiny.error"), utils::recover)) {
+    UU::assign_in_ns(getOption("shiny.error"), nm = ".shiny.error", ns_env = "UU")
     options(shiny.error = utils::recover)
-  else
-    options(shiny.error = NULL)
+    cli::cli_inform("option 'shiny.error' set to `utils::recover`")
+  } else {
+    error_val <- UU::get_from_ns(".shiny.error", .env = "UU")
+    options(shiny.error = error_val)
+    cli::cli_inform("option 'shiny.error' restored to previous value")
+  }
+
 }
 
 #' Read Javascript file
