@@ -75,6 +75,8 @@ assign_global <- function(x, nm = rlang::expr_deparse(rlang::enexpr(x))) {
 #' @export
 
 get_from_ns <- function(nm = c("active", "state")[1], .env = .GlobalEnv) {
+  if (!rlang::is_environment(.env))
+    .env <- rlang::ns_env(.env)
   .global <- get0(nm, envir = .env, inherits = FALSE)
   if (!inherits(.global, c("R6", "reactivevalues")))
     UU::gwarn("`{nm}` object was not found")
@@ -95,6 +97,8 @@ get_from_ns <- function(nm = c("active", "state")[1], .env = .GlobalEnv) {
 assign_in_ns <- function(x, nm = rlang::expr_deparse(rlang::enexpr(x)), ns_env = rlang::ns_env(pkg_name()), x_is_obj_name = TRUE) {
 
   force(nm)
+  if (!rlang::is_environment(ns_env))
+    ns_env <- rlang::ns_env(ns_env)
   e_is_locked <- rlang::env_is_locked(ns_env)
   if (is.character(x) && x_is_obj_name) {
     nm <- x
