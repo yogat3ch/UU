@@ -42,7 +42,11 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">col_types</span><span class="op">(</span><span class="va">x</span>, outtype <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"chr"</span>, <span class="st">"hud"</span>, <span class="st">"fun"</span>, <span class="st">"typ"</span>, <span class="st">"col"</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">col_types</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  outtype <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"chr"</span>, <span class="st">"hud"</span>, <span class="st">"fun"</span>, <span class="st">"typ"</span>, <span class="st">"col"</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,</span>
+<span>  is_raw_column <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -62,6 +66,10 @@
 <li><p><code>"typ"</code> <code>(character)</code> The R data class</p></li>
 <li><p><code>"col"</code> <code>(character)</code> The <code>collector</code></p></li>
 </ul></dd>
+
+
+<dt>is_raw_column</dt>
+<dd><p>Is x a raw column input and the <code><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></code> should be used?</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -99,7 +107,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> nnnnf</span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span> <span class="co"># only run if readr is installed, otherwise will throw error</span></span></span>
-<span class="r-in"><span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map</a></span><span class="op">(</span><span class="va">iris</span>, <span class="va">col_types</span>, outtype <span class="op">=</span> <span class="st">"col"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map</a></span><span class="op">(</span><span class="va">eval</span><span class="op">)</span></span></span>
+<span class="r-in"><span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map</a></span><span class="op">(</span><span class="va">iris</span>, <span class="va">col_types</span>, outtype <span class="op">=</span> <span class="st">"col"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
