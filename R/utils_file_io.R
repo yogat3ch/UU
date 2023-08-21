@@ -74,6 +74,7 @@ col_type_hash <- tibble::tribble(~ typ, ~ hud, ~ fun, ~ chr, ~col,
 #'   \item{\code{"typ"}}{ \code{(character)} The R data class}
 #'   \item{\code{"col"}}{ \code{(character)} The \code{\link[readr]{collector}}}
 #' }
+#' @param is_raw_column Is x a raw column input and the \code{\link[base]{class}} should be used?
 #' @return See outtype
 #' @family file IO
 #' @examples
@@ -85,8 +86,8 @@ col_type_hash <- tibble::tribble(~ typ, ~ hud, ~ fun, ~ chr, ~col,
 #'
 #' @export
 
-col_types <- function(x, outtype = c("chr", "hud", "fun", "typ", "col")[1]) {
-  if (rlang::is_empty(x)) {
+col_types <- function(x, outtype = c("chr", "hud", "fun", "typ", "col")[1], is_raw_column = TRUE) {
+  if (rlang::is_empty(x) || is_raw_column) {
     x <- class(x)[1]
     intype <- "typ"
   } else {

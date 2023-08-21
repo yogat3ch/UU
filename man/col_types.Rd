@@ -4,7 +4,11 @@
 \alias{col_types}
 \title{Converts input to a specified type output}
 \usage{
-col_types(x, outtype = c("chr", "hud", "fun", "typ", "col")[1])
+col_types(
+  x,
+  outtype = c("chr", "hud", "fun", "typ", "col")[1],
+  is_raw_column = TRUE
+)
 }
 \arguments{
 \item{x}{\code{(vector/function)} One of:
@@ -23,6 +27,8 @@ col_types(x, outtype = c("chr", "hud", "fun", "typ", "col")[1])
 \item{\code{"typ"}}{ \code{(character)} The R data class}
 \item{\code{"col"}}{ \code{(character)} The \code{\link[readr]{collector}}}
 }}
+
+\item{is_raw_column}{Is x a raw column input and the \code{\link[base]{class}} should be used?}
 }
 \value{
 See outtype
@@ -34,7 +40,7 @@ Given various inputs, provide a col_type specification in the format indicated b
 glue::glue_collapse(purrr::map_chr(iris, col_types))
 \dontrun{
  # only run if readr is installed, otherwise will throw error
- purrr::map(iris, col_types, outtype = "col") |> purrr::map(eval)
+ purrr::map(iris, col_types, outtype = "col")
 }
 
 }
