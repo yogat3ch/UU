@@ -96,7 +96,7 @@ col_types <- function(x, outtype = c("chr", "hud", "fun", "typ", "col")[1]) {
       "col"
     } else {
       # Match the one that contains all the cols
-      purrr::compact(purrr::imap(hash[c("typ", "hud", "chr")], \(.x, .y) {
+      purrr::compact(purrr::imap(col_type_hash[c("typ", "hud", "chr")], \(.x, .y) {
         if (all(x %in% .x))
           .y
       }))
