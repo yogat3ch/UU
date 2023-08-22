@@ -45,11 +45,11 @@ glue_js <- function(js, as_chr = FALSE, e = rlang::caller_env(), .open = "*{", .
 
 shiny_error_recover <- function() {
   if (!identical(getOption("shiny.error"), utils::recover)) {
-    UU::assign_in_ns(getOption("shiny.error"), nm = ".shiny.error", ns_env = "UU")
+    UU::assign_in_ns(getOption("shiny.error"), nm = ".shiny.error", ns_env = .GlobalEnv)
     options(shiny.error = utils::recover)
     cli::cli_inform("option 'shiny.error' set to `utils::recover`")
   } else {
-    error_val <- UU::get_from_ns(".shiny.error", .env = "UU")
+    error_val <- UU::get_from_ns(".shiny.error")
     options(shiny.error = error_val)
     cli::cli_inform("option 'shiny.error' restored to previous value")
   }
