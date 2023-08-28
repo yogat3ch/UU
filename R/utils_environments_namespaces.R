@@ -87,22 +87,20 @@ get_from_ns <- function(nm = c("active", "state")[1], .env = .GlobalEnv) {
 #' Assign a variable into a namespace
 #' @description Unlocks and relocks namespaces and bindings as needed
 #' @param x \code{object/chr} either the object itself or the name of the object to assign
-#' @param nm \code{chr} name for object in the namespace
+#' @param nm \code{chr} name for object in the namespace. IF `x` is not supplied, this object will be retrieved by name from the calling environment via \code{\link[base]{get0}}
 #' @param ns_env \code{env} of the namespace
-#' @param x_is_obj_name \code{lgl} If x is a character, is it the name of the object? Set to `FALSE` if x is a character object that you wish to assign _and not the name of the object_.
 #' @family namespaces
 #' @return \code{x} the object
 #' @export
 
-assign_in_ns <- function(x, nm = rlang::expr_deparse(rlang::enexpr(x)), ns_env = rlang::ns_env(pkg_name()), x_is_obj_name = TRUE) {
+assign_in_ns <- function(x, nm = rlang::expr_deparse(rlang::enexpr(x)), ns_env = rlang::ns_env(pkg_name())) {
 
   force(nm)
   if (!rlang::is_environment(ns_env))
     ns_env <- rlang::ns_env(ns_env)
   e_is_locked <- rlang::env_is_locked(ns_env)
-  if (is.character(x) && x_is_obj_name) {
-    nm <- x
-    x <- get0(x, envir = rlang::caller_env())
+  if (missing(x)) {
+    x <- get0(nm, envir = rlang::caller_env())
   }
 
   b_is_locked <- rlang::env_has(ns_env, nm) && rlang::env_binding_are_locked(ns_env, nm)

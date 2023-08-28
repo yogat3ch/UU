@@ -7,18 +7,15 @@
 assign_in_ns(
   x,
   nm = rlang::expr_deparse(rlang::enexpr(x)),
-  ns_env = rlang::ns_env(pkg_name()),
-  x_is_obj_name = TRUE
+  ns_env = rlang::ns_env(pkg_name())
 )
 }
 \arguments{
 \item{x}{\code{object/chr} either the object itself or the name of the object to assign}
 
-\item{nm}{\code{chr} name for object in the namespace}
+\item{nm}{\code{chr} name for object in the namespace. IF \code{x} is not supplied, this object will be retrieved by name from the calling environment via \code{\link[base]{get0}}}
 
 \item{ns_env}{\code{env} of the namespace}
-
-\item{x_is_obj_name}{\code{lgl} If x is a character, is it the name of the object? Set to \code{FALSE} if x is a character object that you wish to assign \emph{and not the name of the object}.}
 }
 \value{
 \code{x} the object
