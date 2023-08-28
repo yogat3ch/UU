@@ -92,6 +92,20 @@ get_from_ns <- function(nm = c("active", "state")[1], .env = .GlobalEnv) {
 #' @family namespaces
 #' @return \code{x} the object
 #' @export
+#' @examples
+#' (function(x = mtcars) {
+#' y <- dplyr::mutate(x, cylinders = cyl)
+#'   assign_in_ns(nm = "y", ns_env = "UU")
+#' })()
+#' uu <- rlang::ns_env("UU")
+#' exists("y", uu)
+#' assign_in_ns(mtcars, ns_env = "UU")
+#' exists("mtcars", uu)
+#' assign_in_ns(mtcars, "cars_copy", ns_env = "UU")
+#' exists("cars_copy", uu)
+#' rlang::env_unlock(uu)
+#' rm(list = c("y", "mtcars", "cars_copy"), envir = uu)
+#' rlang::env_lock(uu)
 
 assign_in_ns <- function(x, nm = rlang::expr_deparse(rlang::enexpr(x)), ns_env = rlang::ns_env(pkg_name())) {
 

@@ -23,6 +23,21 @@ assign_in_ns(
 \description{
 Unlocks and relocks namespaces and bindings as needed
 }
+\examples{
+(function(x = mtcars) {
+y <- dplyr::mutate(x, cylinders = cyl)
+  assign_in_ns(nm = "y", ns_env = "UU")
+})()
+uu <- rlang::ns_env("UU")
+exists("y", uu)
+assign_in_ns(mtcars, ns_env = "UU")
+exists("mtcars", uu)
+assign_in_ns(mtcars, "cars_copy", ns_env = "UU")
+exists("cars_copy", uu)
+rlang::env_unlock(uu)
+rm(list = c("y", "mtcars", "cars_copy"), envir = uu)
+rlang::env_lock(uu)
+}
 \seealso{
 Other namespaces: 
 \code{\link{assign_global}()},
