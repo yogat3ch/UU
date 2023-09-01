@@ -61,6 +61,44 @@ assign_global <- function(x, nm = rlang::expr_deparse(rlang::enexpr(x))) {
   x
 }
 
+
+#' Create a function that creates an object and assigns it to a namespace the first time it's called and subsequently retrieves it from the namespace thereafter.
+#' @description
+#' Useful when the object depends on a long running task such as a database query.
+#'
+#' @param obj_nm \code{chr} Name of the object
+#' @param ns_chr \code{expr/chr} name of the namespace to assign the object to, or an expression that returns the environment to assign to
+#' @param call_expr \code{expr} The code used to construct the object if the object hasn't already been constructed
+#'
+#' @return \code{chr} The function at the console for copy/paste
+#' @export
+#'
+#' @examples
+#' create_simple_get_function("mt_cars", .GlobalEnv, dplyr::mutate(mtcars, cyl = as.character(cyl)))
+
+create_simple_get_function <- function(obj_nm, env_expr, call_expr) {
+  exp <- rlang::enexpr(env_expr)
+  if (rlang::is_character(env_expr))
+    exp <- rlang::expr(rlang::ns_env(!!env_expr))
+  get_fn <- rlang::new_function(
+    rlang::pairlist2(env = rlang::expr(!!exp)),
+    rlang::expr({
+      if (exists(!!obj_nm, envir = env)) {
+        get0(!!obj_nm, envir = env)
+      } else {
+        !!rlang::enexpr(call_expr)
+      }
+
+    })
+  )
+  rlang::expr({
+    `<-`(!!rlang::sym(paste0("get_", obj_nm)), !!get_fn)
+  }) |>
+    deparse() |>
+    cat(sep = "\n")
+}
+
+
 #' Get an object from a namespace
 #'
 #' @param nm \code{chr} name of object to retrieve. Current are `active` & `state`.
