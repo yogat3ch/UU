@@ -4,19 +4,47 @@
 \alias{str_break_every}
 \title{Break word every x characters}
 \usage{
-str_break_every(x, every)
+str_break_every(
+  x,
+  width = 0.9 * getOption("width"),
+  indent = 0,
+  exdent = 0,
+  prefix = "",
+  simplify = TRUE,
+  initial = prefix
+)
 }
 \arguments{
-\item{x}{\code{chr} vector}
+\item{x}{a character vector, or an object which can be converted to a
+    character vector by \code{\link[base]{as.character}}.}
 
-\item{every}{\code{num} of chars between each line break}
+\item{width}{a positive integer giving the target column for wrapping
+    lines in the output.}
+
+\item{indent}{a non-negative integer giving the indentation of the
+    first line in a paragraph.}
+
+\item{exdent}{a non-negative integer specifying the indentation of
+    subsequent lines in paragraphs.}
+
+\item{prefix, initial}{a character string to be used as prefix for
+    each line except the first, for which \code{initial} is used.}
+
+\item{simplify}{a logical.  If \code{TRUE}, the result is a single
+    character vector of line text; otherwise, it is a list of the same
+    length as \code{x} the elements of which are character vectors of
+    line text obtained from the corresponding element of \code{x}.
+    (Hence, the result in the former case is obtained by unlisting that
+    of the latter.)}
 }
 \value{
-\code{chr}
+A character vector (if \code{simplify} is \code{TRUE}), or a list of
+  such character vectors, with declared input encodings preserved.
 }
 \description{
-Break word every x characters
-}
-\examples{
-str_break_every("I am a very long string that will broken into pieces", 10)
+Each character string in the input is first split into paragraphs (or
+  lines containing whitespace only).  The paragraphs are then formatted
+  by breaking lines at word boundaries.  The target columns for wrapping
+  lines and the indentation of the first and all subsequent lines of a
+  paragraph can be controlled independently.
 }

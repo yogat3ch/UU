@@ -907,16 +907,57 @@ join_check <- function(after, before, halt_fn = rlang::warn) {
 
 #' Break word every x characters
 #'
-#' @param x \code{chr} vector
-#' @param every \code{num} of chars between each line break
+#' @inherit base::strwrap params return description
 #'
-#' @return \code{chr}
+#' @export
+#' @importFrom base strwrap
+#' str_break_every("I am a very long string that will broken into pieces", 10)
+str_break_every <- strwrap
+
+unit_trans <- c(`Acre-feet` = "AF",
+                Months = "mths",
+                Percent = "%",
+                Years = "yrs",
+                Number = "#",
+                `Cubic feet per second` = "Ft^3/s",
+                `Million Acre-Feet` = "MAF",
+                `Megawatt-hours` = "MWh",
+                `Megawatts` = "MW",
+                `Gigawatt-hours` = "GWh",
+                `Gigawatt` = "GW",
+                Feet = "Ft")
+
+
+#' Easily translate long form unit names to shorthand
+#' @description
+#' Useful for condensed displays like axis titles
+#'
+#' @param x \code{chr/tbl} Character or data.frame with long form names. Currently supports `r glue::glue_collapse(paste0(names(unit_trans), " = ", unit_trans), sep =",")`
+#' @param units \code{chr} Unit translation vector with shorthand as the vectur and long form names as the names. Uses `unit_trans` as default, append additional for specific translations not yet represent in `unit_trans` and open a PR or issue to add the translations if inclined.
+#'
+#' @return \code{chr/tbl} with same class as `x`
 #' @export
 #'
 #' @examples
-#' str_break_every("I am a very long string that will broken into pieces", 10)
-str_break_every <- function(x, every) {
-  purrr::map_chr(x, ~paste0(strwrap(.x, every), collapse = "\n"))
+#' unit_shorthand(tibble::tibble("Max Gigawatt-hours" = 5, "Really big number" = 10^6))
+unit_shorthand <- function(x, units = unit_trans) {
+  UseMethod("unit_shorthand")
+}
+
+unit_shorthand.character <- function(x, units = unit_trans) {
+  out <- x
+  purrr::iwalk(unit_trans, \(.x, .y) {
+    out <<- stringr::str_replace(out, stringr::regex(.y, ignore_case = TRUE), .x)
+  })
+  return(out)
+}
+
+unit_shorthand.data.frame <- function(x, units = unit_trans) {
+  out <- names(x)
+  purrr::iwalk(unit_trans, \(.x, .y) {
+    out <<- stringr::str_replace(out, .y, .x)
+  })
+  rlang::set_names(x, out)
 }
 
 #' Math comparison comparator to plain english key
@@ -930,6 +971,8 @@ comparison_key <- c(
   "greater than or equal to" = ">=",
   "equal to" = "="
 )
+
+
 #' Math comparison comparator inverse key
 #' @export
 comparison_inverse_key <- tibble::tibble(key = comparison_key[c(1:2,4,5)], inverse = c(">=", "<=", ">", "<"))
