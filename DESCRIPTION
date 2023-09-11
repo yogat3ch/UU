@@ -1,6 +1,6 @@
 Package: UU
 Title: Universally Useful
-Version: 1.36.0
+Version: 1.37.0
 Authors@R: person(given = "Stephen", family = "Holsenbeck",
        role = c("aut", "cre"), email =
        "sholsen@alumni.emory.edu")
