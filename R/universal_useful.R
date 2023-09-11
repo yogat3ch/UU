@@ -947,7 +947,7 @@ unit_shorthand <- function(x, units = unit_trans) {
 unit_shorthand.character <- function(x, units = unit_trans) {
   out <- x
   purrr::iwalk(unit_trans, \(.x, .y) {
-    out <<- stringr::str_replace(out, stringr::regex(.y, ignore_case = TRUE), .x)
+    out <<- stringr::str_replace_all(out, stringr::regex(.y, ignore_case = TRUE), .x)
   })
   return(out)
 }
