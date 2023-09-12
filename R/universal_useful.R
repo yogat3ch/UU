@@ -905,14 +905,6 @@ join_check <- function(after, before, halt_fn = rlang::warn) {
 }
 
 
-#' Break word every x characters
-#'
-#' @inherit base::strwrap params return description
-#'
-#' @export
-#' @importFrom base strwrap
-#' str_break_every("I am a very long string that will broken into pieces", 10)
-str_break_every <- strwrap
 
 unit_trans <- c(`Acre-feet` = "AF",
                 Months = "mths",
@@ -944,6 +936,7 @@ unit_shorthand <- function(x, units = unit_trans) {
   UseMethod("unit_shorthand")
 }
 
+#' @export
 unit_shorthand.character <- function(x, units = unit_trans) {
   out <- x
   purrr::iwalk(unit_trans, \(.x, .y) {
@@ -952,6 +945,7 @@ unit_shorthand.character <- function(x, units = unit_trans) {
   return(out)
 }
 
+#' @export
 unit_shorthand.data.frame <- function(x, units = unit_trans) {
   out <- names(x)
   purrr::iwalk(unit_trans, \(.x, .y) {
