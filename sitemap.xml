@@ -379,9 +379,6 @@
     <loc>https://yogat3ch.github.io/UU/reference/startup.html</loc>
   </url>
   <url>
-    <loc>https://yogat3ch.github.io/UU/reference/str_break_every.html</loc>
-  </url>
-  <url>
     <loc>https://yogat3ch.github.io/UU/reference/str_comparison.html</loc>
   </url>
   <url>
@@ -419,6 +416,9 @@
   </url>
   <url>
     <loc>https://yogat3ch.github.io/UU/reference/unit_modify_vec.html</loc>
+  </url>
+  <url>
+    <loc>https://yogat3ch.github.io/UU/reference/unit_shorthand.html</loc>
   </url>
   <url>
     <loc>https://yogat3ch.github.io/UU/reference/unit_string.html</loc>
