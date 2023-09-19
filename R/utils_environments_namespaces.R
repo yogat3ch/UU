@@ -50,13 +50,13 @@ get_global <- function(global = "active") {
 #'
 #' @examples
 #' assign_global(FALSE, "test")
-assign_global <- function(x, nm = rlang::expr_deparse(rlang::enexpr(x))) {
+assign_global <- function(x, nm = rlang::expr_deparse(rlang::enexpr(x)), env = .GlobalEnv) {
   if (length(nm) > 1) {
-    ex <- paste0("`<-`(.GlobalEnv", glue::glue_collapse(glue::glue("[['{nm}']]")), ",x)")
+    ex <- paste0("`<-`(",rlang::expr_deparse(rlang::enexpr(env)), glue::glue_collapse(glue::glue("[['{nm}']]")), ",x)")
     ex <- rlang::parse_expr(ex)
     eval(ex)
   } else {
-    .GlobalEnv[[nm]] <- x
+    env[[nm]] <- x
   }
   x
 }
