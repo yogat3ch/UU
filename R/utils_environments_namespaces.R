@@ -52,7 +52,7 @@ get_global <- function(global = "active") {
 #' assign_global(FALSE, "test")
 assign_global <- function(x, nm = rlang::expr_deparse(rlang::enexpr(x)), env = .GlobalEnv) {
   if (length(nm) > 1) {
-    ex <- paste0("`<-`(",rlang::expr_deparse(rlang::enexpr(env)), glue::glue_collapse(glue::glue("[['{nm}']]")), ",x)")
+    ex <- paste0("`<-`(.GlobalEnv", glue::glue_collapse(glue::glue("[['{nm}']]")), ",x)")
     ex <- rlang::parse_expr(ex)
     eval(ex)
   } else {
@@ -60,6 +60,8 @@ assign_global <- function(x, nm = rlang::expr_deparse(rlang::enexpr(x)), env = .
   }
   x
 }
+
+
 
 
 #' Create a function that creates an object and assigns it to a namespace the first time it's called and subsequently retrieves it from the namespace thereafter.
