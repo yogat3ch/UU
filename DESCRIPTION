@@ -1,6 +1,6 @@
 Package: UU
 Title: Universally Useful
-Version: 1.37.0
+Version: 1.37.1
 Authors@R: person(given = "Stephen", family = "Holsenbeck",
        role = c("aut", "cre"), email =
        "sholsen@alumni.emory.edu")
@@ -14,7 +14,7 @@ Imports:
     cli (>= 3.6.1),
     glue,
     fs,
-    dplyr,
+    dplyr (>= 1.1.3.9000),
     lubridate,
     pkgload,
     purrr,
@@ -50,4 +50,5 @@ Collate:
     'utils_file_navigation.R'
 URL: https://yogat3ch.github.io/UU/
 Remotes: 
-    yogat3ch/UU
+    yogat3ch/UU,
+    tidyverse/dplyr
