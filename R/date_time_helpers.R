@@ -303,6 +303,20 @@ timespan.character <- function(x) {
   time_difftimes[[grep(x, unlist(time_aggregates), ignore.case = TRUE)]]
 }
 
+#' Make a file path compliant ISO8601 timestamp
+#'
+#' @param x \code{Datetime}
+#' @inheritParams lubridate::with_tz
+#'
+#' @return \code{chr} of timestamp
+#' @export
+#'
+#' @examples
+#' fs::path(paste0("file_", file_timestamp()), ext = "zip")
+file_timestamp <- function(x = Sys.time(), tzone = "") {
+  stringr::str_replace_all(lubridate::format_ISO8601(lubridate::with_tz(x, tzone = tzone)), '\\:', '\\.')
+}
+
 #' Return a logical on an interval
 #'
 #' @param file \code{chr} filename in which to store the interval time
