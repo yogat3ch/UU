@@ -18,3 +18,12 @@ Remove all HTML tags from a character vector
 \examples{
 strip_html("The <strong>fox</strong> ran")
 }
+\seealso{
+Other shiny: 
+\code{\link{as_js}()},
+\code{\link{glue_js}()},
+\code{\link{nm_to_id}()},
+\code{\link{read_js}()},
+\code{\link{shiny_error_recover}()}
+}
+\concept{shiny}

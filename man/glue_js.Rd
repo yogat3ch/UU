@@ -35,6 +35,7 @@ Other shiny:
 \code{\link{as_js}()},
 \code{\link{nm_to_id}()},
 \code{\link{read_js}()},
-\code{\link{shiny_error_recover}()}
+\code{\link{shiny_error_recover}()},
+\code{\link{strip_html}()}
 }
 \concept{shiny}

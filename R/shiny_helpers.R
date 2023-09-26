@@ -84,7 +84,7 @@ nm_to_id <- function(x) {
 #' Remove all HTML tags from a character vector
 #'
 #' @param x \code{chr}
-#'
+#' @family shiny
 #' @return \code{chr} without HTML tags
 #' @export
 #'
