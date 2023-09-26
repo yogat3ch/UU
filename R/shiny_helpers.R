@@ -80,3 +80,16 @@ read_js <- function(filename) {
 nm_to_id <- function(x) {
   paste0(stringr::str_extract_all(tolower(x), "[[:alnum:]]+")[[1]], collapse = "_")
 }
+
+#' Remove all HTML tags from a character vector
+#'
+#' @param x \code{chr}
+#'
+#' @return \code{chr} without HTML tags
+#' @export
+#'
+#' @examples
+#' strip_html("The <strong>fox</strong> ran")
+strip_html <- function(x) {
+  gsub("<.*?>", "", x)
+}

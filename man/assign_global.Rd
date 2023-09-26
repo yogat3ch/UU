@@ -4,7 +4,7 @@
 \alias{assign_global}
 \title{Assign an object to the global environment}
 \usage{
-assign_global(x, nm = rlang::expr_deparse(rlang::enexpr(x)))
+assign_global(x, nm = rlang::expr_deparse(rlang::enexpr(x)), env = .GlobalEnv)
 }
 \arguments{
 \item{x}{\code{obj} to assign}
