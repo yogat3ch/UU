@@ -15,11 +15,12 @@ opts <- NULL
 opts_helpers <- function(.Rprofile = ".Rprofile", .env = rlang::ns_env("UU")) {
   if (file.exists(.Rprofile) && is.null(get0("opts", envir = .env, inherits = FALSE))) {
     rprofile <- parse(.Rprofile)
-    calls <- purrr::keep(rprofile, ~utils::head(as.character(.x[[1]]), 1) == "options")
+    calls <- purrr::keep(rprofile, \(.x) utils::head(as.character(.x[[1]]), 1) == "options")
     if (is_legit(calls)) {
       .opts <- rlang::call_args(calls[[1]])
-      opts <- .opts |>
-        purrr::imap(~{
+      opts <-
+        purrr::imap(.opts, \(.x, .y){
+          # Safeguard so reprex mode doesnt turn on in deployed environment
           if (.y == "use_reprex")
             body <- rlang::expr({
               if (!interactive()) {
@@ -35,8 +36,8 @@ opts_helpers <- function(.Rprofile = ".Rprofile", .env = rlang::ns_env("UU")) {
             args = rlang::pairlist2(default = rlang::expr(!!.x)),
             body = body)
         })
-      toggle <- .opts |>
-        purrr::imap(~{
+      toggle <-
+        purrr::imap(.opts, \(.x, .y){
 
           body <- rlang::expr({
             if (missing(set)) {

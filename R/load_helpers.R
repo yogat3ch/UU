@@ -21,5 +21,4 @@ startup <- function() {
 
       })
   }
-  on.exit(unloadNamespace("UU"))
 }
