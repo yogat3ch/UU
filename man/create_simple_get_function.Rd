@@ -4,12 +4,14 @@
 \alias{create_simple_get_function}
 \title{Create a function that creates an object and assigns it to a namespace the first time it's called and subsequently retrieves it from the namespace thereafter.}
 \usage{
-create_simple_get_function(obj_nm, env_expr, call_expr)
+create_simple_get_function(obj_nm, env_expr, call_expr, as_character = FALSE)
 }
 \arguments{
 \item{obj_nm}{\code{chr} Name of the object}
 
 \item{call_expr}{\code{expr} The code used to construct the object if the object hasn't already been constructed}
+
+\item{as_character}{Should the function return code as a character? (Default is an expression)}
 
 \item{ns_chr}{\code{expr/chr} name of the namespace to assign the object to, or an expression that returns the environment to assign to}
 }
