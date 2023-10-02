@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">UU</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.39.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.39.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,7 +42,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">create_simple_get_function</span><span class="op">(</span><span class="va">obj_nm</span>, <span class="va">env_expr</span>, <span class="va">call_expr</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">create_simple_get_function</span><span class="op">(</span><span class="va">obj_nm</span>, <span class="va">env_expr</span>, <span class="va">call_expr</span>, as_character <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -53,6 +53,10 @@
 
 <dt>call_expr</dt>
 <dd><p><code>expr</code> The code used to construct the object if the object hasn't already been constructed</p></dd>
+
+
+<dt>as_character</dt>
+<dd><p>Should the function return code as a character? (Default is an expression)</p></dd>
 
 
 <dt>ns_chr</dt>
@@ -69,17 +73,24 @@
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">create_simple_get_function</span><span class="op">(</span><span class="st">"mt_cars"</span>, <span class="va">.GlobalEnv</span>, <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span><span class="va">mtcars</span>, cyl <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">cyl</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> .Primitive("&lt;-")(get_mt_cars, function (env = .GlobalEnv) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> {</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     get_mt_cars &lt;- function (env = .GlobalEnv) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     {</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         if (exists("mt_cars", envir = env)) {</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             get0("mt_cars", envir = env)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         else {</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             dplyr::mutate(mtcars, cyl = as.character(cyl))</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         }</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     if (exists("mt_cars", envir = env)) {</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         get0("mt_cars", envir = env)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     else {</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         dplyr::mutate(mtcars, cyl = as.character(cyl))</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     }</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> })</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> .Primitive("&lt;-")(get_mt_cars, function (env = .GlobalEnv) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> {</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     if (exists("mt_cars", envir = env)) {</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         get0("mt_cars", envir = env)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     }</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     else {</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         dplyr::mutate(mtcars, cyl = as.character(cyl))</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     }</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> })</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
