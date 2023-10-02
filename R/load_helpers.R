@@ -2,23 +2,33 @@
 #' @export
 startup <- function() {
   if (!getOption("UU_startup", FALSE)) {
-    options(UU_startup = TRUE)
+    profiles <-
+      list(
+        .Rprofile_user = Sys.getenv("R_PROFILE_USER", "~/.Rprofile"),
+        .Rprofile = Sys.getenv("R_PROFILE" , ".Rprofile")
+      )
+    profiles_to_load <- purrr::map_lgl(profiles, file.exists)
+    profiles_to_load <- profiles[profiles_to_load]
+    profiles_chr <- purrr::map(rlang::set_names(profiles_to_load, unlist(profiles_to_load)), readLines)
+    startup_lines <- purrr::map(profiles_chr, \(.x) {
+      .x[!stringr::str_detect(.x, "UU::startup")]
+    })
+
+    purrr::iwalk(startup_lines, \(.x, .y) {
+      eval(parse(text = .x))
+      gmsg("{.path { .y}} loaded.")
+    })
+
     list(
       .Renviron_user = Sys.getenv("R_ENVIRON_USER", "~/.Renviron"),
-      .Renviron = Sys.getenv("R_ENVIRON", ".Renviron"),
-      .Rprofile_user = Sys.getenv("R_PROFILE_USER", "~/.Rprofile"),
-      .Rprofile = Sys.getenv("R_PROFILE" , ".Rprofile")
+      .Renviron = Sys.getenv("R_ENVIRON", ".Renviron")
     ) |>
       purrr::iwalk(\(.x, .y){
         if (file.exists(.x)) {
-          rlang::exec(switch(.y,
-                             .Rprofile = ,
-                             .Rprofile_user = base::source,
-                             .Renviron = ,
-                             .Renviron_user = base::readRenviron), .x)
+          base::readRenviron(.x)
           gmsg("{.path { .x}} loaded.")
         }
-
       })
+    options(UU_startup = TRUE)
   }
 }
