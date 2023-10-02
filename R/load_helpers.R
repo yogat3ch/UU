@@ -9,14 +9,14 @@ startup <- function() {
       .Rprofile_user = Sys.getenv("R_PROFILE_USER", "~/.Rprofile"),
       .Rprofile = Sys.getenv("R_PROFILE" , ".Rprofile")
     ) |>
-      purrr::iwalk(~{
+      purrr::iwalk(\(.x, .y){
         if (file.exists(.x)) {
-          gmsg("{.path {.x}} loaded.")
           rlang::exec(switch(.y,
                              .Rprofile = ,
                              .Rprofile_user = base::source,
                              .Renviron = ,
                              .Renviron_user = base::readRenviron), .x)
+          gmsg("{.path { .x}} loaded.")
         }
 
       })
