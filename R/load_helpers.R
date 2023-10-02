@@ -15,7 +15,7 @@ startup <- function() {
     })
 
     purrr::iwalk(startup_lines, \(.x, .y) {
-      eval(parse(text = .x))
+      eval(parse(text = .x), eval = .GlobalEnv)
       gmsg("{.path { .y}} loaded.")
     })
 
