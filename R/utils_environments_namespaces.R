@@ -71,14 +71,14 @@ assign_global <- function(x, nm = rlang::expr_deparse(rlang::enexpr(x)), env = .
 #' @param obj_nm \code{chr} Name of the object
 #' @param ns_chr \code{expr/chr} name of the namespace to assign the object to, or an expression that returns the environment to assign to
 #' @param call_expr \code{expr} The code used to construct the object if the object hasn't already been constructed
-#'
+#' @param as_character Should the function return code as a character? (Default is an expression)
 #' @return \code{chr} The function at the console for copy/paste
 #' @export
 #'
 #' @examples
 #' create_simple_get_function("mt_cars", .GlobalEnv, dplyr::mutate(mtcars, cyl = as.character(cyl)))
 
-create_simple_get_function <- function(obj_nm, env_expr, call_expr) {
+create_simple_get_function <- function(obj_nm, env_expr, call_expr, as_character = FALSE) {
   exp <- rlang::enexpr(env_expr)
   if (rlang::is_character(env_expr))
     exp <- rlang::expr(rlang::ns_env(!!env_expr))
@@ -93,11 +93,10 @@ create_simple_get_function <- function(obj_nm, env_expr, call_expr) {
 
     })
   )
-  rlang::expr({
-    `<-`(!!rlang::sym(paste0("get_", obj_nm)), !!get_fn)
-  }) |>
-    deparse() |>
-    cat(sep = "\n")
+  code <- rlang::call2(`<-`,rlang::expr(!!rlang::sym(paste0("get_", obj_nm))), rlang::expr(!!get_fn))
+  code_chr <- deparse(code)
+  cat(code_chr, sep = "\n")
+  return(if (as_character) code_chr else code)
 }
 
 
