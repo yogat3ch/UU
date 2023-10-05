@@ -69,7 +69,7 @@ assign_global <- function(x, nm = rlang::expr_deparse(rlang::enexpr(x)), env = .
 #' Useful when the object depends on a long running task such as a database query.
 #'
 #' @param obj_nm \code{chr} Name of the object
-#' @param ns_chr \code{expr/chr} name of the namespace to assign the object to, or an expression that returns the environment to assign to
+#' @param env_expr \code{expr/chr} name of the namespace to assign the object to, or an expression that returns the environment to assign to
 #' @param call_expr \code{expr} The code used to construct the object if the object hasn't already been constructed
 #' @param as_character Should the function return code as a character? (Default is an expression)
 #' @return \code{chr} The function at the console for copy/paste
@@ -80,7 +80,7 @@ assign_global <- function(x, nm = rlang::expr_deparse(rlang::enexpr(x)), env = .
 
 create_simple_get_function <- function(obj_nm, env_expr, call_expr, as_character = FALSE) {
   exp <- rlang::enexpr(env_expr)
-  if (rlang::is_character(env_expr))
+  if (inherits(try(env_expr, silent = TRUE), "character"))
     exp <- rlang::expr(rlang::ns_env(!!env_expr))
   get_fn <- rlang::new_function(
     rlang::pairlist2(env = rlang::expr(!!exp)),
