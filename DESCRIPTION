@@ -26,8 +26,7 @@ Imports:
     plyr,
     usethis (>= 2.1.6),
     grDevices,
-    tools,
-    UU (>= 1.39.4)
+    tools
 Collate: 
     'aaa_imports.R'
     'css_color_helpers.R'
@@ -50,5 +49,4 @@ Collate:
     'utils_file_io.R'
     'utils_file_navigation.R'
 URL: https://yogat3ch.github.io/UU/
-Remotes:  
-    yogat3ch/UU
+
