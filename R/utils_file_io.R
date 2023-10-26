@@ -376,6 +376,7 @@ mkpath <- function(path, mkfile = FALSE, mkdir = TRUE) {
     cli::cli_inform("Created file: {.path {path}}.")
   }
 
+  path
 }
 
 
