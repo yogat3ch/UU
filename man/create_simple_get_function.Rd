@@ -9,11 +9,11 @@ create_simple_get_function(obj_nm, env_expr, call_expr, as_character = FALSE)
 \arguments{
 \item{obj_nm}{\code{chr} Name of the object}
 
+\item{env_expr}{\code{expr/chr} name of the namespace to assign the object to, or an expression that returns the environment to assign to}
+
 \item{call_expr}{\code{expr} The code used to construct the object if the object hasn't already been constructed}
 
 \item{as_character}{Should the function return code as a character? (Default is an expression)}
-
-\item{ns_chr}{\code{expr/chr} name of the namespace to assign the object to, or an expression that returns the environment to assign to}
 }
 \value{
 \code{chr} The function at the console for copy/paste

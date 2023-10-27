@@ -56,6 +56,28 @@ shiny_error_recover <- function() {
 
 }
 
+#' Increment an in-place counter
+#'
+#' @param x \code{obj} Any numeric to be incremented
+#' @param e \code{env} Calling environment
+#'
+#' @return \code{none} Increments the counter in the parent environment (modifies in place)
+#' @export
+#'
+#' @examples
+#' x <- 1
+#' increment(x)
+#' x
+increment <- function(x, e = rlang::caller_env()) {
+  rv <- rlang::enexpr(x)
+  if (inherits(x, "reactiveVal")) {
+    # Add support for reactiveVal
+  } else {
+    # Works for reactiveValues and other non reactives
+    eval(rlang::call2(`<-`, rlang::expr(!!rv), rlang::expr((!!rv %||% 0) + 1)), envir = e)
+  }
+}
+
 #' Read Javascript file
 #'
 #' @param filename \code{chr}
