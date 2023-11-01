@@ -25,6 +25,27 @@
     lhs
 }
 
+#' Replace NA values in LHS with RHS
+#'
+#' @param lhs \code{vctr} of values possibly containing `NA` on which replacement will be performed
+#' @param rhs \codE{vctr} of values length 1 or the same length with which to replace `NA`
+#'
+#' @return \code{vctr} with class according to R's coercion rules.
+#' @export
+#'
+#' @examples
+#' c(4, NA, 4) %|% 3
+#' c(4, NA, 4) %|% 3L
+#' class(c(4, NA, 4, NA) %|% 3L)
+#' cclass((NA, NA, NA, NA) %|% 3L)
+#' c(4, NA, 4, NA) %|% c(2,2,2,3)
+`%|%` <- Vectorize(function(lhs, rhs) {
+  if (is.na(lhs))
+    rhs
+  else
+    lhs
+})
+
 #' If legit lhs, else rhs
 #' @inheritParams %|try|%
 #' @name %|legit|%
