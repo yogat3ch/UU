@@ -58,7 +58,7 @@ shiny_error_recover <- function() {
 
 #' Increment an in-place counter
 #'
-#' @param x \code{obj} Any numeric to be incremented
+#' @param x \code{num/reactiveVal/reactiveValues} Any numeric to be incremented
 #' @param e \code{env} Calling environment
 #'
 #' @return \code{none} Increments the counter in the parent environment (modifies in place)
@@ -71,7 +71,8 @@ shiny_error_recover <- function() {
 increment <- function(x, e = rlang::caller_env()) {
   rv <- rlang::enexpr(x)
   if (inherits(x, "reactiveVal")) {
-    # Add support for reactiveVal
+    i <- (x() %||% 0) + 1
+    eval(rlang::call2(rlang::expr(!!rv), rlang::expr(!!i)), envir = e)
   } else {
     # Works for reactiveValues and other non reactives
     eval(rlang::call2(`<-`, rlang::expr(!!rv), rlang::expr((!!rv %||% 0) + 1)), envir = e)

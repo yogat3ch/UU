@@ -7,7 +7,7 @@
 increment(x, e = rlang::caller_env())
 }
 \arguments{
-\item{x}{\code{obj} Any numeric to be incremented}
+\item{x}{\code{num/reactiveVal/reactiveValues} Any numeric to be incremented}
 
 \item{e}{\code{env} Calling environment}
 }
