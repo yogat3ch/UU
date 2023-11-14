@@ -11,6 +11,26 @@ len_unique <- function(x) {
   length(unique(x))
 }
 
+#' Sort a vector or list by it's name (or self if no names)
+#'
+#' @param x \code{obj} to sort
+#' @param by_names \code{lgl} wether to sort by names
+#'
+#' @return \code{obj} sorted
+#' @export
+#' @examples
+#' sort_by_names(c(b = "b", c = "a"))
+#' sort_by_names(c(b = "b", c = "a"), by_names = FALSE)
+sort_by_names <- function(x, by_names = TRUE) {
+  y <- if (by_names)
+    names(x) %||% x
+  else
+    x
+  stopifnot(!is.list(y))
+  x[order(y)]
+}
+
+
 #' @inherit plyr::match_df title params description
 #' @param out \code{obj} Of class matching the desired output. **Default** `NULL` returns a `data.frame` with the matching row in `y`. `numeric()` will return the matching index in `y` & `logical()` will return a matching logical index
 #' @seealso plyr::match_df
