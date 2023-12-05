@@ -116,3 +116,40 @@ nm_to_id <- function(x) {
 strip_html <- function(x) {
   gsub("<.*?>", "", x)
 }
+
+#' Character code conversion table
+.character_codes <- tibble::tribble(
+  ~Char, ~Numericcode, ~Namedcode,   ~Description,
+   "\"",      "&#34;",   "&quot;", "double quote",
+    "'",      "&#39;",   "&apos;", "single quote",
+    "<",      "&#60;",     "&lt;",    "less than",
+    ">",      "&#62;",     "&gt;", "greater than",
+    "&",      "&#38;",    "&amp;",    "ampersand"
+)
+
+
+#' Replace HTML Character codes with their character equivalent
+#' @description
+#' See `?.character_codes` for conversion table. **Note** that this will not translate Ampersand if converting from Namedcode to character because it will translate the Namedcodes themselves.
+#'
+#' @param x \code{chr} string(s) in which character codes should be replaced
+#' @param to_character \code{lgl} Change character codes to character, if `FALSE` character symbols are changed to character codes
+#'
+#' @return \code{chr} with substitutions
+#' @export
+#'
+#' @examples
+#' character_codes("5 < 10")
+#' character_codes("5 &lt; 10")
+#' character_codes("5 &lt; 10", to_character = FALSE)
+character_codes <- function(x, to_character = TRUE) {
+  action <- c(from = "Namedcode", to = "Char")[if (to_character) 1:2 else 2:1]
+  # Don't do the ampersand if translating from Namedcodes, because it translates all of the appearances of ampersand in the namedcode output
+  if (!to_character)
+    .character_codes <- dplyr::filter(.character_codes, Char != "&")
+  purrr::pwalk(.character_codes, \(...) {
+    .x <- list(...)
+    x <<- stringr::str_replace_all(x, stringr::fixed(.x[[action[1]]]), .x[[action[2]]])
+  })
+  return(x)
+}
