@@ -19,6 +19,7 @@ Preserve a string as JS/HTML (prevent translation of characters)
 Other shiny: 
 \code{\link{glue_js}()},
 \code{\link{nm_to_id}()},
+\code{\link{path_strip_shiny}()},
 \code{\link{read_js}()},
 \code{\link{shiny_error_recover}()},
 \code{\link{strip_html}()}

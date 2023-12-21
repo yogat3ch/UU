@@ -22,6 +22,7 @@ nm_to_id("This convoluted name")
 Other shiny: 
 \code{\link{as_js}()},
 \code{\link{glue_js}()},
+\code{\link{path_strip_shiny}()},
 \code{\link{read_js}()},
 \code{\link{shiny_error_recover}()},
 \code{\link{strip_html}()}

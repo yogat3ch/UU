@@ -212,6 +212,7 @@ unit_find <- function(x) {
 #' evens(1:10)
 #'
 evens <- function(x) subset(x, x %% 2 == 0)
+
 #' Get odd numbers
 #' @param x \code{int}
 #' @export
@@ -496,6 +497,18 @@ need_pkg <- function(pkg, fn) {
 
 
 
+#' Load an R object from a file
+#'
+#' This function loads an R object from a file into the global environment or a new environment.
+#'
+#' @param file \code{character} A character string specifying the file path.
+#' @return The loaded R object.
+#' @family file IO
+#' @examples
+#' # Load an R object from a file
+#' obj <- load_obj("path/to/file.RData")
+#'
+#' @export
 load_obj <- function(file) {
   e <- new.env()
   load(file, e)
@@ -507,6 +520,7 @@ load_obj <- function(file) {
   }
   out
 }
+
 
 .size <- data.frame(
   stringsAsFactors = FALSE,

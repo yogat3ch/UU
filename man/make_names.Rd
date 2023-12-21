@@ -24,6 +24,7 @@ Other file IO:
 \code{\link{is_filepath}()},
 \code{\link{last_updated}()},
 \code{\link{list.files2}()},
+\code{\link{load_obj}()},
 \code{\link{mkpath}()},
 \code{\link{move_files_to_folder}()},
 \code{\link{needs_update}()},

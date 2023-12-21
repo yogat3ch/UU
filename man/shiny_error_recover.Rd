@@ -14,6 +14,7 @@ Other shiny:
 \code{\link{as_js}()},
 \code{\link{glue_js}()},
 \code{\link{nm_to_id}()},
+\code{\link{path_strip_shiny}()},
 \code{\link{read_js}()},
 \code{\link{strip_html}()}
 }

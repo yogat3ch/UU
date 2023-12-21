@@ -50,6 +50,7 @@ Other file IO:
 \code{\link{file_fn}()},
 \code{\link{is_filepath}()},
 \code{\link{last_updated}()},
+\code{\link{load_obj}()},
 \code{\link{make_names}()},
 \code{\link{mkpath}()},
 \code{\link{move_files_to_folder}()},
