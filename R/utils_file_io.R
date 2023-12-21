@@ -279,6 +279,7 @@ write_lines <- function(file, ..., after = "end") {
 #' @examples dirs$data("mydata", ext = "csv", mkpath = TRUE)
 dirs <- purrr::map(
   list(
+    app = "inst/app",
     css = "inst/app/www/css",
     data = "data",
     dev = "dev",
