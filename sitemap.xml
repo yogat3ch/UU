@@ -259,6 +259,9 @@
     <loc>https://yogat3ch.github.io/UU/reference/list_rename.html</loc>
   </url>
   <url>
+    <loc>https://yogat3ch.github.io/UU/reference/load_obj.html</loc>
+  </url>
+  <url>
     <loc>https://yogat3ch.github.io/UU/reference/luminance_filter.html</loc>
   </url>
   <url>
@@ -341,6 +344,12 @@
   </url>
   <url>
     <loc>https://yogat3ch.github.io/UU/reference/package_size.html</loc>
+  </url>
+  <url>
+    <loc>https://yogat3ch.github.io/UU/reference/path_strip_shiny.html</loc>
+  </url>
+  <url>
+    <loc>https://yogat3ch.github.io/UU/reference/path_strip_to.html</loc>
   </url>
   <url>
     <loc>https://yogat3ch.github.io/UU/reference/pkg_ns.html</loc>
