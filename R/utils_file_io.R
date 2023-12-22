@@ -323,7 +323,7 @@ write_dir_fn <- function(outfile = "R/utils_dir_fns.R", overwrite = TRUE, for_go
       .path <- fs::path(!!.x(), ..., ext = ext)
       out <- if (!mkpath) {
         .path <- stringr::str_remove(.path, "^inst\\/?")
-        if (!(!!for_golem) && mustWork)
+        if (!!for_golem)
           !!rlang::exec(rlang::call2, !!!fn, rlang::expr(.path))
         else
           .path

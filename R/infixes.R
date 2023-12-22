@@ -28,7 +28,7 @@
 #' Replace NA values in LHS with RHS
 #'
 #' @param lhs \code{vctr} of values possibly containing `NA` on which replacement will be performed
-#' @param rhs \codE{vctr} of values length 1 or the same length with which to replace `NA`
+#' @param rhs \code{vctr} of values length 1 or the same length with which to replace `NA`
 #'
 #' @return \code{vctr} with class according to R's coercion rules.
 #' @export

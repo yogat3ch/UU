@@ -9,7 +9,7 @@ lhs \%|\% rhs
 \arguments{
 \item{lhs}{\code{vctr} of values possibly containing \code{NA} on which replacement will be performed}
 
-\item{rhs}{\codE{vctr} of values length 1 or the same length with which to replace \code{NA}}
+\item{rhs}{\code{vctr} of values length 1 or the same length with which to replace \code{NA}}
 }
 \value{
 \code{vctr} with class according to R's coercion rules.
