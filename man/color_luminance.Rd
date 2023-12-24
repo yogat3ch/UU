@@ -13,7 +13,8 @@ color_luminance(red, green, blue, alpha, ...)
     values are coerced to integers in \code{0:255} and the result is
     computed most efficiently.}
 
-\item{...}{additional arguments}
+\item{...}{additional arguments
+See \code{color_text_by_luminance} for creating contrasting text color to a background.}
 }
 \value{
 \code{num}
@@ -25,6 +26,8 @@ Find the luminance of a particular color, scaled 0-1
 rlang::exec(color_luminance, !!!css_col2vec('white'))
 }
 \seealso{
+\code{\link[=color_text_by_luminance]{color_text_by_luminance()}}
+
 Other color: 
 \code{\link{color_cycle}()},
 \code{\link{color_distance}()},
