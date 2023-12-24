@@ -98,10 +98,11 @@ color_rgb_table <- function(colors) {
 #'
 #' @inheritParams grDevices::rgb
 #' @param ... additional arguments
-
+#' See `color_text_by_luminance` for creating contrasting text color to a background.
 #' @return \code{num}
 #' @export
 #' @family color
+#' @seealso [color_text_by_luminance()]
 #' @examples
 #' rlang::exec(color_luminance, !!!css_col2vec('white'))
 color_luminance <- function(red, green, blue, alpha, ...) {
