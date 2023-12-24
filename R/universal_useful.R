@@ -697,6 +697,31 @@ class_coercion_fn <- function(.class) {
          )
 }
 
+
+#' @title Translate DT Column names to numeric indices using regex matching
+#'
+#' @param x \code{chr/num} Column numbers or names
+#'
+#' @return \code{num} Numeric representation of column
+#' @examples
+#' names(mtcars)
+#' which_cols("c", mtcars)
+#'
+#' @export
+
+which_cols <- function(x, .data) {
+  UseMethod("which_cols")
+}
+
+#' @export
+which_cols.numeric <- function(x, .data)
+  x
+
+#' @export
+which_cols.character <- function(x, .data) {
+  dplyr::matches(UU::regex_or(x), vars = names(.data))
+}
+
 #' Match the classes of one object to that of another object
 #'
 #' @param x \code{(object)} object to be matched

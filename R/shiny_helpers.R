@@ -161,7 +161,7 @@ character_codes <- function(x, to_character = TRUE) {
 #' @param leading_slash \code{lgl} If leading slash should be included `TRUE` or removed `FALSE`.
 #' @return \code{chr} without stripped directories
 #' @export
-#' @family general
+#' @family shiny
 #' @examples
 #' path_strip_to("inst/app/www/img/myimage.svg", "www")
 path_strip_to <- function(path, resourcepath = "www", leading_slash = FALSE) {
