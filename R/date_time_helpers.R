@@ -345,3 +345,43 @@ time_elapsed <- function(file = ".interval_timer.rds", interval = lubridate::wee
   } else
     FALSE
 }
+
+
+
+#' Create a tbl with each day of the year, it's week number, and the interval containing that week.
+#'
+#' @param year \code{int} Year number
+#' @param inclusive \code{lgl} Whether to include any days from the previous and next years in the first and final weeks of the year respectively.
+#'
+#' @return \code{tbl} With features:
+#' \itemize{
+#'   \item{\code{day}}{ The Date of each day}
+#'   \item{\code{wn}}{ week number. See \code{\link[lubridate]{isoweek}} for details.}
+#'   \item{\code{interval}}{ The \code{\link[lubridate]{interval}} for the week.}
+#' }
+#' @export
+#'
+#' @examples
+week_bins_per_year <- function(year, inclusive = TRUE) {
+  week_table <- tibble::tibble(day = seq(lubridate::make_date(year), lubridate::make_date(year, 12, 31), by = "day")) |>
+    dplyr::mutate(wn = lubridate::isoweek(day)) |>
+    dplyr::group_by(wn) |>
+    dplyr::mutate(interval = lubridate::interval(min(day), max(day)))
+  if (inclusive) {
+    # Include weeks from the previous year in the first week of the year
+    week_1_end <- dplyr::filter(head(week_table, 7), wn == 1) |>
+      dplyr::pull(day) |>
+      dplyr::last()
+    week_table[1:which(week_table$day == week_1_end), "wn"] <- 1
+    if (any(tail(week_table, 7)$wn == 1)) {
+      all_1s <- which(week_table$wn == 1)
+      # Indexes for the days which fall in the first week of the following year
+      idx <- all_1s[(which(diff(all_1s) > 1) + 1):length(all_1s)]
+      week_table[idx, "wn"] <- max(week_table$wn)
+    }
+  }
+  return(week_table)
+
+}
+
+
