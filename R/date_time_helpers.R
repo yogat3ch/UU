@@ -360,8 +360,7 @@ time_elapsed <- function(file = ".interval_timer.rds", interval = lubridate::wee
 #'   \item{\code{interval}}{ The \code{\link[lubridate]{interval}} for the week.}
 #' }
 #' @export
-#'
-#' @examples
+
 week_bins_per_year <- function(year, inclusive = TRUE) {
   week_table <- tibble::tibble(day = seq(lubridate::make_date(year), lubridate::make_date(year, 12, 31), by = "day")) |>
     dplyr::mutate(wn = lubridate::isoweek(day)) |>
@@ -383,5 +382,43 @@ week_bins_per_year <- function(year, inclusive = TRUE) {
   return(week_table)
 
 }
+
+#' Partition a meeting into evenly distributed sections based on how much time is left between when intros end and the end of the meeting
+#'
+#' @param start_hms \code{chr} Meeting start time in 24-hour H:M:S Time format. This is HMS since it's easier to supply this argument in advance of the meeting.
+#' @param intros_end \code{Datetime} If you know when intros should end in advance, supply it, otherwise this function is intended to to be run when they end for a dynamic calculation of sections
+#' @param t4q \code{Duration} how long to save for questions/closing remarks at the end
+#' @param m_length \code{Duration} total length of the meeting
+#' @param sections \code{num} Number of sections to distribute time
+#'
+#' @return \code{list} With:
+#' \itemize{
+#'   \item{\code{each_section}}{ time allotted to each section}
+#'   \item{\code{Section X}}{ The end time for each section}
+#'   \item{\code{end}}{ The end time}
+#' }
+#' @export
+#'
+#' @examples
+#' # If the meeting started 10 minutes ago and the intros just ended
+#' meeting_start_time <- (lubridate::now() - lubridate::minutes(10)) |> as.character() |> stringr::str_extract("\\d{2}:\\d{2}:\\d{2}")
+#' meeting_timer(meeting_start_time)
+meeting_timer <- function(start_hms = "17:40:00", t4q = lubridate::minutes(10), m_length = lubridate::minutes(75), sections = 4, intros_end = lubridate::now()) {
+
+  intros_end <- lubridate::now()
+  start_time <- lubridate::make_datetime(year = lubridate::year(intros_end), month = lubridate::month(intros_end), day = lubridate::day(intros_end), tz = "America/New_York") + lubridate::hms(start_hms)
+  end_time <- start_time + m_length
+  questions <- end_time - t4q
+  each_section = (questions - intros_end) / sections
+  rlang::list2(
+    each_section = each_section,
+    !!!purrr::map(setNames(1:sections, paste0("Section ", 1:sections)), \(.x) {
+      intros_end + (each_section) * .x
+    }),
+    end = end_time
+  )
+}
+
+
 
 
