@@ -22,6 +22,24 @@ ext <- function(path, strip = FALSE, new_ext) {
   out
 }
 
+#' Is JSON file or text valid?
+#'
+#' @param x \code{chr} JSON string or file path
+#'
+#' @return \code{lgl} Whether JSON is valid
+#' @export
+#'
+#' @examples
+#' json_validate('{"done" : 1}')
+json_validate <- function(x) {
+  txt <- if (file.exists(x)) {
+    glue::glue_collapse(readLines(x))
+  } else {
+    x
+  }
+  jsonlite::validate(txt)
+}
+
 #' Writes a trace back as a json for error logging
 #'
 #' @param e \code{error} Error condition object, optional
