@@ -20,8 +20,8 @@
 
 
 
-profile_script <- function(.file, profile_open = utils::Rprof(fs::path(dir_profvis, stringr::str_remove(basename(.file), "\\.[a-zA-Z0-9\\-]+$"), glue::glue('{.lo}-{.lc}_{file_timestamp()}'), ext = "Rprof"), interval = .02, line.profiling = TRUE, memory.profiling = TRUE), profile_close = utils::Rprof(NULL), dir_profvis = "profvis", remove = FALSE, new_script = TRUE) {
-  stopifnot(inherits(.file, "character"))
+profile_script <- function(.file, profile_open = utils::Rprof(fs::path(dir_profvis, ext(basename(.file), strip = TRUE), glue::glue('{.lo}-{.lc}_{file_timestamp()}'), ext = "Rprof"), interval = .02, line.profiling = TRUE, memory.profiling = TRUE), profile_close = utils::Rprof(NULL), dir_profvis = "profvis", remove = FALSE, new_script = TRUE, new_filename = paste0(ext(basename(.file), strip = TRUE), "_prof", ext(.file))) {
+  stopifnot("File does not exist" = inherits(.file, "character") && file.exists(.file))
   .lines <- readLines(.file)
   .po <- rlang::enexpr(profile_open)
   .pc <- rlang::enexpr(profile_close)
@@ -74,7 +74,7 @@ profile_script <- function(.file, profile_open = utils::Rprof(fs::path(dir_profv
 
   # write the new file
   if (new_script && .write && (isFALSE(remove) || !is.character(remove))) {
-    write(.lines, fs::path(dir_profvis, basename(.file)), append = FALSE)
+    write(.lines, fs::path(dir_profvis, new_filename), append = FALSE)
   } else if (isTRUE(remove) || is.character(remove)) {
     write(.lines, .file, append = FALSE)
   }
