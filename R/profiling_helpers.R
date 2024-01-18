@@ -20,7 +20,7 @@
 
 
 
-profile_script <- function(.file, profile_open = utils::Rprof(fs::path(dir_profvis, stringr::str_remove(basename(.file), "\\.[a-zA-Z0-9\\-]+$"), glue::glue('{.lo}-{.lc}'), ext = "Rprof"), interval = .02, line.profiling = TRUE, memory.profiling = TRUE), profile_close = utils::Rprof(NULL), dir_profvis = "profvis", remove = FALSE, new_script = TRUE) {
+profile_script <- function(.file, profile_open = utils::Rprof(fs::path(dir_profvis, stringr::str_remove(basename(.file), "\\.[a-zA-Z0-9\\-]+$"), glue::glue('{.lo}-{.lc}_{file_timestamp()}'), ext = "Rprof"), interval = .02, line.profiling = TRUE, memory.profiling = TRUE), profile_close = utils::Rprof(NULL), dir_profvis = "profvis", remove = FALSE, new_script = TRUE) {
   stopifnot(inherits(.file, "character"))
   .lines <- readLines(.file)
   .po <- rlang::enexpr(profile_open)
