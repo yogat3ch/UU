@@ -47,7 +47,6 @@ is_legit <- function(x, is.null = TRUE, is_empty = TRUE, is.na = TRUE, not_error
 
 }
 
-_is_empty <- Vectorize(rlang::is_empty)
 
 #' Is zero-length character?
 #'
