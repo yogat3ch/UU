@@ -26,8 +26,6 @@ is_error <- function(x) {
 
 is_legit <- function(x, is.null = TRUE, is_empty = TRUE, is.na = TRUE, not_error = TRUE) {
   .checks <- c(is.null, is_empty, is.na, not_error)
-
-  is_na <-
   if (any(!.checks)) {
     checks <- rlang::exprs(
       is.null  = all(is.null(x)),
