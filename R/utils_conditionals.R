@@ -13,13 +13,35 @@ is_error <- function(x) {
 
 #' @title Is object legit?
 #' @description Is object non-null, non-empty, non-NA, and not a try-error?
-#' @param x \code{(object)}
+#'
+#' @param x \code{(object)} to check for legitimacy
+#' @param is.null \code{lgl} Check for non-null
+#' @param is_empty \code{lgl} Check for non-empty
+#' @param is.na \code{lgl} Check for non-NA
+#' @param not_error \code{lgl} Check for non-error
+#'
 #' @return \code{(logical)}
 #' @family conditionals
 #' @export
 
-is_legit <- function(x) {
-  !(all(is.null(x)) || rlang::is_empty(x) || all(suppressWarnings(is.na(x))) || inherits(x, c("try-error", "error")))
+is_legit <- function(x, is.null = TRUE, is_empty = TRUE, is.na = TRUE, not_error = TRUE) {
+  .checks <- c(is.null, is_empty, is.na, not_error)
+  if (any(!.checks)) {
+    checks <- rlang::exprs(
+      is.null  = all(is.null(x)),
+      is_empty = rlang::is_empty(x),
+      is.na = all(suppressWarnings(is.na(x))),
+      not_error = inherits(x, c("try-error", "error"))
+    )[.checks]
+    checks <- purrr::reduce(checks, .f = \(.x, .y, ...) {
+      rlang::call2(`||`, .x, .y)
+    })
+    !rlang::eval_bare(checks)
+  } else {
+    !(all(is.null(x)) || rlang::is_empty(x) || all(suppressWarnings(is.na(x))) ||
+        inherits(x, c("try-error", "error")))
+  }
+
 }
 
 

@@ -4,10 +4,18 @@
 \alias{is_legit}
 \title{Is object legit?}
 \usage{
-is_legit(x)
+is_legit(x, is.null = TRUE, is_empty = TRUE, is.na = TRUE, not_error = TRUE)
 }
 \arguments{
-\item{x}{\code{(object)}}
+\item{x}{\code{(object)} to check for legitimacy}
+
+\item{is.null}{\code{lgl} Check for non-null}
+
+\item{is_empty}{\code{lgl} Check for non-empty}
+
+\item{is.na}{\code{lgl} Check for non-NA}
+
+\item{not_error}{\code{lgl} Check for non-error}
 }
 \value{
 \code{(logical)}
