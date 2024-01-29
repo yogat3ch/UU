@@ -31,7 +31,7 @@ is_legit <- function(x, is.null = TRUE, is_empty = TRUE, is.na = TRUE, not_error
       is.null  = all(is.null(x)),
       is_empty = rlang::is_empty(x),
       # If all arguments are empty, all(is_na) will be TRUE. To disambiguate an empty object from one that has all objects as NA, we need to simultaneously check if the object is non-empty
-      is.na = all(suppressWarnings(is.na(x))) & !rlang::is_empty(x),
+      is.na = all(suppressWarnings(is.na(x))) & nrow(x) != 0,
       not_error = inherits(x, c("try-error", "error"))
     )[.checks]
     checks <- purrr::reduce(checks, .f = \(.x, .y, ...) {

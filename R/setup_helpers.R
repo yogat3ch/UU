@@ -241,7 +241,7 @@ install_remote <- function(pkg, remote, ..., to_desc = TRUE, snapshot = TRUE) {
   if (missing(remote)) {
     install.packages(pkg, ...)
     if (.write_desc)
-      purrr::walk(pkg, ~usethis::use_package(.x, min_version = TRUE))
+      purrr::walk(pkg, \(.x) usethis::use_package(.x, min_version = TRUE))
   } else {
     .remotes <- glue::glue("{remote}/{pkg}")
     remotes::install_github(.remotes, ...)
