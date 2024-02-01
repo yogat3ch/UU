@@ -71,7 +71,7 @@ zchar <- Negate(nzchar)
 #' @family conditionals
 #' @examples
 #' same(list(x = 1, y = 2), list(y = 2, x = 1))
-same <- function(x, y, sort_by_names = TRUE, ...) {
+same <- function(target, current, sort_by_names = TRUE, ...) {
   nms = list(x = !is.null(names(x)),
              y = !is.null(names(y)))
 
