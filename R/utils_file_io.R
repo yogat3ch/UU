@@ -564,6 +564,30 @@ needs_update <- function(x, path = FALSE, threshold = lubridate::floor_date(Sys.
                  needs_update = (threshold > last_updated) %|% TRUE)
 }
 
+#' Was a file updated in the last hour?
+#'
+#' @param file \code{chr} file path
+#' @param alert \code{alert} Whether to give a console alert that the file was updated.
+#' @return \code{lgl} whether the file was updated
+#' @export
+#'
+#' @examples
+#' x <- UU::mkpath(tempfile(), mkfile = TRUE)
+#' was_updated(x)
+#' file.remove(x)
+was_updated <- function(file, alert = TRUE) {
+  lgl <- if (!file.exists(file)) {
+    gwarn("{.path {file}} doesn't exist" )
+    FALSE
+  } else {
+    lgl <- file.mtime(file) > lubridate::floor_date(lubridate::now(), unit = "hour")
+    if (lgl && alert)
+      cli::cli_alert_success("{.path {file}} was updated.")
+    lgl
+  }
+  return(lgl)
+}
+
 #' @title Is path a file path
 #' @description Given a path, is it a filepath?
 #' @param path \code{(character)} path
