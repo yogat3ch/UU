@@ -72,21 +72,21 @@ zchar <- Negate(nzchar)
 #' @examples
 #' same(list(x = 1, y = 2), list(y = 2, x = 1))
 same <- function(target, current, sort_by_names = TRUE, ...) {
-  nms = list(x = !is.null(names(x)),
-             y = !is.null(names(y)))
+  nms = list(x = !is.null(names(target)),
+             y = !is.null(names(current)))
 
   if (sort_by_names && all(nms$x, nms$y)) {
-    stopifnot(`x must be named` = nms$x)
-    stopifnot(`y must be named` = nms$y)
-    x <- x[order(names(x))]
-    y <- y[order(names(y))]
+    stopifnot(`target must be named` = nms$x)
+    stopifnot(`current must be named` = nms$y)
+    target <- target[order(names(target))]
+    current <- current[order(names(current))]
   } else {
-    if (rlang::is_atomic(x))
-      x <- sort(x)
-    if (rlang::is_atomic(y))
-      y <- sort(y)
+    if (rlang::is_atomic(target))
+      target <- sort(target)
+    if (rlang::is_atomic(current))
+      current <- sort(current)
   }
-  isTRUE(all.equal(x, y, ...))
+  isTRUE(all.equal(target, current, ...))
 }
 
 #' Which is larger
