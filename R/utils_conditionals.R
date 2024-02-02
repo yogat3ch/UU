@@ -62,7 +62,7 @@ zchar <- Negate(nzchar)
 #' Are the values in each object the same?
 #' @description
 #' The primary difference from \code{\link[base]{identical}} & \code{\link[base]{all.equal}} is that objects are sorted by name so order doesn't matter. Set `sort_by_names = FALSE` to sort by values.
-#'
+#' @inheritParams base::all.equal
 #' @param x \code{obj}
 #' @param y \code{obj}
 #' @inheritDotParams base::all.equal
@@ -71,7 +71,7 @@ zchar <- Negate(nzchar)
 #' @family conditionals
 #' @examples
 #' same(list(x = 1, y = 2), list(y = 2, x = 1))
-same <- function(target, current, sort_by_names = TRUE, ...) {
+same <- function(target, current, sort_by_names = TRUE, x = target, y = current, ...) {
   nms = list(x = !is.null(names(target)),
              y = !is.null(names(current)))
 
