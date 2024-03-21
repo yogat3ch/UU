@@ -32,6 +32,7 @@ ext <- function(path, strip = FALSE, new_ext) {
 #' @examples
 #' json_validate('{"done" : 1}')
 json_validate <- function(x) {
+  stopifnot(`x must be valid json or a path to valid json` = is.character(x))
   txt <- if (file.exists(x)) {
     glue::glue_collapse(readLines(x))
   } else {
