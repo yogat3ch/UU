@@ -56,7 +56,7 @@ is_legit <- function(x, is.null = TRUE, is_empty = TRUE, is.na = TRUE, not_error
 #' @examples
 #' zchar("")
 #' zchar(" ")
-zchar <- Negate(nzchar)
+zchar <- \(x) isTRUE(Negate(nzchar)(x))
 
 
 #' Are the values in each object the same?

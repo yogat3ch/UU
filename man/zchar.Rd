@@ -4,7 +4,7 @@
 \alias{zchar}
 \title{Is zero-length character?}
 \usage{
-zchar(...)
+zchar(x)
 }
 \arguments{
 \item{x}{\code{chr}}
