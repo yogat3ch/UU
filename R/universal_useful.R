@@ -428,7 +428,7 @@ gbort <- function (
   parent = NULL,
   e = rlang::caller_env()
 ) {
-  rlang::abort(cli::format_error(message, .envir = e), class = class, ..., trace = trace, parent = parent)
+  rlang::abort(cli::format_error(message, .envir = e), class = class, ..., trace = trace, call = dplyr::last(trace)$call[[1]], parent = parent)
 }
 
 #' Custom warning message
