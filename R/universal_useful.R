@@ -44,6 +44,36 @@ unique_with_names <- function(x) {
   x[!duplicated(x)]
 }
 
+vec_reorder <- function(...) {
+
+}
+
+#' Unify two vectors preserving the order of `x`
+#' @param x \code{vec} to preserve the order of
+#' @param y \code{vec} to vector of values to include in the output (unordered)
+#' @export
+#' @examples
+#' unify_vec_preserve_order(letters[c(5, 3)], letters[c(4:10,3)])
+unify_vec_preserve_order <- function(x, y) {
+  out <- if (!any(na.rm = TRUE, x %in% y)) {
+    y
+  } else {
+    # intersect preserves the order of the first argument
+    to_preserve <- intersect(y, x)
+    new <- union(y, to_preserve)
+    lout <- length(new)
+    seq_along
+    prev_order <- match(to_preserve, x)
+    new_order <- setdiff(seq_along(new), prev_order)
+    new_vals <- setdiff(y, x)
+    new[prev_order] <- to_preserve
+    new[new_order] <- new_vals
+    new
+  }
+  return(out)
+}
+
+
 #' @inherit plyr::match_df title params description
 #' @param out \code{obj} Of class matching the desired output. **Default** `NULL` returns a `data.frame` with the matching row in `y`. `numeric()` will return the matching index in `y` & `logical()` will return a matching logical index
 #' @seealso plyr::match_df
