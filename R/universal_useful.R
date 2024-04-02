@@ -54,6 +54,9 @@ vec_reorder <- function(...) {
 #' @export
 #' @examples
 #' unify_vec_preserve_order(letters[c(5, 3)], letters[c(4:10,3)])
+#' unify_vec_preserve_order(letters[1:5], letters[c(4:10)])
+#' unify_vec_preserve_order(NULL, letters[c(4:10)])
+#' unify_vec_preserve_order(letters, NULL)
 unify_vec_preserve_order <- function(x, y) {
   out <- if (!any(na.rm = TRUE, x %in% y)) {
     y
