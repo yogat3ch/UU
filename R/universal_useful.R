@@ -68,9 +68,10 @@ unify_vec_preserve_order <- function(x, y) {
     seq_along
     prev_order <- match(to_preserve, x)
     new_order <- setdiff(seq_along(new), prev_order)
-    new_vals <- setdiff(y, x)
     new[prev_order] <- to_preserve
-    new[new_order] <- new_vals
+    new_vals <- setdiff(y, x)
+    if (!rlang::is_empty(new_vals))
+      new[new_order] <- new_vals
     new
   }
   return(out)
