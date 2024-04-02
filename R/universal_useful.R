@@ -58,7 +58,7 @@ vec_reorder <- function(...) {
 #' unify_vec_preserve_order(NULL, letters[c(4:10)])
 #' unify_vec_preserve_order(letters, NULL)
 unify_vec_preserve_order <- function(x, y) {
-  out <- if (!any(na.rm = TRUE, x %in% y)) {
+  out <- if (!any(na.rm = TRUE, x %in% y) || identical(x, y)) {
     y
   } else {
     # intersect preserves the order of the first argument
