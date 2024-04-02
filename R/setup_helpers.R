@@ -246,7 +246,7 @@ install_remote <- function(pkg, remote, ..., to_desc = TRUE, snapshot = TRUE) {
     .remotes <- glue::glue("{remote}/{pkg}")
     remotes::install_github(.remotes, ...)
     if (.write_desc)
-      purrr::walk2(pkg, .remotes, ~usethis::use_dev_package(.x, remote = .y))
+      purrr::walk2(pkg, .remotes, \(.x, .y) usethis::use_dev_package(.x, remote = .y))
   }
   if (file.exists("renv.lock") && snapshot)
     UU::need_pkg("renv","snapshot")(prompt = FALSE)

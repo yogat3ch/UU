@@ -31,6 +31,19 @@ sort_by_names <- function(x, by_names = TRUE) {
 }
 
 
+#' Unique a vector, preserving the names of the first original entries
+#'
+#' @param x \code{vec} with names
+#'
+#' @return \code{vec} of the same type
+#' @export
+#'
+#' @examples
+#' unique_with_names(c(N = "n", b = "b", A = "n"))
+unique_with_names <- function(x) {
+  x[!duplicated(x)]
+}
+
 #' @inherit plyr::match_df title params description
 #' @param out \code{obj} Of class matching the desired output. **Default** `NULL` returns a `data.frame` with the matching row in `y`. `numeric()` will return the matching index in `y` & `logical()` will return a matching logical index
 #' @seealso plyr::match_df
