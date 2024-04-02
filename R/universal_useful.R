@@ -60,16 +60,18 @@ vec_reorder <- function(...) {
 unify_vec_preserve_order <- function(x, y) {
   out <- if (!any(na.rm = TRUE, x %in% y) || identical(x, y)) {
     y
+  } else if (isTRUE(y %allin% x)) {
+    intersect(x, y)
   } else {
     # intersect preserves the order of the first argument
-    to_preserve <- intersect(y, x)
+    to_preserve <- intersect(x, y)
     new <- union(y, to_preserve)
     lout <- length(new)
-    seq_along
+    new_i <- seq_along(new)
     prev_order <- match(to_preserve, x)
-    new_order <- setdiff(seq_along(new), prev_order)
     new[prev_order] <- to_preserve
     new_vals <- setdiff(y, x)
+    new_order <- setdiff(new_i, prev_order)
     if (!rlang::is_empty(new_vals))
       new[new_order] <- new_vals
     new
