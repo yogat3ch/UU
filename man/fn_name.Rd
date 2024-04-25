@@ -7,10 +7,10 @@
 fn_name(fn)
 }
 \arguments{
-\item{fn}{\code{(function)} for which to retrieve the name}
+\item{fn}{\code{fn} for which to retrieve the name}
 }
 \value{
-\code{(character)} of the functions name
+\code{chr} of the functions name
 }
 \description{
 Sometimes a function is passed down the call stack and it's name is unknown. This function finds the name without having to pass it down the call stack as an argument.

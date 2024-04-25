@@ -9,7 +9,7 @@ License: AGPL-3
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
 Imports: 
     cli (>= 3.6.1),
     glue,
@@ -30,23 +30,25 @@ Imports:
     jsonlite
 Collate: 
     'aaa_imports.R'
-    'css_color_helpers.R'
-    'date_time_helpers.R'
-    'file_helpers.R'
     'infixes.R'
-    'load_helpers.R'
-    'modeling.R'
     'onload.R'
-    'opts_helpers.R'
-    'pkg_helpers.R'
-    'profiling_helpers.R'
-    'scraping_helpers.R'
-    'setup_helpers.R'
-    'shiny_helpers.R'
     'universal_useful.R'
-    'utils_character.R'
+    'utils_condition_signaling.R'
     'utils_conditionals.R'
+    'utils_css_color.R'
+    'utils_date_time.R'
     'utils_environments_namespaces.R'
+    'utils_file.R'
     'utils_file_io.R'
     'utils_file_navigation.R'
+    'utils_load.R'
+    'utils_math.R'
+    'utils_opts.R'
+    'utils_package_dev.R'
+    'utils_profiling.R'
+    'utils_rounding.R'
+    'utils_scraping.R'
+    'utils_setup.R'
+    'utils_shiny.R'
+    'utils_vectors.R'
 URL: https://yogat3ch.github.io/UU/

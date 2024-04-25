@@ -13,3 +13,13 @@ Are all lhs values in rhs?
 2:5 \%allin\% 1:10
 5:11 \%allin\% 1:10
 }
+\seealso{
+Other infixes: 
+\code{\link{\%nin\%}()},
+\code{\link{\%|0|\%}()},
+\code{\link{\%|\%}()},
+\code{\link{\%|legit|\%}()},
+\code{\link{\%|try|\%}()},
+\code{\link{\%|zchar|\%}()}
+}
+\concept{infixes}

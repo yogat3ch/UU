@@ -17,3 +17,13 @@ results from lhs if length > 1 otherwise rhs
 \description{
 If the lhs is length 0, replace with rhs
 }
+\seealso{
+Other infixes: 
+\code{\link{\%allin\%}()},
+\code{\link{\%nin\%}()},
+\code{\link{\%|\%}()},
+\code{\link{\%|legit|\%}()},
+\code{\link{\%|try|\%}()},
+\code{\link{\%|zchar|\%}()}
+}
+\concept{infixes}

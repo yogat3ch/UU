@@ -14,7 +14,16 @@ Are lhs values absent from set on rhs?
 }
 \seealso{
 is_legit
+
+Other infixes: 
+\code{\link{\%allin\%}()},
+\code{\link{\%|0|\%}()},
+\code{\link{\%|\%}()},
+\code{\link{\%|legit|\%}()},
+\code{\link{\%|try|\%}()},
+\code{\link{\%|zchar|\%}()}
 }
 \author{
 Think.fr
 }
+\concept{infixes}

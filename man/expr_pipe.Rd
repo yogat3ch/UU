@@ -13,26 +13,17 @@ expr_pipe(exprs)
 \code{expression}
 }
 \description{
-Return a list of expressions all piped together as a single expression
+Useful when making complex compound statements that require dynamic substitution via tidy eval for dynamically created variables derived from the context.
 }
 \examples{
-ex <- tibble::tibble(cat = rep(letters, length.out = 6, each = 2), val = runif(6, 0, 10))
-exps <- rlang::exprs(
-  data,
-  dplyr::mutate(data, val = val  + 3)
-)
-make_exp <- function(data, addtl_exp, summarise = TRUE) {
-  if (summarise) {
-    addtl_exp <- append(
-      addtl_exp,
-      rlang::exprs(
-        dplyr::group_by(cat),
-        dplyr::summarise(val = sum(val))
-      )
-    )
-  }
-  rlang::eval_bare(expr_pipe(addtl_exp))
-}
-make_exp(ex, exps)
-make_exp(ex, exps, FALSE)
+(.data <- tibble::tibble(val = runif(10)))
+(exp <- expr_pipe(
+  rlang::exprs(
+    .data,
+    dplyr::mutate(val = val + 5, category = sample(1:3, length(val), replace = TRUE)),
+    dplyr::group_by(category),
+    dplyr::summarise(s = sum(val))
+  )
+))
+rlang::eval_bare(exp)
 }

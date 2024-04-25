@@ -2,7 +2,7 @@
 % Please edit documentation in R/universal_useful.R
 \name{common_names}
 \alias{common_names}
-\title{Find the names in common}
+\title{Find the common names between two objects}
 \usage{
 common_names(...)
 }
@@ -14,4 +14,7 @@ common_names(...)
 }
 \description{
 Given named objects, find the names in common
+}
+\examples{
+common_names(rlang::set_names(letters), rlang::set_names(letters[4:10]))
 }

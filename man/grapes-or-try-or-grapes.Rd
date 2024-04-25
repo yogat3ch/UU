@@ -17,3 +17,13 @@ results from lhs on success results from rhs on fail
 \description{
 Calls the expression (LHS) & if it fails return RHS
 }
+\seealso{
+Other infixes: 
+\code{\link{\%allin\%}()},
+\code{\link{\%nin\%}()},
+\code{\link{\%|0|\%}()},
+\code{\link{\%|\%}()},
+\code{\link{\%|legit|\%}()},
+\code{\link{\%|zchar|\%}()}
+}
+\concept{infixes}

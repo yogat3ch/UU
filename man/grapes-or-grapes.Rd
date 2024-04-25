@@ -15,7 +15,7 @@ lhs \%|\% rhs
 \code{vctr} with class according to R's coercion rules.
 }
 \description{
-Replace NA values in LHS with RHS
+Does not strictly enforce class typing like \code{\link[rlang]{op-na-default}}
 }
 \examples{
 c(4, NA, 4) \%|\% 3
@@ -24,3 +24,13 @@ class(c(4, NA, 4, NA) \%|\% 3L)
 cclass((NA, NA, NA, NA) \%|\% 3L)
 c(4, NA, 4, NA) \%|\% c(2,2,2,3)
 }
+\seealso{
+Other infixes: 
+\code{\link{\%allin\%}()},
+\code{\link{\%nin\%}()},
+\code{\link{\%|0|\%}()},
+\code{\link{\%|legit|\%}()},
+\code{\link{\%|try|\%}()},
+\code{\link{\%|zchar|\%}()}
+}
+\concept{infixes}

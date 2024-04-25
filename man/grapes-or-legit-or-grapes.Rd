@@ -24,4 +24,13 @@ list(a = 5)$b \%|legit|\% 4
 }
 \seealso{
 is_legit
+
+Other infixes: 
+\code{\link{\%allin\%}()},
+\code{\link{\%nin\%}()},
+\code{\link{\%|0|\%}()},
+\code{\link{\%|\%}()},
+\code{\link{\%|try|\%}()},
+\code{\link{\%|zchar|\%}()}
 }
+\concept{infixes}

@@ -20,3 +20,13 @@ Replace zero-length character strings with right hand side
 \examples{
 c("a" , "", "c", "") \%|zchar|\% "b"
 }
+\seealso{
+Other infixes: 
+\code{\link{\%allin\%}()},
+\code{\link{\%nin\%}()},
+\code{\link{\%|0|\%}()},
+\code{\link{\%|\%}()},
+\code{\link{\%|legit|\%}()},
+\code{\link{\%|try|\%}()}
+}
+\concept{infixes}
