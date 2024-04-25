@@ -358,6 +358,9 @@
     <loc>https://yogat3ch.github.io/UU/reference/path_strip_to.html</loc>
   </url>
   <url>
+    <loc>https://yogat3ch.github.io/UU/reference/pkg_chr_split_comma.html</loc>
+  </url>
+  <url>
     <loc>https://yogat3ch.github.io/UU/reference/pkg_ns.html</loc>
   </url>
   <url>
@@ -413,9 +416,6 @@
   </url>
   <url>
     <loc>https://yogat3ch.github.io/UU/reference/str_comparison.html</loc>
-  </url>
-  <url>
-    <loc>https://yogat3ch.github.io/UU/reference/string_split_comma.html</loc>
   </url>
   <url>
     <loc>https://yogat3ch.github.io/UU/reference/strip_html.html</loc>
@@ -476,9 +476,6 @@
   </url>
   <url>
     <loc>https://yogat3ch.github.io/UU/reference/use_reimport.html</loc>
-  </url>
-  <url>
-    <loc>https://yogat3ch.github.io/UU/reference/vlookup.html</loc>
   </url>
   <url>
     <loc>https://yogat3ch.github.io/UU/reference/vlookup_from_ref.html</loc>
