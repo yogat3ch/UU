@@ -1,85 +1,4 @@
 
-#' The length of unique values in a vector
-#'
-#' @param x \code{vctr}
-#'
-#' @return \code{dbl}
-#' @export
-#' @examples
-#' len_unique(c(1,2,1))
-len_unique <- function(x) {
-  length(unique(x))
-}
-
-#' Sort a vector or list by it's name (or self if no names)
-#'
-#' @param x \code{obj} to sort
-#' @param by_names \code{lgl} wether to sort by names
-#'
-#' @return \code{obj} sorted
-#' @export
-#' @examples
-#' sort_by_names(c(b = "b", c = "a"))
-#' sort_by_names(c(b = "b", c = "a"), by_names = FALSE)
-sort_by_names <- function(x, by_names = TRUE) {
-  y <- if (by_names)
-    names(x) %||% x
-  else
-    x
-  stopifnot(!is.list(y))
-  x[order(y)]
-}
-
-
-#' Unique a vector, preserving the names of the first original entries
-#'
-#' @param x \code{vec} with names
-#'
-#' @return \code{vec} of the same type
-#' @export
-#'
-#' @examples
-#' unique_with_names(c(N = "n", b = "b", A = "n"))
-unique_with_names <- function(x) {
-  x[!duplicated(x)]
-}
-
-vec_reorder <- function(...) {
-
-}
-
-#' Unify two vectors preserving the order of `x`
-#' @param x \code{vec} to preserve the order of
-#' @param y \code{vec} to vector of values to include in the output (unordered)
-#' @export
-#' @examples
-#' unify_vec_preserve_order(letters[c(5, 3)], letters[c(4:10,3)])
-#' unify_vec_preserve_order(letters[1:5], letters[c(4:10)])
-#' unify_vec_preserve_order(NULL, letters[c(4:10)])
-#' unify_vec_preserve_order(letters, NULL)
-unify_vec_preserve_order <- function(x, y) {
-  out <- if (!any(na.rm = TRUE, x %in% y) || identical(x, y)) {
-    y
-  } else if (isTRUE(y %allin% x)) {
-    intersect(x, y)
-  } else {
-    # intersect preserves the order of the first argument
-    to_preserve <- intersect(x, y)
-    new <- union(y, to_preserve)
-    lout <- length(new)
-    new_i <- seq_along(new)
-    prev_order <- match(to_preserve, x)
-    new[prev_order] <- to_preserve
-    new_vals <- setdiff(y, x)
-    new_order <- setdiff(new_i, prev_order)
-    if (!rlang::is_empty(new_vals))
-      new[new_order] <- new_vals
-    new
-  }
-  return(out)
-}
-
-
 #' @inherit plyr::match_df title params description
 #' @param out \code{obj} Of class matching the desired output. **Default** `NULL` returns a `data.frame` with the matching row in `y`. `numeric()` will return the matching index in `y` & `logical()` will return a matching logical index
 #' @seealso plyr::match_df
@@ -114,538 +33,31 @@ key_out.logical <- function(x, keys, out) {
 }
 
 #' Return a list of expressions all piped together as a single expression
+#' @description
+#' Useful when making complex compound statements that require dynamic substitution via tidy eval for dynamically created variables derived from the context.
 #'
 #' @param exprs \code{expressions} See \code{\link[rlang]{exprs}}
 #' @return \code{expression}
 #' @export
 #'
 #' @examples
-#' ex <- tibble::tibble(cat = rep(letters, length.out = 6, each = 2), val = runif(6, 0, 10))
-#' exps <- rlang::exprs(
-#'   data,
-#'   dplyr::mutate(data, val = val  + 3)
-#' )
-#' make_exp <- function(data, addtl_exp, summarise = TRUE) {
-#'   if (summarise) {
-#'     addtl_exp <- append(
-#'       addtl_exp,
-#'       rlang::exprs(
-#'         dplyr::group_by(cat),
-#'         dplyr::summarise(val = sum(val))
-#'       )
-#'     )
-#'   }
-#'   rlang::eval_bare(expr_pipe(addtl_exp))
-#' }
-#' make_exp(ex, exps)
-#' make_exp(ex, exps, FALSE)
+#'(.data <- tibble::tibble(val = runif(10)))
+#' (exp <- expr_pipe(
+#'   rlang::exprs(
+#'     .data,
+#'     dplyr::mutate(val = val + 5, category = sample(1:3, length(val), replace = TRUE)),
+#'     dplyr::group_by(category),
+#'     dplyr::summarise(s = sum(val))
+#'   )
+#' ))
+#' rlang::eval_bare(exp)
 
 expr_pipe <- function(exprs) {
-  rlang::parse_expr(glue::glue_collapse(purrr::reduce(exprs, \(.x, .y) {
-    paste0(.x ," |>\n\t", rlang::expr_deparse(.y))
-  })))
+  with_pipes <- purrr::reduce(exprs, \(.x, .y) {
+    paste0(.x ," |>\n\t", glue::glue_collapse(rlang::expr_deparse(.y)))
+  })
+  rlang::parse_expr(glue::glue_collapse(with_pipes))
 }
-
-
-#' @title Abbreviations of numeric magnitude
-#' @family rounding
-#' @export
-num_chr_suffi <- c("K" = "in thousands", "M" = "in millions", "B" = "in billions", "T" = "in trillions")
-
-#' @title Abbreviations of numeric magnitude for various units
-#' @export
-unit_conversion <- tibble::tribble(
-  ~ unit,  ~magnitude, ~ begin, ~end, ~abbrev, ~unit_eng,
-  "AF" , 10^3, "K", "in thousands", "k", "acre_feet",
-  "AF" , 10^6, "M", "in millions", "M","acre_feet",
-  "AF" , 10^9, "B", "in billions", "B","acre_feet",
-  "F" , 10^3, NA, "in thousands", "k", "feet",
-  "F" , 10^6, NA, "in millions", "M","feet",
-  "F" , 10^9, NA, "in billions", "B","feet",
-  "$", 10^3, NA, "in thousands", "k",  "dollars",
-  "$", 10^6, NA, "in millions", "mn", "dollars",
-  "$", 10^9, NA, "in billions", "bn", "dollars",
-  "$" , 10^12, NA, "in trillions", "tr", "dollars",
-  "W", 10^3, "k", "in thousands", "k",  "watts",
-  "W", 10^6, "M", "in millions", "M", "watts",
-  "W" , 10^9, "G", "in billions", "G", "watts",
-  "MW", 10^3, NA, "in thousands", "k",  "megawatts",
-  "MW", 10^6, NA, "in millions", "M", "megawatts",
-  "MW" , 10^9,NA, "in billions", "G", "megawatts",
-)
-
-
-#' Compute the order of magnitude
-#' @description Uses the \link[base]{floor} to round
-#' @param x \code{num}
-#'
-#' @return \code{num}
-#' @export
-#' @family rounding
-#' @examples
-#' magnitude_order(10^(1:10))
-magnitude_order <- function (x) {
-  floor(log10(abs(x)))
-}
-
-
-#' Find the global minima/maxima of input vectors
-#'
-#' @param ... \code{num} vectors
-#' @inheritParams plyr::round_any
-#' @param fn \code{fun} \link[base]{min}/\link[base]{max}
-#' @description If accuracy is omitted, number will be rounded to the nearest order of magnitude IE 145, if `fn = min`, will round to 100
-#' @return \code{num}
-#' @export
-#' @family rounding
-#' @examples
-#' round_to(runif(10, 5:10), runif(2, 2:5))
-#' round_to(145)
-round_to <- function(..., accuracy = NULL, fn = min, f = NULL) {
-  d <- do.call(c, rlang::dots_list(...))
-  n <- fn(d)
-  if (is.null(f)) {
-    f <- if (identical(fn, min)) {
-      floor
-    } else {
-      ceiling
-    }
-  }
-  if (is.null(accuracy)) {
-    accuracy <- 10 ^ UU::magnitude_order(n)
-  }
-  plyr::round_any(
-    n,
-    accuracy = accuracy,
-    f = f
-  )
-}
-
-#' Compute the order of magnitude triplet ie thousand, million, trillion
-#'
-#' @param x \code{num}
-#'
-#' @return \code{num}
-#' @export
-#' @family rounding
-#' @examples
-#' magnitude_triplet(10^(1:10))
-magnitude_triplet <- function(x) {
-  magnitude_order(x) %/% 3
-}
-
-
-unit_find_ <- Vectorize(function(x) {
-  names(unit_conversion)[purrr::map_lgl(unit_conversion, ~x %in% .x)]
-})
-#' Find the row corresponding to a value in `unit_conversion`
-#'
-#' @param x \code{chr/num} vector to find
-#'
-#' @return \code{tbl}
-#' @export
-#' @family rounding
-#' @examples
-#' unit_find("B")
-unit_find <- function(x) {
-  .cols <- smode(unlist(unit_find_(x)))
-  dplyr::filter(unit_conversion, !!purrr::reduce(.cols[2], \(.x, .y) {
-    rlang::expr(!!.x & !!rlang::sym(.y) == !!x)
-  }, .init = rlang::expr(!!rlang::sym(.cols[1]) == !!x)))
-}
-
-#' Get even numbers
-#' @param x \code{int}
-#' @export
-#' @examples
-#' evens(1:10)
-#'
-evens <- function(x) subset(x, x %% 2 == 0)
-
-#' Get odd numbers
-#' @param x \code{int}
-#' @export
-#' @examples
-#' odds(1:10)
-#'
-odds <- function(x) subset(x, x %% 2 == 1)
-
-#' Extract the units from a string
-#' @description It is assumed that units are encased in parentheses at the end of the string
-#' @param x \code{chr} String(s) to extract units from/assign units to
-#'
-#' @return \code{chr}
-#' @export
-#' @family rounding
-#' @examples
-#' unit_string("Elevation (F)")
-unit_string <- function(x) {
-  stringr::str_extract(x, "(?<=\\()[^\\)]+")
-}
-
-#' @rdname unit_string
-#' @family rounding
-#' @export
-`unit_string<-` <- function(x, value) {
-  stringr::str_replace(x, "(?<=\\()[^\\)]+", value)
-}
-
-#' Modify unit abbreviations
-#' @param x \code{num} The maximum number in the dataset
-#' @param unit \code{chr} Type of units, supported values are: \code{`r glue::glue("{unique(unit_conversion$unit)}")`}
-#' @param outtype \code{chr} The type of output to be added. Current possibilities are: \code{`r glue::glue("{names(unit_conversion)[-c(1:2)]}")`}
-#' @param magnitude \code{num} The order of magnitude for the unit. The highest triplet will be used. See `magnitude_triplet`
-#' @family rounding
-#' @return \code{chr} updated units
-#' @export
-#' @seealso unit_modify_vec
-#' @examples
-#' unit_modify(10^7, "AF", "abbrev")
-unit_modify <- function(x, unit, outtype, magnitude = magnitude_order(x)) {
-  outtype <- ifelse(unit == "AF", "begin", outtype)
-
-  mt <- magnitude %/% 3
-
-  out <- unit_conversion[unit_conversion$unit == unit & unit_conversion$magnitude == 10 ^ (3 * mt), ][[outtype]]
-  trimws(switch(outtype,
-         begin = paste0(out, unit),
-         end = paste(unit, out),
-         abbrev = paste0(unit, out),
-         unit_eng = out))
-
-}
-#' Modify unit abbreviation, vectorized version
-#' @inherit unit_modify  params return examples
-#' @seealso unit_modify
-#' @family rounding
-#' @export
-unit_modify_vec <- Vectorize(unit_modify)
-
-#' Simple interpolate between two numbers
-#'
-#' @param start \code{num} first number
-#' @param end \code{num} last number
-#' @param n \code{int} total numbers in output vector
-#'
-#' @return \code{num} vector with length equivalent to n
-#' @export
-#'
-#' @examples
-#' interpolate(0, 6, 6)
-interpolate = function(start, end, n) {
-  out <- approx(x = c(start, end), n = n)$y
-  return(out)
-}
-
-#' Convert numeric value to a string abbreviation with K, M, B for Thousand, Million & Billion
-#'
-#' @param x \code{num}
-#' @param sf \code{num} significant figures to round to
-#' @param outtype \code{chr} Format of the outtype
-#' \itemize{
-#'   \item{\code{abbreviated}}{  takes the form `XX` where X are digits}
-#'   \item{\code{with_suffix}}{ takes the form `XXS` where X are digits and S is the suffix}
-#'   \item{\code{rounded}}{  takes the form `XX.XX` rounded with `sf` sig figs}
-#' }
-#' @return \code{chr}
-#' @export
-#' @seealso num2str_vec
-#' @family rounding
-#' @examples
-#' num2str(10000)
-num2str <- function(x, sf = 2, outtype = c("abbreviated", "with_suffix", "rounded"), suffix_lb = "K") {
-  if (!is.numeric(x))
-    x <- as.numeric(x)
-  if (!is.numeric(x))
-    gbort("{.code x} must be numeric")
-  if (all(is.na(x)))
-    gwarn("{.code x} is entirely NA")
-
-  if (length(suffix_lb) != 1) {
-    gbort("{.code suffix_lb} must be one of {num_chr_suffi}")
-  }
-
-  i <- max(magnitude_triplet(x), na.rm = TRUE)
-
-  if (identical(outtype, "rounded"))
-    as.character(round(x, sf))
-  else if (is_legit(i) && i >= which(names(num_chr_suffi) == suffix_lb))
-    paste0(round(x / 10^(3 * i), ifelse("rounded" %in% outtype, sf, 0)), ifelse("with_suffix" %in% outtype, names(num_chr_suffi)[i], ""))
-}
-
-#' @title Convert number to string Vectorized version
-#' @inherit num2str params return examples
-#' @seealso num2str
-#' @family rounding
-#' @export
-num2str_vec <- Vectorize(num2str)
-
-
-#' @title Statistical mode
-#' @description Return the most frequenctly occuring item in a dataset
-#' @family statistics
-#' @param x \code{(vector)}
-#' @return \code{(vector)}
-#' @export
-
-smode <- function(x) {
-  .u <- unique(x)
-  tab <- tabulate(match(x, .u))
-  .u[tab == max(tab)]
-}
-
-
-#' Switch the names and the values of a vector
-#'
-#' @param x \code{named object}
-#'
-#' @return \code{obj}
-#' @export
-#' @family vectors
-#' @examples
-#' names_values_switch(c(a = 1, b = 2))
-names_values_switch <- function(x) {
-  rlang::set_names(names(x), x)
-}
-
-#' Vlookup replace using a lookup column and reference table
-#'
-#' @param base \code{vector} of starting values. Replacements will be made in this vector before it is returned.
-#' @param lookup_col \code{vector} of values with same length as `base` that will be matched to `lookup_ref` to deteremine the replacement indices
-#' @param lookup_ref \code{vector} of reference values, which `lookup_col` will be matched to in order to determine replacement values.
-#' @param value_col \code{vector} of replacement values with same length as `lookup_ref`
-#'
-#' @return \code{vector}
-#' @export
-#' @family vectors
-#' @examples
-#' ref <- tibble::tibble(lookup = letters[1:5], value = 1:5)
-#' original <- tibble::tibble(lookup = letters[1:20], base = runif(20, min = 6, max = 20))
-#' dplyr::mutate(original, base = vlookup_from_ref(base, lookup, ref$lookup, ref$value))
-vlookup_from_ref <- function(
-    base,
-    lookup_col,
-    lookup_ref,
-    value_col
-) {
-  col_ref_idx <- match(lookup_col, lookup_ref)
-  replacements <- value_col[na.omit(col_ref_idx)]
-  col_base_idx <- !is.na(col_ref_idx)
-  if (any(col_base_idx))
-    base[which(col_base_idx)] <- replacements
-  return(base)
-}
-
-#' Simple lookup of values
-#'
-#' @param x \code{any} Values to lookup
-#' @param lookup \code{named any} names will be used as replacement
-#'
-#' @return \code{any}
-#' @export
-#' @family vectors
-#' @seealso [names_values_switch()]
-#' @examples
-#' lookup <- rlang::set_names(1:5, letters[1:5])
-#' vlookup(sample(1:5, 5), lookup, switch_names_values = TRUE)
-vlookup <- function(x, lookup, switch_names_values = FALSE) {
-  if (switch_names_values)
-    lookup <- UU::names_values_switch(lookup)
-  nl <- names(lookup)
-  .x <- x
-  for (i in seq_along(x)) {
-    .x[i] <- lookup[which(nl == x[i])]
-  }
-  .x
-}
-
-#' Custom error message
-#' @description Throw \link[rlang]{abort} with \link[cli]{format_error}
-#' @param message \code{(chr)} The message to display, formatted as a bulleted list. The first element is displayed as an alert bullet prefixed with ! by default. Elements named "*", "i", and "x" are formatted as regular, info, and cross bullets respectively. See \link[rlang]{topic-condition-formatting} for more about bulleted messaging.
-#' @param class \code{(class)} Subclass of the condition
-#' @param trace \code{(trace)} A `trace` object created by \link[rlang]{trace_back}
-#' @param parent \code{(cond)} Supply `parent` when you rethrow an error from a condition handler
-#' @param e \code{(environment)} calling environment. Passed to `glue` for making the message
-#' @family condition signaling
-#' @export
-
-gbort <- function (
-  message = NULL,
-  class = NULL,
-  ...,
-  trace = rlang::trace_back(bottom = 2),
-  parent = NULL,
-  e = rlang::caller_env()
-) {
-  rlang::abort(cli::format_error(message, .envir = e), class = class, ..., trace = trace, call = dplyr::last(trace)$call[[1]], parent = parent)
-}
-
-#' Custom warning message
-#' @description Throw \link[cli]{cli_alert_warning} with \link[cli]{format_warning}
-#' @inheritParams gbort
-#' @inheritParams rlang::warn
-#' @family condition signaling
-#' @export
-
-gwarn <- function (
-  message = NULL,
-  body = NULL,
-  footer = NULL,
-  .frequency = c("always", "regularly", "once"),
-  e = rlang::caller_env()
-) {
-  rlang::warn(cli::format_warning(message, .envir = e) , use_cli_format = TRUE, .frequency = .frequency, .frequency_id = "UU", body = body, footer = footer)
-}
-
-#' Custom info message
-#' @description Provide info with \link[rlang]{inform}
-#' @inheritParams gbort
-#' @inheritParams rlang::inform
-#' @family condition signaling
-#' @export
-
-ginfo <- function (
-  message = NULL,
-  body = NULL,
-  footer = NULL,
-  .frequency = c("always", "regularly", "once"),
-  e = rlang::caller_env()
-) {
-  rlang::inform(cli::format_message(message, .envir = e) , use_cli_format = TRUE, .frequency = .frequency, .frequency_id = "UU", body = body, footer = footer)
-}
-
-#' Custom message
-#' Message using \link[cli]{format_message} & \link[cli]{cat_line}
-#' @inheritParams cli::format_message
-#' @family condition signaling
-#' @export
-
-gmsg <- function (
-  msg,
-  e = rlang::caller_env()
-) {
-  cli::cat_line(cli::format_message(msg, .envir = e))
-}
-
-
-#' Get a function from a package, abort if package not installed.
-#'
-#' @param pkg \code{chr} package
-#' @param fn \code{fn} function name
-#'
-#' @return \code{fun}
-#' @export
-#' @family development
-#' @examples
-#' need_pkg("utils", "recover")
-need_pkg <- function(pkg, fn) {
-  cmd <- cli::code_highlight(glue::glue("install.packages('{pkg}')"), code_theme = 'Twilight')
-  getFromNamespace(fn, ns = pkg) %|try|% gbort(c("{fn} requires {pkg}. Use {cmd} first."))
-}
-
-
-
-
-#' Load an R object from a file
-#'
-#' This function loads an R object from a file into the global environment or a new environment.
-#'
-#' @param file \code{character} A character string specifying the file path.
-#' @return The loaded R object.
-#' @family file IO
-#' @examples
-#' # Load an R object from a file
-#' obj <- load_obj("path/to/file.RData")
-#'
-#' @export
-load_obj <- function(file) {
-  e <- new.env()
-  load(file, e)
-  .nms <- ls(e, all.names = TRUE)
-  if (length(.nms) == 1){
-    out <- e[[.nms]]
-  } else {
-    out <- rlang::env_get_list(e, nms = .nms)
-  }
-  out
-}
-
-
-.size <- data.frame(
-  stringsAsFactors = FALSE,
-  check.names = FALSE,
-  IEC = c(1, 1024^(1:8)),
-  type_legacy = c("b", "Kb", "Mb", "Gb", "Tb", "Pb", NA, NA, NA),
-  type_IEC = c("B", "KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB", "YiB"),
-  type_SI = c("B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"),
-  SI = c(1, 1000^(1:8))
-)
-#' Digital storage size conversion
-#' See \link[utils]{object.size}
-#' @param x \code{(numeric)}
-#' @param in_unit \code{(character)} units of x
-#' @param out_unit \code{(character)} units of output number **Default: Mb**. See \link[utils]{object.size} for the options.
-#' @param standard \code{(character)}
-#' @return \code{(numeric)} value in `out_unit`s
-#' @export
-#' @family rounding
-#' @seealso size_
-#' @examples
-#' size(50, "Mb")
-#' size(50, "Gb")
-#' size(50, "Gb", "Mb")
-
-size <- function(x, in_unit = "b", out_unit = c("b", "Kb", "Mb", "Gb", "Tb", "Pb", "Eb", "Zb", "Yb")[3]) {
-  if (!is.numeric(x))
-    x <- object.size(x)
-
-  in_idx <- size_idx(in_unit)
-  .x <- if (in_unit %nin% c("b", "B")) {
-    # Get the multiplier
-    in_mlt <- .size[[size_type(in_idx)]][in_idx]
-    # Convert to bytes
-    x * in_mlt
-  } else
-    x
-  # Convert to out unit
-  # Get the index
-  out_idx <- size_idx(out_unit)
-  # Get the divisor
-  out_div <- .size[[size_type(out_idx)]][out_idx]
-  # Get the out units
-  out <- .x / out_div
-  return(out)
-}
-size_idx <- function(unit) {
-  col_out <- purrr::keep(dplyr::select(.size, tidyselect::starts_with("type")), \(.x) {any(.x %in% unit)})
-  rlang::set_names(which(unit == col_out[[1]]), names(col_out))
-}
-size_type <- function(idx) {
-  out <- stringr::str_extract(names(idx), UU::regex_or(c("IEC","SI", "legacy")))
-  if (out == "SI")
-    "SI"
-  else
-    "IEC"
-}
-#' Vectorized version of size
-#' @export
-#' @rdname size
-size_ <- Vectorize(size)
-
-
-#' An alternative to \link[base]{max} that preserves names
-#'
-#' @param x \code{vec}
-#'
-#' @return \code{atomic} returns the largest element in the vector
-#' @export
-#' @family statistics
-#' @examples
-#' max2(c(a = 1, b = 2))
-max2 <- function(x) {
-  x[which.max(x) %|0|% 1]
-}
-
 
 #' @title Find an object by it's class
 #' @param \code{(environment)} The environment to search
@@ -692,14 +104,21 @@ list_rename <- function(.data, ...) {
   setNames(.data, new_names)
 }
 
-#' @title Find the names in common
+#' @title Find the common names between two objects
 #' @description Given named objects, find the names in common
 #' @param ... \code{(objects)}
 #' @return \code{(character)} of the common names
 #' @export
+#' @examples
+#' common_names(rlang::set_names(letters), rlang::set_names(letters[4:10]))
 
 common_names <- function(...) {
-  x <- table(do.call(c, purrr::map(rlang::dots_list(..., .named = TRUE), names)))
+  .d <- rlang::dots_list(..., .named = TRUE)
+  nms <- purrr::map(.d, names)
+  no_names <- purrr::map_lgl(nms, is.null)
+  if (any(no_names))
+    gwarn("Argument{?s} {names(.d)[no_names]} do{?esn't/n't} have names.")
+  x <- table(do.call(c, nms))
   names(x)[x == max(x)]
 }
 
@@ -780,7 +199,7 @@ which_cols.character <- function(x, .data) {
 #' @export
 
 map_class <- function(x, y) {
-    purrr::map2(purrr::map(y, class), x, ~class_coercion_fn(.x)(.y))
+    purrr::map2(purrr::map(y, class), x, \(.x, .y) class_coercion_fn(.x)(.y))
 }
 
 #' @title Get the missing arguments from the function as character
@@ -830,9 +249,9 @@ missing_args <-
 
 #' @title Retrieve the function name
 #' @description Sometimes a function is passed down the call stack and it's name is unknown. This function finds the name without having to pass it down the call stack as an argument.
-#' @param fn \code{(function)} for which to retrieve the name
+#' @param fn \code{fn} for which to retrieve the name
 #'
-#' @return \code{(character)} of the functions name
+#' @return \code{chr} of the functions name
 #' @export
 
 fn_name <- function(fn) {
@@ -884,57 +303,6 @@ regex_op <- function(x, type = "|", prefix = "", suffix = "") {
 
 regex_or <- function(x, prefix = "", suffix = "", type = "|") regex_op(x, type = type, prefix = prefix, suffix = suffix)
 
-
-# ----------------------- Mon Apr 08 16:49:54 2019 ------------------------#
-#' @title rle_df - create a run-length-encoding data.frame
-#' @description
-#' Given an \code{\link[base]{rle}} this function will return a data.frame of starts, ends, and indexes thereof of the run lengths.
-#' Credit: \url{https://stackoverflow.com/questions/43875716/find-start-and-end-positions-indices-of-runs-consecutive-values}
-#' @param x \code{(vector)} An object for which to run an `rle`
-#' @return \item{(data.frame)}{ with length, values, start and end indices.}
-#' @examples
-#' rle_df(sample(c(TRUE,FALSE), replace = TRUE, 100))
-#' @export
-
-rle_df <- function(x) {
-  input_rle <- rle(x)
-  .out <- unclass(input_rle)
-  .out <- dplyr::select(dplyr::mutate(tibble::as_tibble(.out),
-                                      end = cumsum(lengths),
-                                      start = c(1, dplyr::lag(end)[-1] + 1)),
-                        c(1,2,4,3))
-  return(.out)
-}
-
-#' Create a sequence from the start to the end for a given value from an `rle_df` for indexing
-#'
-#' @param rle_df \code{(tbl)} See `rle_df`
-#' @param value \code{(any)} Value to filter for in the `values` column. Require the values in the value column to be unique.
-#'
-#' @return \code{(dbl)}
-#' @export
-#'
-#' @examples
-#' rle_seq(rle_df(rep(letters[1:3], each = 3)), "c")
-rle_seq <- function(rle_df, value) {
-  r <- dplyr::filter(rle_df, values == value)
-  seq(r$start, r$end)
-}
-
-#' Create an RLE Grouping from a logical vector
-#'
-#' @param x \code{lgl} vector
-#'
-#' @return \code{list}
-#' @export
-#'
-#' @examples
-#' rle_groups(sample(c(TRUE, FALSE), 20, replace = TRUE))
-rle_groups <- function(x) {
-  rle_df(x) |>
-    dplyr::filter(values) |>
-    apply(1, \(.x) {.x["start"]:.x["end"]})
-}
 #' Concatenate row values in a poorly scraped table
 #'
 #' @param .data \code{tbl} Of data with empty rows
@@ -1060,84 +428,6 @@ unit_shorthand.data.frame <- function(x, units = unit_trans) {
     out <<- stringr::str_replace(out, .y, .x)
   })
   rlang::set_names(x, out)
-}
-
-#' Math comparison comparator to plain english key
-#' @export
-comparison_key <- c(
-  "less than" = "<",
-  "greater than" = ">",
-  "more than" = ">",
-  "less than or equal to" = "<=",
-  "more than or equal to" = ">=",
-  "greater than or equal to" = ">=",
-  "equal to" = "="
-)
-
-
-#' Math comparison comparator inverse key
-#' @export
-comparison_inverse_key <- tibble::tibble(key = comparison_key[c(1:2,4,5)], inverse = c(">=", "<=", ">", "<"))
-
-#' Convert inequality statements between character, mathematic, symbol and function representations
-#'
-#' @param x \code{chr} vector or inequality statements
-#' @param outtype \code{chr} class of the outype
-#' \itemize{
-#'   \item{\code{"chr"}} A character
-#'   \item{\code{"str"}} A character
-#'   \item{\code{"sym"}} A symbol/name
-#'   \item{\code{"name"}} A symbol/name
-#'   \item{\code{"fun"}} A function
-#' }
-#'
-#' @return \code{chr/name/fun} depending on the requested `outtype`
-#' @export
-#' @seealso comparison_key
-#' @examples
-#' str_comparison(">")
-#' str_comparison("less than or equal to", "fun")
-#' str_comparison("greater than or equal to", "sym")
-str_comparison <- function(x, outtype = "chr") {
-
-  out <- purrr::map_chr(x, ~{
-    .switches <- if (.x %in% names(comparison_key))
-      comparison_key
-    else
-      rlang::set_names(names(comparison_key), comparison_key)
-      rlang::exec(switch, trimws(x),
-             !!!.switches)
-  })
-  if (all(out %in% comparison_key) && !outtype %in% c("chr","str"))
-    out <- switch(outtype,
-                  name = ,
-                  sym = rlang::syms(out),
-                  fun = purrr::map(out, getFromNamespace, ns = "base"))
-
-  return(out)
-}
-
-
-#' Convert a math comparator to it's inverse
-#'
-#' @param x \code{chr/fun} Math comparator, one of `r paste0(comparison_inverse_key$key, collapse = ', ')`
-#'
-#' @return \code{chr/fun} the inverse comparator as the same class as `x`
-#' @export
-#'
-#' @examples
-#' comparison_inverse(">=")
-comparison_inverse <- function(x) {
-  as_fun <- is.function(x)
-  s <- if (as_fun)
-    stringr::str_extract(rlang::expr_deparse(x), "[><=]+")
-  else
-    x
-
-  inverse <- comparison_inverse_key[which(comparison_inverse_key$key == s),]$inverse
-  if (as_fun)
-    inverse <- getFromNamespace(inverse, "base")
-  return(inverse)
 }
 
 #' Change or apply filters to output type
