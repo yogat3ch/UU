@@ -41,25 +41,6 @@ json_validate <- function(x) {
   jsonlite::validate(txt)
 }
 
-#' Writes a trace back as a json for error logging
-#'
-#' @param e \code{error} Error condition object, optional
-#' @param file \code{chr} path to file to be written.
-#' @param tb \code{rlang_trace} Trace back
-#'
-#' @return \code{None} called for side effect of writing to file
-#' @export
-#'
-#' @examples
-#' trace_back_json()
-trace_back_json <- function(e = NULL, file = glue::glue("{lubridate::format_ISO8601(Sys.time())}.json"), tb = rlang::trace_back(bottom = 1)) {
-  out <- list(
-    trace_back = dplyr::mutate(tibble::as_tibble(tb), call = Vectorize(\(.x)glue::glue_collapse(sep = "\n", rlang::expr_deparse(.x)))(call))
-  )
-  if (!is.null(e))
-    out$error = e
-  jsonlite::write_json(out, file)
-}
 
 #' Index of column type conversions
 #' @include universal_useful.R
@@ -267,6 +248,33 @@ file_fn <- function(x, write = FALSE) {
   }
 
 }
+
+
+
+#' Load an R object from a file
+#'
+#' This function loads an R object from a file into the global environment or a new environment.
+#'
+#' @param file \code{character} A character string specifying the file path.
+#' @return The loaded R object.
+#' @family file IO
+#' @examples
+#' # Load an R object from a file
+#' obj <- load_obj("path/to/file.RData")
+#'
+#' @export
+load_obj <- function(file) {
+  e <- new.env()
+  load(file, e)
+  .nms <- ls(e, all.names = TRUE)
+  if (length(.nms) == 1){
+    out <- e[[.nms]]
+  } else {
+    out <- rlang::env_get_list(e, nms = .nms)
+  }
+  out
+}
+
 
 #' Write lines at a specific location in a file
 #'
