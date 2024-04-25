@@ -31,5 +31,6 @@ startup <- function() {
       })
     options(UU_startup = TRUE)
   }
-  unload_namespaces("UU")
+
+  on.exit(unloadNamespace("UU"))
 }
