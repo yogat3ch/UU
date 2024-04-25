@@ -3,6 +3,7 @@
 #' @param lhs \code{(expression)} to try
 #' @param rhs \code{(expression)} to replace if expression fails
 #' @name %|try|%
+#' @family infixes
 #' @return results from lhs on success results from rhs on fail
 #' @export
 
@@ -15,6 +16,7 @@
 #' @param lhs \code{(expression)} to try
 #' @param rhs \code{(expression)} to replace if expression fails
 #' @name %|0|%
+#' @family infixes
 #' @return results from lhs if length > 1 otherwise rhs
 #' @export
 
@@ -26,13 +28,15 @@
 }
 
 #' Replace NA values in LHS with RHS
+#' @description
+#' Does not strictly enforce class typing like \code{\link[rlang]{op-na-default}}
 #'
 #' @param lhs \code{vctr} of values possibly containing `NA` on which replacement will be performed
 #' @param rhs \code{vctr} of values length 1 or the same length with which to replace `NA`
-#'
+#' @name %|%
 #' @return \code{vctr} with class according to R's coercion rules.
 #' @export
-#'
+#' @family infixes
 #' @examples
 #' c(4, NA, 4) %|% 3
 #' c(4, NA, 4) %|% 3L
@@ -52,6 +56,7 @@
 #' @seealso is_legit
 #' @return If legit lhs else rhs
 #' @export
+#' @family infixes
 #' @examples
 #' (100 / NA) %|legit|% 4
 #' list(a = 5)$a %|legit|% 4
@@ -71,7 +76,7 @@
 #'
 #' @return \code{chr}
 #' @export
-#'
+#' @family infixes
 #' @examples
 #' c("a" , "", "c", "") %|zchar|% "b"
 `%|zchar|%` <- Vectorize(function(lhs, rhs) {
@@ -87,12 +92,14 @@
 #' @seealso is_legit
 #' @author Think.fr
 #' @export
+#' @family infixes
 #' @examples
 #' 1 %nin% 1:10
 `%nin%` <- Negate(`%in%`)
 
 #' Are all lhs values in rhs?
 #' @name %allin%
+#' @family infixes
 #' @export
 #' @examples
 #' 2:5 %allin% 1:10
