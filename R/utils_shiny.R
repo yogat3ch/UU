@@ -1,6 +1,6 @@
 
 #' Preserve a string as JS/HTML (prevent translation of characters)
-#'
+#' @seealso [DT::JS()]
 #' @param x \code{chr}
 #' @family shiny
 #' @return \code{chr, HTML, JS_EVAL}
