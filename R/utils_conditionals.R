@@ -142,19 +142,3 @@ is_project <- function() {
   else
     FALSE
 }
-
-#' Return the names of all TRUE items in a logical vector
-#'
-#' @param x \code{lgl} with names
-#'
-#' @return \code{chr} of the names of true values
-#' @export
-#'
-#' @examples
-#' true_names(c(a = TRUE, b = FALSE))
-#' true_names(c(a = FALSE, b = FALSE))
-true_names <- function(x) {
-  stopifnot(`x must have names` = !is.null(names(x)),
-            `x must be a logical, atomic vector` = rlang::is_atomic(x) && rlang::is_logical(x))
-  names(x)[x]
-}
