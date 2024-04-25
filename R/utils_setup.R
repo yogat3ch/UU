@@ -275,8 +275,13 @@ fun_docs_table <- function(package = pkgload::pkg_name()) {
     doc <- .x
     desc <- purrr::map_chr(rlang::set_names(c("name","concept", "title", "description")), \(.x) {
       browser(expr = .x == "family")
-      glue::glue_collapse(as.character(unlist(doc[[.x]] %||% "")))
+      glue::glue_collapse(as.character(unlist(doc[[.x]] %||% ""))) |>
+        stringr::str_remove_all(regex_or(c("^\\n", "\\n$")))
     })
+
+    if (same(desc["title"], desc["description"], check.attributes = FALSE)) {
+      desc$description <- ''
+    }
     names(desc) <- stringr::str_to_title(names(desc))
     tibble::tibble_row(
       !!!desc
