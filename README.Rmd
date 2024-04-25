@@ -37,4 +37,3 @@ All the fun(s)!
 ```{r echo = FALSE, results='asis'}
 bs4Dash::bs4Table(fun_docs_table()) 
 ```
-
