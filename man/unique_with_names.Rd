@@ -28,6 +28,7 @@ Other vectors:
 \code{\link{sort_by_names}()},
 \code{\link{true_names}()},
 \code{\link{unify_vec_preserve_order}()},
+\code{\link{vlookup}()},
 \code{\link{vlookup_from_ref}()},
 \code{\link{zchar_remove}()}
 }

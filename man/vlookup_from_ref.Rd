@@ -37,6 +37,7 @@ Other vectors:
 \code{\link{true_names}()},
 \code{\link{unify_vec_preserve_order}()},
 \code{\link{unique_with_names}()},
+\code{\link{vlookup}()},
 \code{\link{zchar_remove}()}
 }
 \concept{vectors}

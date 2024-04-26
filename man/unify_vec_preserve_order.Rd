@@ -30,6 +30,7 @@ Other vectors:
 \code{\link{sort_by_names}()},
 \code{\link{true_names}()},
 \code{\link{unique_with_names}()},
+\code{\link{vlookup}()},
 \code{\link{vlookup_from_ref}()},
 \code{\link{zchar_remove}()}
 }

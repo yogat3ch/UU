@@ -490,3 +490,25 @@ formula_make <- function(predictors, label = "response") {
   formula(paste0(label," ~ ", paste(collapse = " + ", glue::glue("`{predictors}`"))))
 }
 
+#' Simple lookup of values
+#'
+#' @param x \code{any} Values to lookup
+#' @param lookup \code{named any} names will be used as replacement
+#'
+#' @return \code{any}
+#' @export
+#' @family vectors
+#' @seealso [names_values_switch()]
+#' @examples
+#' lookup <- rlang::set_names(1:5, letters[1:5])
+#' vlookup(sample(1:5, 5), lookup, switch_names_values = TRUE)
+vlookup <- function(x, lookup, switch_names_values = FALSE) {
+  if (switch_names_values)
+    lookup <- UU::names_values_switch(lookup)
+  nl <- names(lookup)
+  .x <- x
+  for (i in seq_along(x)) {
+    .x[i] <- lookup[which(nl == x[i])]
+  }
+  .x
+}
