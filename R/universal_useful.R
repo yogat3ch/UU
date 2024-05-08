@@ -340,6 +340,19 @@ concat_rows <- function(.data, col_to_check = 1) {
   return(new_tbl)
 }
 
+#' Alphabetize the _.gitignore_ file
+#'
+#' @param gitignore \code{chr} path to gitignore
+#'
+#' @return \code{None} overwrites the file
+#' @export
+#'
+gitignore_alphabetize <- function(gitignore = ".gitignore") {
+  if (file.exists(gitignore))
+    UU::zchar_remove(sort(readLines(gitignore))) |>
+      writeLines(gitignore)
+}
+
 
 #' @title Detect possible duplicates of rows or columns after a join
 #'
