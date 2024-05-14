@@ -29,7 +29,7 @@ key_out.numeric <- function(x, keys, out) {
 }
 #' @export
 key_out.logical <- function(x, keys, out) {
-  keys$y %in% keys$x
+  keys$x %in% keys$y
 }
 
 #' Return a list of expressions all piped together as a single expression
