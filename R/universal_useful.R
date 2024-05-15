@@ -1,23 +1,40 @@
 
 #' @inherit plyr::match_df title params description
 #' @param out \code{obj} Of class matching the desired output. **Default** `NULL` returns a `data.frame` with the row(s) of `x` that have matches in `y`. `numeric()` will return the matching indices of `x` with matches in `y` & `logical()` will return a matching logical vector with length equivalent to `x` of the rows matching in `y`
+#' @param on \code{chr} Either a vector of the names on which to match, if they are named similarly in x & y, or a specification in the form `c(y_feature = x_feature)`
 #' @seealso plyr::match_df
 #' @return \code{tbl/dbl/lgl} Depending on the class of `out`
 #' @export
 match_df <- function(x, y, out = NULL, on = NULL, verbose = FALSE) {
+  fn <- purrr::map
+  vars_differ <- FALSE
   if (is.null(on)) {
     on <- intersect(names(x), names(y))
+    if (rlang::is_empty(on))
+      gbort("{.code x} and {.code y} have no common features, please specify features to be matched ")
+
+
     if (verbose)
       message("Matching on: ", paste(on, collapse = ", "))
+  } else if (!rlang::is_empty(names(on))) {
+    fn <- purrr::imap
+    vars_differ <- TRUE
   }
+
   # Map over all the features in `on`
-  keys <- purrr::map(on, \(.x, .y) {
+  keys <- fn(on, \(.x, .y) {
+    if (!vars_differ) {
+      .y <- .x
+    }
     v <- x[[.x]]
     # Return the indices which intersect between the two
-    which(v %in% intersect(v, y[[.x]]))
+    which(v %in% intersect(v, y[[.y]]))
   }) |>
     # Reduce across all the features to only those in common
     purrr::reduce(intersect)
+  if (rlang::is_empty(keys))
+    gwarn("No common keys between {.code x} and {.code y} on feature{?s} {on}")
+
   key_out(x, keys, out)
 }
 
