@@ -32,5 +32,13 @@ startup <- function() {
     options(UU_startup = TRUE)
   }
 
-  on.exit(unloadNamespace("UU"))
+
+  on.exit({
+    unloadNamespace("UU")
+    pkgs_to_unload <- stringr::str_split(utils::packageDescription("UU")$Imports, ",")[[1]] |>
+      stringr::str_trim() |>
+      stringr::str_extract("^[:alnum:]+") |>
+      base::setdiff(utils::installed.packages(priority = c("base", "recommended"))[,"Package"])
+    sapply(pkgs_to_unload, \(.x) try(utils::unloadNamespace(.x), silent = TRUE))
+  })
 }
