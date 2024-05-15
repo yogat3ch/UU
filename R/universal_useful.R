@@ -344,12 +344,12 @@ concat_rows <- function(.data, col_to_check = 1) {
 #'
 #' @param gitignore \code{chr} path to gitignore
 #'
-#' @return \code{None} overwrites the file
+#' @return \code{None} overwrites the file with entries in alphabetical order
 #' @export
 #'
 gitignore_alphabetize <- function(gitignore = ".gitignore") {
   if (file.exists(gitignore))
-    UU::zchar_remove(sort(readLines(gitignore))) |>
+    zchar_remove(sort(readLines(gitignore))) |>
       writeLines(gitignore)
 }
 
