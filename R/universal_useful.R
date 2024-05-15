@@ -1,8 +1,8 @@
 
 #' @inherit plyr::match_df title params description
-#' @param out \code{obj} Of class matching the desired output. **Default** `NULL` returns a `data.frame` with the matching row in `y`. `numeric()` will return the matching index in `y` & `logical()` will return a matching logical index
+#' @param out \code{obj} Of class matching the desired output. **Default** `NULL` returns a `data.frame` with the row(s) of `x` that have matches in `y`. `numeric()` will return the matching indices of `x` with matches in `y` & `logical()` will return a matching logical vector with length equivalent to `x` of the rows matching in `y`
 #' @seealso plyr::match_df
-#' @return \code{tbl/dbl/lgl} Depending on
+#' @return \code{tbl/dbl/lgl} Depending on the class of `out`
 #' @export
 match_df <- function(x, y, out = NULL, on = NULL, verbose = FALSE) {
   if (is.null(on)) {
@@ -10,7 +10,14 @@ match_df <- function(x, y, out = NULL, on = NULL, verbose = FALSE) {
     if (verbose)
       message("Matching on: ", paste(on, collapse = ", "))
   }
-  keys <- plyr::join.keys(x, y, on)
+  # Map over all the features in `on`
+  keys <- purrr::map(on, \(.x, .y) {
+    v <- x[[.x]]
+    # Return the indices which intersect between the two
+    which(v %in% intersect(v, y[[.x]]))
+  }) |>
+    # Reduce across all the features to only those in common
+    purrr::reduce(intersect)
   key_out(x, keys, out)
 }
 
@@ -21,15 +28,17 @@ key_out <- function(x, keys, out) {
 }
 #' @export
 key_out.default <- function(x, keys, out) {
-  x[keys$x %in% keys$y, , drop = FALSE]
+  x[keys, , drop = FALSE]
 }
 #' @export
 key_out.numeric <- function(x, keys, out) {
-  keys$x
+  keys
 }
 #' @export
 key_out.logical <- function(x, keys, out) {
-  keys$y %in% keys$x
+  out <- rep(FALSE, nrow(x))
+  out[keys] <- TRUE
+  out
 }
 
 #' Return a list of expressions all piped together as a single expression
@@ -344,12 +353,12 @@ concat_rows <- function(.data, col_to_check = 1) {
 #'
 #' @param gitignore \code{chr} path to gitignore
 #'
-#' @return \code{None} overwrites the file
+#' @return \code{None} overwrites the file with entries in alphabetical order
 #' @export
 #'
 gitignore_alphabetize <- function(gitignore = ".gitignore") {
   if (file.exists(gitignore))
-    UU::zchar_remove(sort(readLines(gitignore))) |>
+    zchar_remove(sort(readLines(gitignore))) |>
       writeLines(gitignore)
 }
 
