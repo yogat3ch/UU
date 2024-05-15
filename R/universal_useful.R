@@ -28,15 +28,17 @@ key_out <- function(x, keys, out) {
 }
 #' @export
 key_out.default <- function(x, keys, out) {
-  x[intersect(keys$x, keys$y), , drop = FALSE]
+  x[keys, , drop = FALSE]
 }
 #' @export
 key_out.numeric <- function(x, keys, out) {
-  intersect(keys$x, keys$y)
+  keys
 }
 #' @export
 key_out.logical <- function(x, keys, out) {
-  keys$x %in% keys$y
+  out <- rep(FALSE, nrow(x))
+  out[keys] <- TRUE
+  out
 }
 
 #' Return a list of expressions all piped together as a single expression
