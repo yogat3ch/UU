@@ -1,8 +1,8 @@
 
 #' @inherit plyr::match_df title params description
-#' @param out \code{obj} Of class matching the desired output. **Default** `NULL` returns a `data.frame` with the matching row in `y`. `numeric()` will return the matching index in `y` & `logical()` will return a matching logical index
+#' @param out \code{obj} Of class matching the desired output. **Default** `NULL` returns a `data.frame` with the row(s) of `x` that have matches in `y`. `numeric()` will return the matching indices of `x` with matches in `y` & `logical()` will return a matching logical vector with length equivalent to `x` of the rows matching in `y`
 #' @seealso plyr::match_df
-#' @return \code{tbl/dbl/lgl} Depending on
+#' @return \code{tbl/dbl/lgl} Depending on the class of `out`
 #' @export
 match_df <- function(x, y, out = NULL, on = NULL, verbose = FALSE) {
   if (is.null(on)) {
@@ -21,11 +21,11 @@ key_out <- function(x, keys, out) {
 }
 #' @export
 key_out.default <- function(x, keys, out) {
-  x[keys$x %in% keys$y, , drop = FALSE]
+  x[intersect(keys$x, keys$y), , drop = FALSE]
 }
 #' @export
 key_out.numeric <- function(x, keys, out) {
-  keys$x
+  intersect(keys$x, keys$y)
 }
 #' @export
 key_out.logical <- function(x, keys, out) {
