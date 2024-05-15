@@ -10,7 +10,14 @@ match_df <- function(x, y, out = NULL, on = NULL, verbose = FALSE) {
     if (verbose)
       message("Matching on: ", paste(on, collapse = ", "))
   }
-  keys <- plyr::join.keys(x, y, on)
+  # Map over all the features in `on`
+  keys <- purrr::map(on, \(.x, .y) {
+    v <- x[[.x]]
+    # Return the indices which intersect between the two
+    which(v %in% intersect(v, y[[.x]]))
+  }) |>
+    # Reduce across all the features to only those in common
+    purrr::reduce(intersect)
   key_out(x, keys, out)
 }
 
