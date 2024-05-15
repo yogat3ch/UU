@@ -11,13 +11,13 @@ match_df(x, y, out = NULL, on = NULL, verbose = FALSE)
 
 \item{y}{data frame defining matching rows.}
 
-\item{out}{\code{obj} Of class matching the desired output. \strong{Default} \code{NULL} returns a \code{data.frame} with the matching row in \code{y}. \code{numeric()} will return the matching index in \code{y} & \code{logical()} will return a matching logical index}
+\item{out}{\code{obj} Of class matching the desired output. \strong{Default} \code{NULL} returns a \code{data.frame} with the row(s) of \code{x} that have matches in \code{y}. \code{numeric()} will return the matching indices of \code{x} with matches in \code{y} & \code{logical()} will return a matching logical vector with length equivalent to \code{x} of the rows matching in \code{y}}
 
 \item{on}{variables to match on - by default will use all variables common
 to both data frames.}
 }
 \value{
-\code{tbl/dbl/lgl} Depending on
+\code{tbl/dbl/lgl} Depending on the class of \code{out}
 }
 \description{
 Match works in the same way as join, but instead of return the combined
