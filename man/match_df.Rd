@@ -13,8 +13,7 @@ match_df(x, y, out = NULL, on = NULL, verbose = FALSE)
 
 \item{out}{\code{obj} Of class matching the desired output. \strong{Default} \code{NULL} returns a \code{data.frame} with the row(s) of \code{x} that have matches in \code{y}. \code{numeric()} will return the matching indices of \code{x} with matches in \code{y} & \code{logical()} will return a matching logical vector with length equivalent to \code{x} of the rows matching in \code{y}}
 
-\item{on}{variables to match on - by default will use all variables common
-to both data frames.}
+\item{on}{\code{chr} Either a vector of the names on which to match, if they are named similarly in x & y, or a specification in the form \code{c(y_feature = x_feature)}}
 }
 \value{
 \code{tbl/dbl/lgl} Depending on the class of \code{out}

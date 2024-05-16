@@ -18,6 +18,13 @@ test_that("match_df works", {
 
   results_numeric <- match_df(x, y, out = numeric())
   expect_identical(results_numeric, c(8:10))
-  ## I'm not sure if this is really the expected result.
-  ## If so, there's a bug.
+  # Test warning
+  y$B <- letters[11:15]
+  expect_warning(match_df(x, y, on = "B"), regexp = stringr::fixed("No common keys between `x` and `y` on feature B"))
+
+  y <- rlang::set_names(x, letters[8:10])
+  expect_error(match_df(x, y), regexp = "no common features")
+
+  y <- y[2:7,]
+  expect_identical(match_df(x, y, on = c(i = "B"), out = numeric()), 2:7)
 })
