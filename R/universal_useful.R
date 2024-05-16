@@ -79,6 +79,12 @@ key_out.logical <- function(x, keys, out) {
 #' rlang::eval_bare(exp)
 
 expr_pipe <- function(exprs) {
+  stopifnot("`exprs` must be a list." = is.list(exprs))
+  if (length(exprs) < 2)
+    gbort("`exprs` should have more tan 1 element for a pipe to take effect.")
+  if (!is.name(exprs[[1]]))
+    gwarn("The first element of `exprs` should be of class 'name'.")
+  
   with_pipes <- purrr::reduce(exprs, \(.x, .y) {
     paste0(.x ," |>\n\t", glue::glue_collapse(rlang::expr_deparse(.y)))
   })
