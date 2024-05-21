@@ -80,3 +80,46 @@ pkg_chr_split_comma <- function(x) {
     stringr::str_split(.x, "\\,\\s{1,}")
   })))
 }
+
+
+#' Changes installed package version relationships to `==` from the `usethis` default of `>=`
+#'
+#' @param pkg \code{chr} Name of package
+#' @param write_to_desc \code{lgl} Whether to write the packages with updated
+#'
+#' @return \code{None} Either prints to the console or modifies the DESCRIPTION in place
+#' @export
+#'
+
+installed_to_description <- function(pkg, write_to_desc = TRUE) {
+  pd <- packageDescription(pkg)
+  out <- stringr::str_split(pd$Imports, "\n")[[1]] |>
+    purrr::map_chr(\(.x) {
+      v <- stringr::str_extract(.x, "\\d+\\.(?:\\d+\\.){1,2}\\d*")[[1]]
+      p <- stringr::str_extract(.x, "^[A-Za-z0-9\\.]+")[[1]]
+      if (!is.na(v)) {
+        pv <- packageDescription(p)
+        .x <- stringr::str_replace(.x, v, pv$Version)
+      }
+      .x
+    })
+  if (write_to_desc) {
+    desc_path <- file.path("DESCRIPTION")
+    keep.white <- c("Authors@R", "Imports", "Remotes", "Suggests")
+    if (file.exists(desc_path)) {
+      desc <- read.dcf(desc_path, keep.white = keep.white)
+      import_col <- grep("Imports", colnames(desc))
+      replacement <- paste0("\n\t", glue::glue_collapse(out, sep = "\n\t"))
+      if (length(import_col) == 0) {
+        desc <- cbind(desc, gsub("Imports: ", "\n\t",
+                                 replacement))
+        colnames(desc)[ncol(desc)] <- "Imports"
+      }
+      else {
+        desc[, "Imports"] <- gsub("Imports: ", "\n\t",
+                                  replacement)
+      }
+      write.dcf(desc, file = desc_path, keep.white = keep.white)
+    }
+  }
+}

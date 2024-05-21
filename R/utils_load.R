@@ -1,7 +1,7 @@
 #' Load project & user-level _.Renviron_ & _.Rprofile_
 #' @export
 startup <- function() {
-  if (!getOption("UU_startup", FALSE)) {
+  if (!getOption("UU_startup", FALSE) && interactive()) {
     profiles <-
       list(
         .Rprofile_user = Sys.getenv("R_PROFILE_USER", "~/.Rprofile"),
