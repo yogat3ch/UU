@@ -31,7 +31,6 @@ test_that("match_df works", {
 
 
 test_that("expr_pipe works", {
-  
   df <- data.frame(val = 1:10)
   exprs <- list(
     quote(df),
@@ -53,9 +52,32 @@ test_that("expr_pipe works", {
   expr_pipe(list(quote(data.frame(val = 1:10)), quote(dplyr::mutte(new = val * 2)))) |>
     expect_error() |>
     expect_warning("The first element of `exprs` should be of class 'name'.")
-  
+
   expect_identical(
     rlang::eval_bare(exp_piped),
     tibble::tibble(category = c("High", "Low"), s = c(65, 40))
   )
+})
+
+
+test_that("find_by_class works", {
+  UU_testing_env <- new.env(parent = emptyenv())
+  df <- data.frame(A = 1:10, B = letters[1:10], C = rnorm(10))
+  assign("df", df, envir = UU_testing_env)
+
+  expect_silent(x <- find_by_class("data.frame", UU_testing_env))
+
+  expect_s3_class(x, "data.frame")
+  expect_equal(nrow(x), 10)
+  expect_equal(ncol(x), 3)
+
+  df2 <- data.frame(A = 1, B = "B", C = 1.23)
+  assign("df2", df2, envir = UU_testing_env)
+
+  expect_warning(
+    find_by_class("data.frame", UU_testing_env),
+    "More than one object with class: data.frame. Returning the first found.")
+  expect_warning(
+    find_by_class("numeric", UU_testing_env),
+    "Could not find object with class numeric. Has it been instantiated?")
 })
