@@ -2,14 +2,17 @@
 % Please edit documentation in R/universal_useful.R
 \name{find_by_class}
 \alias{find_by_class}
-\title{Find an object by it's class}
+\title{Find by class}
 \usage{
 find_by_class(class, e = rlang::caller_env())
 }
 \arguments{
-\item{\code{(environment)}}{The environment to search}
+\item{class}{The \code{(class)} class to search}
 
-\item{\code{(class)}}{The class to search for}
+\item{e}{The \code{(environment)} to search}
+}
+\value{
+the first object assigned to the environment that matches the class. If more than one object of the class are found, it triggers a warning.
 }
 \description{
 Find an object by it's class

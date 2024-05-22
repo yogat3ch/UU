@@ -1,4 +1,3 @@
-
 #' @inherit plyr::match_df title params description
 #' @param out \code{obj} Of class matching the desired output. **Default** `NULL` returns a `data.frame` with the row(s) of `x` that have matches in `y`. `numeric()` will return the matching indices of `x` with matches in `y` & `logical()` will return a matching logical vector with length equivalent to `x` of the rows matching in `y`
 #' @param on \code{chr} Either a vector of the names on which to match, if they are named similarly in x & y, or a specification in the form `c(y_feature = x_feature)`
@@ -84,29 +83,34 @@ expr_pipe <- function(exprs) {
     gbort("`exprs` should have more tan 1 element for a pipe to take effect.")
   if (!is.name(exprs[[1]]))
     gwarn("The first element of `exprs` should be of class 'name'.")
-  
+
   with_pipes <- purrr::reduce(exprs, \(.x, .y) {
     paste0(.x ," |>\n\t", glue::glue_collapse(rlang::expr_deparse(.y)))
   })
   rlang::parse_expr(glue::glue_collapse(with_pipes))
 }
 
-#' @title Find an object by it's class
-#' @param \code{(environment)} The environment to search
-#' @param \code{(class)} The class to search for
+#' @title Find by class
+#' @description Find an object by it's class
+#'
+#' @param class The \code{(class)} class to search
+#' @param e The \code{(environment)} to search
+#'
+#' @return the first object assigned to the environment that matches the class. If more than one object of the class are found, it triggers a warning.
 #' @export
-
 find_by_class <- function(class, e = rlang::caller_env()) {
   obj <- purrr::compact(purrr::map(ls(e), purrr::possibly(~{
     out <- get0(.x, envir = e)
     purrr::when(out, inherits(., class) ~ ., ~NULL)
   }, NULL)))
+
   if (is_legit(obj)) {
     if (length(obj) > 1)
       rlang::warn(paste0("More than one object with class: ", class,". Returning the first found."))
     out <- obj[[1]]
   } else {
     rlang::warn(paste0("Could not find object with class ",class,". Has it been instantiated?"))
+    return(NULL)
   }
   out
 }
