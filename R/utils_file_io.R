@@ -346,7 +346,12 @@ write_dir_fn <- function(outfile = "R/utils_dir_fns.R", overwrite = TRUE, for_go
   else
     list("path_package", .ns = "fs", package = pkg_nm)
   .dots <- rlang::dots_list(...)
+  # Append the custom dir functions
   .dirs <- append(dirs, purrr::map(.dots, dir_fn))
+  # Deduplicate the dirs in favor of user supplied names that overlap
+  .dirs[!duplicated(names(.dirs), fromLast = TRUE)]
+  # Order alphabetically
+  .dirs <- .dirs[order(names(.dirs))]
   dirs <- purrr::map(.dirs, \(.x) {
     .exp <- rlang::expr({
       .path <- fs::path(!!.x(), ..., ext = ext)
@@ -372,6 +377,8 @@ write_dir_fn <- function(outfile = "R/utils_dir_fns.R", overwrite = TRUE, for_go
           "#' @param ext \\code{(chr)} file extension",
           "#' @param mustWork \\code{lgl} If `TRUE`, an error is given if there are no matching files.",
           "#' @usage dirs$data()",
+          if (for_golem)
+            "#' @include app_config.R",
           "#' @export",
           "#' @examples dirs$data(\"mydata\", ext = \"csv\")",
           l), file = outfile)
