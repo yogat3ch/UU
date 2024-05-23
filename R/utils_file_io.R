@@ -329,7 +329,7 @@ dirs <- purrr::map(
 #' @param outfile \code{chr} path to file to write. Default _R/utils_dir_fns.R_
 #' @param overwrite \code{lgl} Whether to overwrite the existing file. Default `TRUE`
 #' @param for_golem \code{lgl} Whether to use the `app_sys` function if package is a golem package
-#' @param ... \code{named directory path vectors} Other dir functions to write in the form of `dir_function_name = c('dir1', 'nesteddir2')` where `dir_function_name` is the name of the function under `dirs` and a vector of folder names. eg for a dirs function that accesses `data/plots`, the argument will be `plots = c('data', 'plots')`.
+#' @param ... \code{named directory path vectors} Other dir functions to write in the form of `dir_function_name = c('dir1', 'nesteddir2')` where `dir_function_name` is the name of the function under `dirs` and a vector of folder names. eg for a dirs function that accesses `data/plots`, the argument will be `plots = c('data', 'plots')`, `plots = "data/plots"` will accomplish the same.
 #' @family file IO
 #' @return \code{msg} and a new file
 #' @export
@@ -349,12 +349,12 @@ write_dir_fn <- function(outfile = "R/utils_dir_fns.R", overwrite = TRUE, for_go
   # Append the custom dir functions
   .dirs <- append(dirs, purrr::map(.dots, dir_fn))
   # Deduplicate the dirs in favor of user supplied names that overlap
-  .dirs[!duplicated(names(.dirs), fromLast = TRUE)]
+  .dirs <- .dirs[!duplicated(names(.dirs), fromLast = TRUE)]
   # Order alphabetically
   .dirs <- .dirs[order(names(.dirs))]
   dirs <- purrr::map(.dirs, \(.x) {
     .exp <- rlang::expr({
-      .path <- fs::path(!!.x(), ..., ext = ext)
+      .path <- fs::path(!!!.x(), ..., ext = ext)
       out <- if (!mkpath) {
         .path <- stringr::str_remove(.path, "^inst\\/?")
         if (!!for_golem)
