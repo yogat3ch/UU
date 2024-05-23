@@ -329,11 +329,12 @@ dirs <- purrr::map(
 #' @param outfile \code{chr} path to file to write. Default _R/utils_dir_fns.R_
 #' @param overwrite \code{lgl} Whether to overwrite the existing file. Default `TRUE`
 #' @param for_golem \code{lgl} Whether to use the `app_sys` function if package is a golem package
+#' @param ... \code{named directory path vectors} Other dir functions to write in the form of `dir_function_name = c('dir1', 'nesteddir2')` where `dir_function_name` is the name of the function under `dirs` and a vector of folder names. eg for a dirs function that accesses `data/plots`, the argument will be `plots = c('data', 'plots')`.
 #' @family file IO
 #' @return \code{msg} and a new file
 #' @export
 
-write_dir_fn <- function(outfile = "R/utils_dir_fns.R", overwrite = TRUE, for_golem = file.exists("R/app_ui.R")) {
+write_dir_fn <- function(outfile = "R/utils_dir_fns.R", overwrite = TRUE, for_golem = file.exists("R/app_ui.R"), ...) {
   if (file.exists(outfile) && overwrite)
     file.remove(outfile)
   mkpath(outfile, mkfile = TRUE)
@@ -344,8 +345,9 @@ write_dir_fn <- function(outfile = "R/utils_dir_fns.R", overwrite = TRUE, for_go
     list("app_sys", mustWork = rlang::expr(mustWork))
   else
     list("path_package", .ns = "fs", package = pkg_nm)
-
-  dirs <- purrr::map(dirs, ~{
+  .dots <- rlang::dots_list(...)
+  .dirs <- append(dirs, .dots)
+  dirs <- purrr::map(.dirs, \(.x) {
     .exp <- rlang::expr({
       .path <- fs::path(!!.x(), ..., ext = ext)
       out <- if (!mkpath) {
