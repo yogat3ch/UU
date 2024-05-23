@@ -321,7 +321,7 @@ dirs <- purrr::map(
     vault = "inst/vault",
     www = "inst/app/www"
   ),
-  ~ dir_fn(.x)
+  \(.x) dir_fn(.x)
 )
 
 #' Write `dir` helper function that are robust to dev vs deployed package states
@@ -346,7 +346,7 @@ write_dir_fn <- function(outfile = "R/utils_dir_fns.R", overwrite = TRUE, for_go
   else
     list("path_package", .ns = "fs", package = pkg_nm)
   .dots <- rlang::dots_list(...)
-  .dirs <- append(dirs, .dots)
+  .dirs <- append(dirs, purrr::map(.dots, dir_fn))
   dirs <- purrr::map(.dirs, \(.x) {
     .exp <- rlang::expr({
       .path <- fs::path(!!.x(), ..., ext = ext)
