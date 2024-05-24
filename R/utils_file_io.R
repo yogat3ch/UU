@@ -470,16 +470,16 @@ object_ext.default <- function(object) {
 object_fn <- function(x, filepath) {
   UseMethod("object_fn")
 }
-object_check_filepath <- function(obj, filepath) {
+object_check_filepath <- function(obj, filepath, x) {
   if (!missing(filepath)) {
     if (!identical(obj, file_fn(filepath, write = TRUE)))
-      gbort("Mismatch between class of `x` ({class(obj)}) & it's `filepath` extension ({UU::ext(filepath)}). Is this the right object?")
+      gbort("Mismatch between class of `x` ({class(x)}) & it's `filepath` extension ({UU::ext(filepath)}). Is this the right object?")
   }
 }
 #' @export
 object_fn.default <- function(x, filepath) {
   out <- base::saveRDS
-  object_check_filepath(out, filepath)
+  object_check_filepath(out, filepath, x)
   return(out)
 }
 #' @export
@@ -494,13 +494,13 @@ object_fn.data.frame <- function(x, filepath) {
                       arrow = need_pkg("arrow", "write_feather"),
                       readr = need_pkg("readr", "write_csv"),
                       base = utils::write.csv)
-  object_check_filepath(csv_write, filepath)
+  object_check_filepath(csv_write, filepath, x)
   return(csv_write)
 }
 #' @export
 object_fn.matrix <- function(x, filepath) {
   csv_write <- object_fn.data.frame(x, filepath)
-  object_check_filepath(csv_write, filepath)
+  object_check_filepath(csv_write, filepath, x)
   return(function(x, filepath) {
     csv_write(tibble::as_tibble(x, .name_repair = "minimal"), filepath)
   })
@@ -509,14 +509,10 @@ object_fn.matrix <- function(x, filepath) {
 #' @export
 object_fn.ggplot <- function(x, filepath) {
   out <- need_pkg("ggplot2", "ggsave")
-  object_check_filepath(out, filepath)
+  object_check_filepath(out, filepath, x)
   return(out)
 }
-#' @export
-object_fn.default <- function(x, filepath) {
-  object_check_filepath(x, filepath)
-  return(base::saveRDS)
-}
+
 
 
 #' @title Provide the appropriate file read/write function
