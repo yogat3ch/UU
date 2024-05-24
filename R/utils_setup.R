@@ -35,17 +35,18 @@ need_write <-
 
 creds_to_renviron <- function(..., scope = c("user", "project")[1], overwrite = FALSE, proj_dir = ".", rprofile = FALSE) {
   .scope <- match_letters(scope, "user", "project")
-  .fp <- purrr::when(
-    rprofile,
-    isTRUE(.) ~ list(
+  .fp <- if (rprofile) {
+    list(
       user = Sys.getenv("R_PROFILE_USER", "~/.Rprofile"),
       project = file.path(proj_dir, ".Rprofile")
-    ),
-    ~ list(
+    )
+  } else {
+    list(
       user = Sys.getenv("R_ENVIRON_USER", "~/.Renviron"),
       project = file.path(proj_dir, ".Renviron")
     )
-  )
+  }
+
   fp <- rlang::exec(switch,.scope,
                !!!.fp)
 
