@@ -28,23 +28,34 @@ is_legit <- function(x, is.null = TRUE, is_empty = TRUE, is.na = TRUE, not_error
   .checks <- c(is.null, is_empty, is.na, not_error)
   if (any(!.checks)) {
     checks <- rlang::exprs(
-      is.null  = all(is.null(x)),
-      is_empty = rlang::is_empty(x),
+      is.null  = legit_null(x),
+      is_empty = legit_empty(x),
       # If all arguments are empty, all(is_na) will be TRUE. To disambiguate an empty object from one that has all objects as NA, we need to simultaneously check if the object is non-empty
-      is.na = all(suppressWarnings(is.na(x))) & {if (is.data.frame(x)) nrow(x) != 0 else !rlang::is_empty(x)},
-      not_error = inherits(x, c("try-error", "error"))
+      is.na = legit_na(x),
+      not_error = legit_error(x)
     )[.checks]
     checks <- purrr::reduce(checks, .f = \(.x, .y, ...) {
       rlang::call2(`||`, .x, .y)
     })
     !rlang::eval_bare(checks)
   } else {
-    !(all(is.null(x)) || rlang::is_empty(x) || all(suppressWarnings(is.na(x))) ||
-        inherits(x, c("try-error", "error")))
+    !(legit_null(x) || legit_empty(x) || legit_na(x) || legit_error(x))
   }
 
 }
 
+legit_null <- function(x) {
+  all(is.null(x))
+}
+legit_empty <- function(x) {
+  rlang::is_empty(x)
+}
+legit_na <- function(x) {
+  all(suppressWarnings(is.na(x))) & {if (is.data.frame(x)) nrow(x) != 0 else !rlang::is_empty(x)}
+}
+legit_error <- function(x) {
+  is_error(x)
+}
 
 #' Is zero-length character?
 #'
