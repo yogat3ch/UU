@@ -52,8 +52,13 @@ css_col2vec <- function(x) {
     out <- as.numeric(stringr::str_extract_all(x, "[\\d\\.]+")[[1]])
   } else
     out <- col2rgb(x, alpha = TRUE)[,1]
-  if (length(out) != 4)
+  lo <- length(out)
+  if (lo != 4)
     out <- c(out, alpha = ifelse(all(out < 1), 1, 255))
+  else if (lo == 4 && out[4] <= 1) {
+    out[4] <- round(255 * out[4])
+  }
+
   rlang::set_names(out, c("red","green","blue","alpha"))
 }
 #' Vectorized version of `css_col2vec`
