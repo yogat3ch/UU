@@ -78,8 +78,23 @@ css_col2vec_ <- Vectorize(css_col2vec)
 #' @examples
 #' color_interpolate(n = 3)
 color_interpolate <- function(colors = c("#9A3324", "#016f90"), n, ...) {
+  # Assert that colors is a character vector
+  if (!is.character(colors) || any(!grepl("^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{8})$", colors))) {
+    stop("`colors` must be a character vector of valid hex color codes.")
+  }
+
+  # Assert that n is a positive integer
+  if (!is.numeric(n) || n <= 0 || floor(n) != n) {
+    stop("`n` must be a positive integer.")
+  }
+
   .n <- n - 1
-  apply(grDevices::colorRamp(colors, ...)(c(0, 1 / .n * 1:.n)), 1, \(.x) do.call(rgb2hex, as.list(.x)))
+  out <- if (.n == 0) {
+    colors[1]
+  } else {
+    apply(grDevices::colorRamp(colors, ...)(c(0, 1 / .n * 1:.n)), 1, \(.x) do.call(rgb2hex, as.list(.x)))
+  }
+  return(out)
 }
 
 #' Convert vector of colors to named tbl
