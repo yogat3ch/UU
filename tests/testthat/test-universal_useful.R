@@ -28,3 +28,56 @@ test_that("match_df works", {
   y <- y[2:7,]
   expect_identical(match_df(x, y, on = c(i = "B"), out = numeric()), 2:7)
 })
+
+
+test_that("expr_pipe works", {
+  df <- data.frame(val = 1:10)
+  exprs <- list(
+    quote(df),
+    quote(dplyr::mutate(val = val + 5, category = ifelse(val > 10, "High", "Low"))),
+    quote(dplyr::group_by(category)),
+    quote(dplyr::summarise(s = sum(val)))
+  )
+  exp_piped <- expr_pipe(exprs)
+
+  expect_true(is.call(exp_piped))
+  expect_error(
+    expr_pipe(quote(df)),
+    "`exprs` must be a list."
+  )
+  expect_error(
+    expr_pipe(list(quote(df))),
+    "`exprs` should have more tan 1 element for a pipe to take effect."
+  )
+  expr_pipe(list(quote(data.frame(val = 1:10)), quote(dplyr::mutte(new = val * 2)))) |>
+    expect_error() |>
+    expect_warning("The first element of `exprs` should be of class 'name'.")
+
+  expect_identical(
+    rlang::eval_bare(exp_piped),
+    tibble::tibble(category = c("High", "Low"), s = c(65, 40))
+  )
+})
+
+
+test_that("find_by_class works", {
+  UU_testing_env <- new.env(parent = emptyenv())
+  df <- data.frame(A = 1:10, B = letters[1:10], C = rnorm(10))
+  assign("df", df, envir = UU_testing_env)
+
+  expect_silent(x <- find_by_class("data.frame", UU_testing_env))
+
+  expect_s3_class(x, "data.frame")
+  expect_equal(nrow(x), 10)
+  expect_equal(ncol(x), 3)
+
+  df2 <- data.frame(A = 1, B = "B", C = 1.23)
+  assign("df2", df2, envir = UU_testing_env)
+
+  expect_warning(
+    find_by_class("data.frame", UU_testing_env),
+    "More than one object with class: data.frame. Returning the first found.")
+  expect_warning(
+    find_by_class("numeric", UU_testing_env),
+    "Could not find object with class numeric. Has it been instantiated?")
+})
