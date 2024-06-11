@@ -101,7 +101,8 @@ expr_pipe <- function(exprs) {
 find_by_class <- function(class, e = rlang::caller_env()) {
   obj <- purrr::compact(purrr::map(ls(e), purrr::possibly(~{
     out <- get0(.x, envir = e)
-    purrr::when(out, inherits(., class) ~ ., ~NULL)
+    out <- if (inherits(out, class))
+      out
   }, NULL)))
 
   if (is_legit(obj)) {
@@ -184,7 +185,12 @@ match_letters <- function(x, ..., n = 1, multiple = FALSE, ignore.case = FALSE, 
       out <- out[1]
 
     if (capitalize && !is.null(out))
-      out <- purrr::map_chr(out, ~purrr::when(nchar(.x) == 1,. ~ toupper(.x), ~ gsub("^(\\w)(\\w+)","\\U\\1\\L\\2", .x, perl = TRUE)))
+      out <- purrr::map_chr(out, \(.x){
+        if (nchar(.x) == 1)
+          toupper(.x)
+        else
+          gsub("^(\\w)(\\w+)", "\\U\\1\\L\\2", .x, perl = TRUE)
+        })
   }
   out
 }
