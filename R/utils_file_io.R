@@ -306,22 +306,22 @@ write_lines <- function(file, ..., after = "end") {
 #' @examples dirs$data("mydata", ext = "csv", mkpath = TRUE)
 dirs <- purrr::map(
   list(
-    app = "inst/app",
-    css = "inst/app/www/css",
+    app = "app",
+    css = "app/www/css",
     data = "data",
     dev = "dev",
-    extdata = "inst/extdata",
-    img = "inst/app/www/img",
+    extdata = "extdata",
+    img = "app/www/img",
     inst = "inst",
-    js = "inst/app/www/js",
+    js = "app/www/js",
     R = "R",
     renv = "renv",
     tests = "tests/testthat",
     top = ".",
-    vault = "inst/vault",
-    www = "inst/app/www"
+    vault = "vault",
+    www = "app/www"
   ),
-  ~ dir_fn(.x)
+  \(.x, .y) dir_fn(.x)
 )
 
 #' Write `dir` helper function that are robust to dev vs deployed package states
@@ -339,21 +339,17 @@ write_dir_fn <- function(outfile = "R/utils_dir_fns.R", overwrite = TRUE, for_go
   mkpath(outfile, mkfile = TRUE)
 
   pkg_nm <- pkg_name()
-  app_sys <- function() {}
-  fn <- if (for_golem)
-    list("app_sys", mustWork = rlang::expr(mustWork))
-  else
-    list("path_package", .ns = "fs", package = pkg_nm)
 
-  dirs <- purrr::map(dirs, ~{
+  fn <- if (for_golem)
+    rlang::call2(rlang::call2(":::", as.symbol(pkg_nm), as.symbol("app_sys")), rlang::expr(.path))
+  else
+    rlang::expr(system.file(package = !!pkg_nm, .path))
+
+  dirs <- purrr::map(dirs, \(.x) {
     .exp <- rlang::expr({
       .path <- fs::path(!!.x(), ..., ext = ext)
       out <- if (!mkpath) {
-        .path <- stringr::str_remove(.path, "^inst\\/?")
-        if (!!for_golem)
-          !!rlang::exec(rlang::call2, !!!fn, rlang::expr(.path))
-        else
-          .path
+        !!fn
       } else
         .path
       return(out)
