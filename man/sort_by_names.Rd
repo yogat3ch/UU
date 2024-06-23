@@ -4,12 +4,14 @@
 \alias{sort_by_names}
 \title{Sort a vector or list by it's name (or self if no names)}
 \usage{
-sort_by_names(x, by_names = TRUE)
+sort_by_names(x, by_names = TRUE, sort_by_values = TRUE)
 }
 \arguments{
 \item{x}{\code{obj} to sort}
 
-\item{by_names}{\code{lgl} wether to sort by names}
+\item{by_names}{\code{lgl} whether to sort by names}
+
+\item{sort_by_values}{\code{lgl} whether to sort by values in the absence of names. If FALSE and \code{x} has no names, an error will be thrown.}
 }
 \value{
 \code{obj} sorted
