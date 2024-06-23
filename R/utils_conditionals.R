@@ -69,34 +69,38 @@ legit_error <- function(x) {
 #' zchar(" ")
 zchar <- \(x) isTRUE(Negate(nzchar)(x))
 
-
 #' Are the values in each object the same?
 #' @description
-#' The primary difference from \code{\link[base]{identical}} & \code{\link[base]{all.equal}} is that objects are sorted by name so order doesn't matter. Set `sort_by_names = FALSE` to sort by values.
+#' The primary difference from \code{\link[base]{identical}} & \code{\link[base]{all.equal}} is that objects are sorted by name so order doesn't matter. Set `sort_by_names = FALSE` to sort by values instead of names for atomic vectors: eg `c(1,2,3)` is equivalent to `c(3,2,1)`. Turn off sorting altogether with `no_sort`.
 #' @inheritParams base::all.equal
 #' @param x \code{obj}
 #' @param y \code{obj}
+#' @param sort_by_names \code{lgl} Sort both target/current by their names (so the order is not taken into account when comparing). Sorting by names is non-recursive, only the top level of the list is sorted.
+#' @param no_sort \code{lgl} Turn off the default behavior that sorts atomic vectors before comparing. This will compare `current` & `target` as is, equivalent to `isTRUE(all.equal(target,current, ...))`.
 #' @inheritDotParams base::all.equal
 #' @return \code{lgl}
 #' @export
 #' @family conditionals
 #' @examples
 #' same(list(x = 1, y = 2), list(y = 2, x = 1))
-same <- function(target = x, current = y, sort_by_names = TRUE, x = target, y = current, ...) {
-  nms = list(x = !is.null(names(target)),
-             y = !is.null(names(current)))
+same <- function(target = x, current = y, sort_by_names = TRUE, x = target, y = current, no_sort = FALSE, ...) {
+  if (!no_sort) {
+    nms = list(x = !is.null(names(target)),
+               y = !is.null(names(current)))
 
-  if (sort_by_names && all(nms$x, nms$y)) {
-    stopifnot(`target must be named` = nms$x)
-    stopifnot(`current must be named` = nms$y)
-    target <- target[order(names(target))]
-    current <- current[order(names(current))]
-  } else {
-    if (rlang::is_atomic(target))
-      target <- sort(target)
-    if (rlang::is_atomic(current))
-      current <- sort(current)
+    if (sort_by_names && all(nms$x, nms$y)) {
+      stopifnot(`target must be named` = nms$x)
+      stopifnot(`current must be named` = nms$y)
+      target <- target[order(names(target))]
+      current <- current[order(names(current))]
+    } else {
+      if (rlang::is_atomic(target))
+        target <- sort(target)
+      if (rlang::is_atomic(current))
+        current <- sort(current)
+    }
   }
+
   isTRUE(all.equal(target, current, ...))
 }
 
