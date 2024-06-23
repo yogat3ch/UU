@@ -7,7 +7,7 @@
 colors2css(colors, file = "", sass_vars = TRUE)
 }
 \arguments{
-\item{file}{A \link[base]{connection}, or a character string naming the file
+\item{file}{a \link[base]{connection}, or a character string naming the file
     to print to.  If \code{""} (the default), \code{cat} prints to the
     standard output connection, the console unless redirected by
     \code{\link[base]{sink}}.
