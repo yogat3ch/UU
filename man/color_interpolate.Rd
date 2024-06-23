@@ -16,7 +16,7 @@ color_interpolate(colors = c("#9A3324", "#016f90"), n, ...)
   \describe{
     \item{\code{bias}}{a positive number.  Higher values give more widely spaced
     colors at the high end.}
-    \item{\code{space}}{a character string; interpolation in RGB or CIE Lab
+    \item{\code{space}}{a character string; interpolation in RGB or \abbr{CIE} Lab
     color spaces.}
     \item{\code{interpolate}}{use spline or linear interpolation.}
     \item{\code{alpha}}{logical: should alpha channel (opacity) values be
