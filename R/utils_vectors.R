@@ -35,7 +35,7 @@ sort_by_names <- function(x, by_names = TRUE, sort_by_values = TRUE) {
     names(x) %||% x
   } else
     x
-  stopifnot(!is.list(y))
+  stopifnot(`x must be a list` = !is.list(y))
   x[order(y)]
 }
 
