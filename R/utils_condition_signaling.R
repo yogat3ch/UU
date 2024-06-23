@@ -64,7 +64,7 @@ gmsg <- function (
     msg,
     e = rlang::caller_env()
 ) {
-  cli::cat_line(cli::format_message(msg, .envir = e))
+  cli::cli_text(cli::format_message(msg, .envir = e))
 }
 
 

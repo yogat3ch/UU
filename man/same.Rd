@@ -10,6 +10,7 @@ same(
   sort_by_names = TRUE,
   x = target,
   y = current,
+  no_sort = FALSE,
   ...
 )
 }
@@ -18,9 +19,13 @@ same(
 
 \item{current}{other \R object, to be compared with \code{target}.}
 
+\item{sort_by_names}{\code{lgl} Sort both target/current by their names (so the order is not taken into account when comparing). Sorting by names is non-recursive, only the top level of the list is sorted.}
+
 \item{x}{\code{obj}}
 
 \item{y}{\code{obj}}
+
+\item{no_sort}{\code{lgl} Turn off the default behavior that sorts atomic vectors before comparing. This will compare \code{current} & \code{target} as is, equivalent to \code{isTRUE(all.equal(target,current, ...))}.}
 
 \item{...}{
   Arguments passed on to \code{\link[base:all.equal]{base::all.equal}}
@@ -32,7 +37,7 @@ same(
 \code{lgl}
 }
 \description{
-The primary difference from \code{\link[base]{identical}} & \code{\link[base]{all.equal}} is that objects are sorted by name so order doesn't matter. Set \code{sort_by_names = FALSE} to sort by values.
+The primary difference from \code{\link[base]{identical}} & \code{\link[base]{all.equal}} is that objects are sorted by name so order doesn't matter. Set \code{sort_by_names = FALSE} to sort by values instead of names for atomic vectors: eg \code{c(1,2,3)} is equivalent to \code{c(3,2,1)}. Turn off sorting altogether with \code{no_sort}.
 }
 \examples{
 same(list(x = 1, y = 2), list(y = 2, x = 1))

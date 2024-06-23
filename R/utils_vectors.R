@@ -14,19 +14,28 @@ len_unique <- function(x) {
 #' Sort a vector or list by it's name (or self if no names)
 #'
 #' @param x \code{obj} to sort
-#' @param by_names \code{lgl} wether to sort by names
+#' @param by_names \code{lgl} whether to sort by names
+#' @param sort_by_values \code{lgl} whether to sort by values in the absence of names. If FALSE and `x` has no names, an error will be thrown.
 #' @family vectors
 #' @return \code{obj} sorted
 #' @export
 #' @examples
 #' sort_by_names(c(b = "b", c = "a"))
 #' sort_by_names(c(b = "b", c = "a"), by_names = FALSE)
-sort_by_names <- function(x, by_names = TRUE) {
-  y <- if (by_names)
+sort_by_names <- function(x, by_names = TRUE, sort_by_values = TRUE) {
+  no_names <- is.null(names(x))
+  y <- if (by_names) {
+    if (no_names) {
+      msg <- "{.code x} has no names"
+      if (sort_by_values)
+        gmsg(paste0(msg,", sorting by values."))
+      else
+        gbort(msg)
+    }
     names(x) %||% x
-  else
+  } else
     x
-  stopifnot(!is.list(y))
+  stopifnot(`x must be a list` = !is.list(y))
   x[order(y)]
 }
 
