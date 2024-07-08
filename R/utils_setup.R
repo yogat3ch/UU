@@ -257,7 +257,7 @@ install_remote <- function(pkg, remote, ..., to_desc = TRUE, snapshot = TRUE) {
 
 #' Install packages from the yogat3ch repo
 #'
-#' @inheritParams UU::install_remote
+#' @inheritParams install_remote
 #'
 #' @export
 install_yogat3ch <- function(pkg, ..., to_desc = TRUE, snapshot = TRUE) {
