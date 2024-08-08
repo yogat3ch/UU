@@ -34,3 +34,22 @@ startup <- function() {
 
   on.exit(unloadNamespace("UU"))
 }
+
+# ----------------------- Fri Jan 11 18:00:33 2019 ------------------------#
+#' libraries
+#'
+#' Loads all packages supplied by the character vector silently and quickly. Useful for invisibly starting all library requirements with less typing in the setup chunk rather than calling each library independently.
+#' @param pkgs \code{(character)} Vector of package names to be loaded in the R environment
+#' @examples
+#' req.pkgs <- c("tidyverse","magrittr","dplyr")
+#' system.time({library(tidyverse);library(magrittr);library(dplyr)})
+#' system.time(libraries(req.pkgs))
+#' @export
+libraries <- function(pkgs) {
+  init <- Vectorize(
+    FUN = function(pkg) {
+      suppressPackageStartupMessages(library(pkg, character.only = TRUE))
+    }
+  )
+  invisible(init(pkgs))
+}
