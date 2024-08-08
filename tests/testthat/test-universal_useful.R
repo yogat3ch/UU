@@ -102,7 +102,6 @@ test_that("missing_args function identifies missing arguments correctly", {
   # Test case 1: No missing arguments when all arguments are passed
   fn1 <- function(a, b) missing_args()
   result_1 <- fn1(a = 1, b = 2)
-  print(result_1)
   expect_length(result_1, 0)
   expect_equal(result_1, character(0))
 
@@ -134,7 +133,7 @@ test_that("list_rename function renames list elements correctly", {
   expected_result <- list(x = 1, y = 2, z = 3)
 
   # Apply the function
-  result <- list_rename(data, a = "x", b = "y", c = "z")
+  result <- list_rename(data, x = "a", y = "b", z = "c")
 
   # Check if the result matches the expected result
   expect_equal(result, expected_result)
