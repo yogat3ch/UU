@@ -261,7 +261,7 @@ map_class <- function(x, y) {
 #' a()
 missing_args <-
   function(calling_function = rlang::caller_fn(1),
-           corresponding_call = sys.call(1),
+           corresponding_call = sys.call(sys.parent()),
            include_null = TRUE,
            exclude_defaults = TRUE)
   {
