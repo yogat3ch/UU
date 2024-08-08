@@ -17,13 +17,16 @@ Return the appropriate function for writing the supplied object to disk
 }
 \details{
 \itemize{
-\item{\code{data.frame/matrix}}{ \link[arrow]{write_feather}}
+\item{\code{data.frame/matrix}}{ Uses \link[arrow]{write_feather} if \code{arrow} installed. Otherwise uses \link[readr]{write_csv} if \code{readr} installed. Otherwise uses \link[base]{write.csv}}
 \item{\code{ggplot}}{ \link[ggplot2]{ggsave}}
 \item{\code{anything else}}{ \link[base]{saveRDS}}
 }
 }
 \examples{
 object_fn(1:15)
+object_fn(data.frame())
+object_fn(matrix())
+object_fn(structure("x", class = "ggplot"))
 }
 \seealso{
 Other file IO: 

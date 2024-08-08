@@ -52,3 +52,6 @@ Collate:
     'utils_shiny.R'
     'utils_vectors.R'
 URL: https://yogat3ch.github.io/UU/
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3

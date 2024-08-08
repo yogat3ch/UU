@@ -10,7 +10,7 @@ gitignore_alphabetize(gitignore = ".gitignore")
 \item{gitignore}{\code{chr} path to gitignore}
 }
 \value{
-\code{None} overwrites the file
+\code{None} overwrites the file with entries in alphabetical order
 }
 \description{
 Alphabetize the \emph{.gitignore} file

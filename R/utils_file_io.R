@@ -306,20 +306,20 @@ write_lines <- function(file, ..., after = "end") {
 #' @examples dirs$data("mydata", ext = "csv", mkpath = TRUE)
 dirs <- purrr::map(
   list(
-    app = "inst/app",
-    css = "inst/app/www/css",
+    app = "app",
+    css = "app/www/css",
     data = "data",
     dev = "dev",
-    extdata = "inst/extdata",
-    img = "inst/app/www/img",
+    extdata = "extdata",
+    img = "app/www/img",
     inst = "inst",
-    js = "inst/app/www/js",
+    js = "app/www/js",
     R = "R",
     renv = "renv",
     tests = "tests/testthat",
     top = ".",
-    vault = "inst/vault",
-    www = "inst/app/www"
+    vault = "vault",
+    www = "app/www"
   ),
   \(.x) dir_fn(.x)
 )
@@ -340,9 +340,9 @@ write_dir_fn <- function(outfile = "R/utils_dir_fns.R", overwrite = TRUE, for_go
   mkpath(outfile, mkfile = TRUE)
 
   pkg_nm <- pkg_name()
-  app_sys <- function() {}
+
   fn <- if (for_golem)
-    list("app_sys", mustWork = rlang::expr(mustWork))
+    rlang::call2(rlang::call2(":::", as.symbol(pkg_nm), as.symbol("app_sys")), rlang::expr(.path))
   else
     list("path_package", .ns = "fs", package = pkg_nm)
   .dots <- rlang::dots_list(...)
@@ -356,11 +356,7 @@ write_dir_fn <- function(outfile = "R/utils_dir_fns.R", overwrite = TRUE, for_go
     .exp <- rlang::expr({
       .path <- fs::path(!!!.x(), ..., ext = ext)
       out <- if (!mkpath) {
-        .path <- stringr::str_remove(.path, "^inst\\/?")
-        if (!!for_golem)
-          !!rlang::exec(rlang::call2, !!!fn, rlang::expr(.path))
-        else
-          .path
+        !!fn
       } else
         .path
       return(out)
@@ -437,20 +433,32 @@ list.files2 <- function(path = ".", full.names =  TRUE, ...) {
 #' @title Provide the appropriate file extension for a given object
 #' @param object to determine the appropriate function for writing to disk
 #' @return \code{(character)}
+#' @examples
+#' object_ext(data.frame())
+#' object_ext("asdf")
+#' object_ext(structure("a", class = "ggplot"))
 #' @export
 object_ext <- function(object) {
-  purrr::when(object,
-              inherits(., "data.frame") ~ ".feather",
-              inherits(., "ggplot") ~ ".png",
-              !inherits(., "data.frame") ~ ".rds")
+  UseMethod("object_ext")
 }
-
+#' @export
+object_ext.data.frame <- function(object) {
+  return (".feather")
+}
+#' @export
+object_ext.ggplot <- function(object) {
+  return (".png")
+}
+#' @export
+object_ext.default <- function(object) {
+  return (".rds")
+}
 #' @title Return the appropriate function for writing the supplied object to disk
 #'
 #' @param x \code{(object)}
 #' @details
 #' \itemize{
-#'   \item{\code{data.frame/matrix}}{ \link[arrow]{write_feather}}
+#'   \item{\code{data.frame/matrix}}{ Uses \link[arrow]{write_feather} if `arrow` installed. Otherwise uses \link[readr]{write_csv} if `readr` installed. Otherwise uses \link[base]{write.csv}}
 #'   \item{\code{ggplot}}{ \link[ggplot2]{ggsave}}
 #'   \item{\code{anything else}}{ \link[base]{saveRDS}}
 #' }
@@ -459,37 +467,58 @@ object_ext <- function(object) {
 #' @family file IO
 #' @examples
 #' object_fn(1:15)
+#' object_fn(data.frame())
+#' object_fn(matrix())
+#' object_fn(structure("x", class = "ggplot"))
 
 
 object_fn <- function(x, filepath) {
+  UseMethod("object_fn")
+}
+object_check_filepath <- function(obj, filepath, x) {
+  if (!missing(filepath)) {
+    if (!identical(obj, file_fn(filepath, write = TRUE)))
+      gbort("Mismatch between class of `x` ({class(x)}) & it's `filepath` extension ({UU::ext(filepath)}). Is this the right object?")
+  }
+}
+#' @export
+object_fn.default <- function(x, filepath) {
+  out <- base::saveRDS
+  object_check_filepath(out, filepath, x)
+  return(out)
+}
+#' @export
+object_fn.data.frame <- function(x, filepath) {
   pkgs <- rlang::set_names(c("arrow", "readr", "base"))
+  # Determine which write function should be used in order of preferred precendence, based on whether the library is installed
   i <- purrr::map_lgl(pkgs, \(.x) {
     require(.x, character.only = TRUE, quietly = TRUE)
   }) |>
     which()
-
   csv_write <- switch(names(pkgs)[min(i)],
-         arrow = need_pkg("arrow", "write_feather"),
-         readr = need_pkg("readr", "write_csv"),
-         base = utils::write.csv)
-
-
-
-  out <- purrr::when(
-    x,
-    inherits(., "data.frame") ~ csv_write,
-    inherits(., "matrix") ~ function(x, path) {
-      csv_write(tibble::as_tibble(x, .name_repair = "minimal"), path = path)
-    },
-    inherits(., "ggplot") ~ need_pkg("ggplot2", "ggsave"),
-    !inherits(., "data.frame") ~ saveRDS
-  )
-  if (!missing(filepath)) {
-    if (!identical(out, file_fn(filepath, write = TRUE)))
-      stop(glue::glue("Mismatch between class of object `x` & it's `filepath` extension. Is this the right object?"))
-  }
-  out
+                      arrow = need_pkg("arrow", "write_feather"),
+                      readr = need_pkg("readr", "write_csv"),
+                      base = utils::write.csv)
+  object_check_filepath(csv_write, filepath, x)
+  return(csv_write)
 }
+#' @export
+object_fn.matrix <- function(x, filepath) {
+  csv_write <- object_fn.data.frame(x, filepath)
+  object_check_filepath(csv_write, filepath, x)
+  return(function(x, filepath) {
+    csv_write(tibble::as_tibble(x, .name_repair = "minimal"), filepath)
+  })
+}
+
+#' @export
+object_fn.ggplot <- function(x, filepath) {
+  out <- need_pkg("ggplot2", "ggsave")
+  object_check_filepath(out, filepath, x)
+  return(out)
+}
+
+
 
 #' @title Provide the appropriate file read/write function
 #' @description Write an object to disk

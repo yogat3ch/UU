@@ -15,3 +15,8 @@ object_ext(object)
 \description{
 Provide the appropriate file extension for a given object
 }
+\examples{
+object_ext(data.frame())
+object_ext("asdf")
+object_ext(structure("a", class = "ggplot"))
+}

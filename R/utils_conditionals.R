@@ -28,23 +28,34 @@ is_legit <- function(x, is.null = TRUE, is_empty = TRUE, is.na = TRUE, not_error
   .checks <- c(is.null, is_empty, is.na, not_error)
   if (any(!.checks)) {
     checks <- rlang::exprs(
-      is.null  = all(is.null(x)),
-      is_empty = rlang::is_empty(x),
+      is.null  = legit_null(x),
+      is_empty = legit_empty(x),
       # If all arguments are empty, all(is_na) will be TRUE. To disambiguate an empty object from one that has all objects as NA, we need to simultaneously check if the object is non-empty
-      is.na = all(suppressWarnings(is.na(x))) & {if (is.data.frame(x)) nrow(x) != 0 else !rlang::is_empty(x)},
-      not_error = inherits(x, c("try-error", "error"))
+      is.na = legit_na(x),
+      not_error = legit_error(x)
     )[.checks]
     checks <- purrr::reduce(checks, .f = \(.x, .y, ...) {
       rlang::call2(`||`, .x, .y)
     })
     !rlang::eval_bare(checks)
   } else {
-    !(all(is.null(x)) || rlang::is_empty(x) || all(suppressWarnings(is.na(x))) ||
-        inherits(x, c("try-error", "error")))
+    !(legit_null(x) || legit_empty(x) || legit_na(x) || legit_error(x))
   }
 
 }
 
+legit_null <- function(x) {
+  all(is.null(x))
+}
+legit_empty <- function(x) {
+  rlang::is_empty(x)
+}
+legit_na <- function(x) {
+  all(suppressWarnings(is.na(x))) & {if (is.data.frame(x)) nrow(x) != 0 else !rlang::is_empty(x)}
+}
+legit_error <- function(x) {
+  is_error(x)
+}
 
 #' Is zero-length character?
 #'
@@ -58,34 +69,38 @@ is_legit <- function(x, is.null = TRUE, is_empty = TRUE, is.na = TRUE, not_error
 #' zchar(" ")
 zchar <- \(x) isTRUE(Negate(nzchar)(x))
 
-
 #' Are the values in each object the same?
 #' @description
-#' The primary difference from \code{\link[base]{identical}} & \code{\link[base]{all.equal}} is that objects are sorted by name so order doesn't matter. Set `sort_by_names = FALSE` to sort by values.
+#' The primary difference from \code{\link[base]{identical}} & \code{\link[base]{all.equal}} is that objects are sorted by name so order doesn't matter. Set `sort_by_names = FALSE` to sort by values instead of names for atomic vectors: eg `c(1,2,3)` is equivalent to `c(3,2,1)`. Turn off sorting altogether with `no_sort`.
 #' @inheritParams base::all.equal
 #' @param x \code{obj}
 #' @param y \code{obj}
+#' @param sort_by_names \code{lgl} Sort both target/current by their names (so the order is not taken into account when comparing). Sorting by names is non-recursive, only the top level of the list is sorted.
+#' @param no_sort \code{lgl} Turn off the default behavior that sorts atomic vectors before comparing. This will compare `current` & `target` as is, equivalent to `isTRUE(all.equal(target,current, ...))`.
 #' @inheritDotParams base::all.equal
 #' @return \code{lgl}
 #' @export
 #' @family conditionals
 #' @examples
 #' same(list(x = 1, y = 2), list(y = 2, x = 1))
-same <- function(target = x, current = y, sort_by_names = TRUE, x = target, y = current, ...) {
-  nms = list(x = !is.null(names(target)),
-             y = !is.null(names(current)))
+same <- function(target = x, current = y, sort_by_names = TRUE, x = target, y = current, no_sort = FALSE, ...) {
+  if (!no_sort) {
+    nms = list(x = !is.null(names(target)),
+               y = !is.null(names(current)))
 
-  if (sort_by_names && all(nms$x, nms$y)) {
-    stopifnot(`target must be named` = nms$x)
-    stopifnot(`current must be named` = nms$y)
-    target <- target[order(names(target))]
-    current <- current[order(names(current))]
-  } else {
-    if (rlang::is_atomic(target))
-      target <- sort(target)
-    if (rlang::is_atomic(current))
-      current <- sort(current)
+    if (sort_by_names && all(nms$x, nms$y)) {
+      stopifnot(`target must be named` = nms$x)
+      stopifnot(`current must be named` = nms$y)
+      target <- target[order(names(target))]
+      current <- current[order(names(current))]
+    } else {
+      if (rlang::is_atomic(target))
+        target <- sort(target)
+      if (rlang::is_atomic(current))
+        current <- sort(current)
+    }
   }
+
   isTRUE(all.equal(target, current, ...))
 }
 

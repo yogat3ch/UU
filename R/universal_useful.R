@@ -1,16 +1,39 @@
-
 #' @inherit plyr::match_df title params description
-#' @param out \code{obj} Of class matching the desired output. **Default** `NULL` returns a `data.frame` with the matching row in `y`. `numeric()` will return the matching index in `y` & `logical()` will return a matching logical index
+#' @param out \code{obj} Of class matching the desired output. **Default** `NULL` returns a `data.frame` with the row(s) of `x` that have matches in `y`. `numeric()` will return the matching indices of `x` with matches in `y` & `logical()` will return a matching logical vector with length equivalent to `x` of the rows matching in `y`
+#' @param on \code{chr} Either a vector of the names on which to match, if they are named similarly in x & y, or a specification in the form `c(y_feature = x_feature)`
 #' @seealso plyr::match_df
-#' @return \code{tbl/dbl/lgl} Depending on
+#' @return \code{tbl/dbl/lgl} Depending on the class of `out`
 #' @export
 match_df <- function(x, y, out = NULL, on = NULL, verbose = FALSE) {
+  fn <- purrr::map
+  vars_differ <- FALSE
   if (is.null(on)) {
     on <- intersect(names(x), names(y))
+    if (rlang::is_empty(on))
+      gbort("{.code x} and {.code y} have no common features, please specify features to be matched ")
+
+
     if (verbose)
       message("Matching on: ", paste(on, collapse = ", "))
+  } else if (!rlang::is_empty(names(on))) {
+    fn <- purrr::imap
+    vars_differ <- TRUE
   }
-  keys <- plyr::join.keys(x, y, on)
+
+  # Map over all the features in `on`
+  keys <- fn(on, \(.x, .y) {
+    if (!vars_differ) {
+      .y <- .x
+    }
+    v <- x[[.x]]
+    # Return the indices which intersect between the two
+    which(v %in% intersect(v, y[[.y]]))
+  }) |>
+    # Reduce across all the features to only those in common
+    purrr::reduce(intersect)
+  if (rlang::is_empty(keys))
+    gwarn("No common keys between {.code x} and {.code y} on feature{?s} {on}")
+
   key_out(x, keys, out)
 }
 
@@ -21,15 +44,17 @@ key_out <- function(x, keys, out) {
 }
 #' @export
 key_out.default <- function(x, keys, out) {
-  x[keys$x %in% keys$y, , drop = FALSE]
+  x[keys, , drop = FALSE]
 }
 #' @export
 key_out.numeric <- function(x, keys, out) {
-  keys$x
+  keys
 }
 #' @export
 key_out.logical <- function(x, keys, out) {
-  keys$y %in% keys$x
+  out <- rep(FALSE, nrow(x))
+  out[keys] <- TRUE
+  out
 }
 
 #' Return a list of expressions all piped together as a single expression
@@ -53,28 +78,40 @@ key_out.logical <- function(x, keys, out) {
 #' rlang::eval_bare(exp)
 
 expr_pipe <- function(exprs) {
+  stopifnot("`exprs` must be a list." = is.list(exprs))
+  if (length(exprs) < 2)
+    gbort("`exprs` should have more tan 1 element for a pipe to take effect.")
+  if (!is.name(exprs[[1]]))
+    gwarn("The first element of `exprs` should be of class 'name'.")
+
   with_pipes <- purrr::reduce(exprs, \(.x, .y) {
     paste0(.x ," |>\n\t", glue::glue_collapse(rlang::expr_deparse(.y)))
   })
   rlang::parse_expr(glue::glue_collapse(with_pipes))
 }
 
-#' @title Find an object by it's class
-#' @param \code{(environment)} The environment to search
-#' @param \code{(class)} The class to search for
+#' @title Find by class
+#' @description Find an object by it's class
+#'
+#' @param class The \code{(class)} class to search
+#' @param e The \code{(environment)} to search
+#'
+#' @return the first object assigned to the environment that matches the class. If more than one object of the class are found, it triggers a warning.
 #' @export
-
 find_by_class <- function(class, e = rlang::caller_env()) {
   obj <- purrr::compact(purrr::map(ls(e), purrr::possibly(~{
     out <- get0(.x, envir = e)
-    purrr::when(out, inherits(., class) ~ ., ~NULL)
+    out <- if (inherits(out, class))
+      out
   }, NULL)))
+
   if (is_legit(obj)) {
     if (length(obj) > 1)
       rlang::warn(paste0("More than one object with class: ", class,". Returning the first found."))
     out <- obj[[1]]
   } else {
     rlang::warn(paste0("Could not find object with class ",class,". Has it been instantiated?"))
+    return(NULL)
   }
   out
 }
@@ -148,7 +185,12 @@ match_letters <- function(x, ..., n = 1, multiple = FALSE, ignore.case = FALSE, 
       out <- out[1]
 
     if (capitalize && !is.null(out))
-      out <- purrr::map_chr(out, ~purrr::when(nchar(.x) == 1,. ~ toupper(.x), ~ gsub("^(\\w)(\\w+)","\\U\\1\\L\\2", .x, perl = TRUE)))
+      out <- purrr::map_chr(out, \(.x){
+        if (nchar(.x) == 1)
+          toupper(.x)
+        else
+          gsub("^(\\w)(\\w+)", "\\U\\1\\L\\2", .x, perl = TRUE)
+        })
   }
   out
 }
@@ -219,7 +261,7 @@ map_class <- function(x, y) {
 #' a()
 missing_args <-
   function(calling_function = rlang::caller_fn(1),
-           corresponding_call = sys.call(1),
+           corresponding_call = sys.call(sys.parent()),
            include_null = TRUE,
            exclude_defaults = TRUE)
   {
@@ -344,12 +386,12 @@ concat_rows <- function(.data, col_to_check = 1) {
 #'
 #' @param gitignore \code{chr} path to gitignore
 #'
-#' @return \code{None} overwrites the file
+#' @return \code{None} overwrites the file with entries in alphabetical order
 #' @export
 #'
 gitignore_alphabetize <- function(gitignore = ".gitignore") {
   if (file.exists(gitignore))
-    UU::zchar_remove(sort(readLines(gitignore))) |>
+    zchar_remove(sort(readLines(gitignore))) |>
       writeLines(gitignore)
 }
 
