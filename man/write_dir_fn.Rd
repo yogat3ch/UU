@@ -7,7 +7,8 @@
 write_dir_fn(
   outfile = "R/utils_dir_fns.R",
   overwrite = TRUE,
-  for_golem = file.exists("R/app_ui.R")
+  for_golem = file.exists("R/app_ui.R"),
+  ...
 )
 }
 \arguments{
@@ -16,6 +17,8 @@ write_dir_fn(
 \item{overwrite}{\code{lgl} Whether to overwrite the existing file. Default \code{TRUE}}
 
 \item{for_golem}{\code{lgl} Whether to use the \code{app_sys} function if package is a golem package}
+
+\item{...}{\code{named directory path vectors} Other dir functions to write in the form of \code{dir_function_name = c('dir1', 'nesteddir2')} where \code{dir_function_name} is the name of the function under \code{dirs} and a vector of folder names. eg for a dirs function that accesses \code{data/plots}, the argument will be \code{plots = c('data', 'plots')}.}
 }
 \value{
 \code{msg} and a new file

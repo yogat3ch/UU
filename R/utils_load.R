@@ -1,7 +1,7 @@
 #' Load project & user-level _.Renviron_ & _.Rprofile_
 #' @export
 startup <- function() {
-  if (!getOption("UU_startup", FALSE)) {
+  if (!getOption("UU_startup", FALSE) && interactive()) {
     profiles <-
       list(
         .Rprofile_user = Sys.getenv("R_PROFILE_USER", "~/.Rprofile"),
@@ -32,7 +32,15 @@ startup <- function() {
     options(UU_startup = TRUE)
   }
 
-  on.exit(unloadNamespace("UU"))
+
+  on.exit({
+    unloadNamespace("UU")
+    pkgs_to_unload <- stringr::str_split(utils::packageDescription("UU")$Imports, ",")[[1]] |>
+      stringr::str_trim() |>
+      stringr::str_extract("^[:alnum:]+") |>
+      base::setdiff(c(utils::installed.packages(priority = c("base", "recommended"))[,"Package"], "rstudioapi"))
+    base::sapply(pkgs_to_unload, \(.x) try(utils::unloadNamespace(.x), silent = TRUE))
+  })
 }
 
 # ----------------------- Fri Jan 11 18:00:33 2019 ------------------------#
